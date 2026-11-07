@@ -14,7 +14,7 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 
 - PASUL 00: DONE — repository separat și privat, surse canonice importate, push verificat. Merge commit `1e0cf4451aac1f59e88e849f8e997a999fbfcd91`; PR #1.
 - PASUL 01: DONE prin PR-ul acestei livrări. A creat indexul, reguli de stare, istoric, decizii, tracker de blocaje/dovezi și handoff.
-- PASUL 02: READY, următorul pas conform dependenței. Planul recomandă GPT-6.1 Terra / Medium sau Claude Sonnet 5.5 / Medium. Neînceput.
+- PASUL 02: BLOCKED — politica este pregătită în [GIT_POLICY.md](GIT_POLICY.md), dar main este neprotejat și accesul la protecție a returnat HTTP 403. Nu considera pasul închis.
 - PASUL 03–84: NOT_STARTED; urmează dependențele și recomandările modelului din plan.
 
 ## Stări și tranziții
@@ -35,7 +35,7 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 |---|---|---|---|---|
 | 00 | DONE | Codex; modelul exact nu a fost verificat atunci | `590e4d1` → `1e0cf44`; surse și progres publicate prin PR #1 | Review independent nepretins |
 | 01 | DONE | Codex; utilizatorul a confirmat GPT-6 Luna / Low înainte de execuție | `1e0cf44` → SHA-ul PR-ului curent; jurnal și handoff în PR | Clasa L; review independent necerut/nepretins |
-| 02 | READY | Model recomandat: GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium | Depinde de 01; încă neînceput | De stabilit conform planului |
+| 02 | BLOCKED | Codex; model runtime/efort neverificat | Bază `df7d1347a99c19119544c56e57761b7d3fb46d99`; politică pregătită pe branch dedicat | Review independent neefectuat; protecția main neconfirmată |
 
 Nu inventa model runtime, versiune, efort sau usage dacă nu sunt verificabile. Instrucțiunea utilizatorului pentru sesiunile curente este să nu se folosească usage; nu îl urmări și nu raporta procente.
 
@@ -71,4 +71,4 @@ La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branc
 
 La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
 
-Punct de reluare după acest PR: PASUL 02 READY; model recomandat GPT-6.1 Terra / Medium (alternativ Claude Sonnet 5.5 / Medium).
+Punct de reluare: PASUL 02 BLOCKED până la dovada protecției main și review; apoi PASUL 03 conform dependenței, recomandat GPT-6.1 Sol / Medium.

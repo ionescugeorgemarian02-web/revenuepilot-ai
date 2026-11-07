@@ -9,6 +9,7 @@ Punct unic de reluare: [PROGRESS.md](PROGRESS.md). Execută un singur pas autori
 
 ## Progres și handoff
 - [Index și status](PROGRESS.md)
+- [Politică Git și review](GIT_POLICY.md)
 - [Jurnal append-only de sesiuni](SESSION_LOG.md)
 - [Jurnal append-only de decizii](DECISIONS.md)
 - [Șablon handoff](SESSION_TEMPLATE.md)
