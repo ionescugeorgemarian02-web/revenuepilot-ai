@@ -72,3 +72,6 @@ D08-1 — actualizare după integrarea 07: PR #10 merge `a5d7759`, PASUL 07 DONE
 
 ## D08-2 — CI automat la PR și main
 Autor: Codex. Utilizatorul vrea ca agenții să gestioneze verificările fără buton manual. Workflowul Foundation checks este configurat la toate PR-urile și la push în main, păstrând `workflow_dispatch` numai ca opțiune de recuperare. Filtrele de path și branchurile de lucru au fost eliminate pentru a evita lipsa verificărilor la schimbări de jurnal, politici ori cod. Tokenul jobului rămâne `contents: read`, fără secrete/deploy. Conexiunea GitHub a agentului are permisiunea declarată `actions: write`, dar dispatch returnează HTTP 422 și lista API arată zero runs, în timp ce utilizatorul vede în browser rulări istorice și declară una manuală reușită. Nu se pretinde că automatizarea a rulat până la probă efectivă.
+
+## D09-1 — previzualizare mobilă cu acțiuni simulate
+Autor: Codex. PASUL 09 adaugă o singură pagină română responsive, cu navigare, campanie demonstrativă și notificări simulate. Aprobarea schimbă numai starea locală din pagină și spune explicit că nu trimite nimic; autentificarea, tenanturile, persistența și integrarea externă aparțin pașilor următori. Fără dependințe runtime noi sau cheltuieli. Interfața este servită doar pe loopback, prin shell-ul existent.

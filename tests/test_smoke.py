@@ -19,6 +19,10 @@ class SmokeTest(unittest.TestCase):
         thread.start()
         try:
             base = f"http://127.0.0.1:{server.server_port}"
+            with urlopen(base + "/", timeout=2) as response:
+                self.assertEqual(response.status, 200)
+                self.assertIn("text/html", response.headers["Content-Type"])
+                self.assertIn("RevenuePilot AI", response.read().decode("utf-8"))
             with urlopen(base + "/health", timeout=2) as response:
                 self.assertEqual(response.status, 200)
                 self.assertEqual(response.headers["Content-Type"], "application/json; charset=utf-8")

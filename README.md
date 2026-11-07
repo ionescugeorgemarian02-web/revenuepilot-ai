@@ -32,3 +32,7 @@ Git păstrează codul și documentele, nu găzduiește aplicația sau baza de da
 ## Schelet minim — PASUL 08
 
 [Stack, build și test local](docs/stack/step-08.md). `/health` local-only; dependența 07 și CI remote rămân blocate.
+
+## Interfață mobilă — PASUL 09
+
+[Previzualizare și verificări](docs/ui/step-09.md). Rulează local și deschide `http://127.0.0.1:8765/`.
