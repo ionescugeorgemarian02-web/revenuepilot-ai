@@ -26,3 +26,10 @@ Adaugă o intrare per sesiune Codex/Claude. Nu rescrie intrări precedente; core
 - Stare: BLOCKED. `gh api .../branches/main` a arătat protected=false; GET protection HTTP 403. Nu există dovada că main respinge modificări neanalizate.
 - Review independent: NOT_RUN; CI și teste produs NOT_RUN. Cheltuieli suplimentare: niciuna.
 - Handoff: verifică PR-ul și protecția branchului; închide 02 numai după acceptanță dovedită. PASUL 03 depinde de 02.
+
+## S03-preliminar — 2026-11-07 — solicitare utilizator
+- Autor: Codex; model runtime/efort neverificate. Bază PASUL 02: `b73fc9b2173a1dc1d76fb46ce6eec87165af5ee2`.
+- PASUL 02: BLOCKED; main neprotejat, GET protecție HTTP 403. PR #3 draft.
+- PASUL 03: audit preliminar în `AUDIT_PASUL_03.md`, BLOCKED de dependența 02; niciun DONE declarat.
+- Teste: versiuni și spațiu citite; GitHub Actions permissions HTTP 403, runs 0; CI și deploy NOT_RUN. `pdftotext --version` eșuat din cauza sintaxei.
+- Handoff: rezolvă protecția și review-ul PASULUI 02, apoi reia auditul 03. Nu a fost activat niciun serviciu plătit.
