@@ -191,3 +191,6 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Livrare: interfață română, navigare trei secțiuni, tokenuri, carduri, butoane, stare goală/loading/eroare notificări și aprobare/reset exclusiv demo, fără efect extern sau persistență. Serverul local servește HTML-ul inclus în zipapp; /health rămâne disponibil. Fără host, API, chei sau cheltuieli noi.
 - Teste: build zipapp și unittest PASS; Chromium la 320/360/390 px PASS fără overflow, primul Tab focus link salt, navigare, aprobare/reset și eroare notificări; captură 360 px inspectată. Audit contrast și screen-reader complet, Safari/iPhone real și CI remote NOT_RUN. Testul de browser este `tests/browser/mobile.cjs`, Playwright disponibil local dar nu este dependență runtime.
 - Baseline 08: adăugată interfață vizibilă, fără KPI comercial măsurat. Memoria produsului neimplementată; progresul se păstrează în Git. STOP înainte de PASUL 10. Predare: docs/ui/step-09.md.
+
+### S09 — integrare și predare
+- PR #15 MERGED în main prin `14c575da81cb81cfacad6ff4ffab51573eed5c4b`. Zipapp construit pornit pe loopback și HTML verificat HTTP 200: PASS. Linkuri în 14 documente PASS. CI GitHub neconfirmat de conexiunea API; nu se inventează rezultat. PASUL 09 DONE; STOP înainte de 10. Claim Codex eliberat.

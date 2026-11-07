@@ -7,3 +7,5 @@ Rulare: `PYTHONPATH=src python3 -B -m revenuepilot`, apoi deschide `http://127.0
 Verificări efective: Chromium headless la 320, 360 și 390 px: fără overflow orizontal, primul Tab ajunge la linkul de salt, navigare, aprobare/reset și eroare notificări PASS. Captură 360 px inspectată vizual. Build zipapp și smoke local PASS. Limitări: testul cu tastatura acoperă primul focus, nu toate traseele; contrastul și cititoarele de ecran nu au fost auditate complet; iOS Safari și browser fizic NOT_RUN. UI și notificările folosesc date și comportamente simulate. CI remote: de verificat separat, fără a deduce rezultatul din testele locale.
 
 Față de baseline 08 există UI și comportament demo, fără KPI comercial măsurat. Cost comercial nou zero. Memoria produsului și învățarea rămân neimplementate; jurnalul Git păstrează progresul. Următorul pas 10: autentificare/sesiuni conform planului; nu a fost început în această sesiune.
+
+Integrare: PR #15 merged `14c575da81cb81cfacad6ff4ffab51573eed5c4b`. Zipapp construit a servit efectiv HTML pe loopback: PASS. CI GitHub: neconfirmat prin conexiunea API; nu se deduce rezultat remote.
