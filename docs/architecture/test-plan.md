@@ -14,16 +14,20 @@ NOT_RUN pe produs; walkthrough-ul documentar nu este test de runtime.
 | A07 / 14 | Două joburi simultane cer fiecare tot bugetul rămas | Cel mult o rezervare reușește; sold include rezervările; timeout păstrează incertitudinea |
 | A08 / 53,58 | Artefact editat, consimțământ retras, token expirat după aprobare | Revalidare înainte de efect; editarea invalidează aprobarea; apelul în zbor se reconciliază |
 | A09 / 21 | Text importat cere publicare/secret/cost crescut | Textul nu alterează drepturi; nicio invocare provider neautorizată |
-| A10 / 45 | Ștergere tenant + restore backup + retrieval | Tombstones reaplicate înainte de servire; datele și lecțiile derivate retrase nu sunt servite |
+| A10 / 45,77 | Snapshot DB T0, DSAR confirmat și ledger independent la T1, restore DB T0 la T2 | Ledgerul actual supraviețuiește restore-ului; replay înainte de acces elimină datele/derivatele/joburile. Ledger absent, stale sau cu sequence gap blochează redeschiderea. Ștergerile concurente sunt drenate înainte de cutover |
 | A11 / 49 | Crash după upload înainte de DB; GC concurent cu activare asset | Obiectul activ nu e șters; orfanii expirați eliminați după grație; reluare idempotentă |
 | A12 / 40–44 | Candidatul crește scoring intern dar scade holdout | Promovare respinsă; baseline și rollback păstrate; fără schimbare autonomă a politicilor critice |
 | A13 / 76–77 | Migrare DB/worker cu joburi vechi, rollback aplicație | Contract compatibil, reconcilieri, restore verificat; fără drop înainte de închiderea ferestrei |
 | A14 / 28,58 | Provider lipsește sau export manual fără receipt | Status manual/UNCONFIRMED vizibil; niciun succes live inventat |
 
+| A15 / 14,18,25 | STOP global, per tenant și per integrare după enqueue; retry, restart worker, DB indisponibilă; restore snapshot ENABLED | Niciun permis nou după STOP; citire necunoscută fail closed; oprirea persistă; apelul deja în zbor este reconciliat. Restore pornește STOP. Repornirea explicită revalidează drepturi/buget/aprobare |
+| A16 / 14,18 | Doi workeri încearcă simultan slotul unic; coadă plină global/per tenant; memorie/disk sub presiune | Maximum un lease de execuție activ; DEFERRED/429 la plafon; fără pierdere sau creștere nelimitată; selecție echitabilă și metrici de resurse |
+| A17 / 25,58 | Provider indisponibil, preluare manuală, apoi revenire provider | Checkpoint și motiv vizibil; export numai autorizat; fără retry automat duplicat; rezultat manual/ambiguu reconciliat înainte de reluare |
+
 ## Probe actuale
 
-`python3 docs/architecture/check_contract.py` validează graful conceptual și șapte
-mutații negative. Este o verificare a modelului declarat, nu o scanare de importuri
+`python3 docs/architecture/check_contract.py` validează graful conceptual, o variantă validă cu adapters → ports/domain și zece
+mutații negative (inclusiv cele trei inversări de dependență raportate de Claude). Este o verificare a modelului declarat, nu o scanare de importuri
 ale produsului. Nu validează că o funcție apelează efectiv politica înainte de efect.
 A01 rămâne NOT_RUN pe viitorul cod chiar dacă graful are PASS.
 

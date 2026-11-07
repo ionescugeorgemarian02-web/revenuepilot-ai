@@ -1,18 +1,26 @@
+R04 remediation evidence — 2026-11-07 — Codex
+Baseline review commit: c3772578d64205bee9eda6b27669819211434604
+BEFORE: R04-3 reproduced: adapters -> application, executor, policy were all accepted.
 PASS: conceptual layer boundaries and acyclic dependency graph
+PASS: adapters may use ports and domain
 PASS: rejected UI bypass
 PASS: rejected provider import from application
 PASS: rejected domain coupled to storage
 PASS: rejected worker without policy
 PASS: rejected cycle
 PASS: rejected unknown layer
+PASS: rejected adapter importing application
+PASS: rejected adapter importing executor
+PASS: rejected adapter importing policy
 PASS: rejected composition imported
 NOT_RUN: application behavior, authorization, database, workers, live providers
 RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf: OK
 RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.txt: OK
 RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf: OK
 RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.txt: OK
-PASS: git diff --check (no whitespace errors)
-PASS: relative links in README, PROGRESS and architecture Markdown resolve
-PASS: SESSION_LOG.md and DECISIONS.md preserve the complete base content as prefix
-PASS: canonical files unchanged relative to 7f692ba4002e75e1224836cc05bf732f2542e0dc
-NOT_RUN: independent Claude review; step 03 not DONE
+PASS: git diff --check
+PASS: journal history preserved; original Claude review byte-for-byte unchanged
+PASS: canonical sources unchanged; relative documentation links resolve
+VERIFIED: GitHub metadata isPrivate=false; main protected=true
+STATUS: steps 01-03 DONE per d87acab; step 04 REVIEW_PENDING after R04 fixes
+NOT_RUN: independent re-review of remediation, runtime restore/kill-switch/worker/tenant tests, CI, deployment

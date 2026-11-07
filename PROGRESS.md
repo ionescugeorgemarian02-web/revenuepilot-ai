@@ -4,7 +4,7 @@ Punct unic de reluare: această pagină. Sesiunea următoare citește planul can
 
 ## Proiect și limite
 
-Repository privat: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai
+Repository public: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai
 Owner `ionescugeorgemarian02-web` (GitHub ID 342118131), repository ID 1449074103. Branch canonic `main`.
 Surse canonice nemodificate: [Meta-prompt V3](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf), [Plan V3](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf). PDF-urile sunt sursa de adevăr; textul extras ajută căutarea. Hashuri în `docs/canonical/SHA256SUMS`.
 
@@ -16,7 +16,7 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 - PASUL 01: DONE prin PR-ul acestei livrări. A creat indexul, reguli de stare, istoric, decizii, tracker de blocaje/dovezi și handoff.
 - PASUL 02: DONE — politica în [GIT_POLICY.md](GIT_POLICY.md). Protecția clasică pe `main` verificată din API (2026-11-07): PR cu 1 aprobare, `enforce_admins=true`, force-push și ștergere interzise. Ruleset-ul `main` rămâne `disabled` (nefolosit). Integrarea în `main` se face prin PR #3 → #4 → #5, doar de proprietar.
 - PASUL 03: DONE — audit în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunile 1–6). Repo public din decizia C (D03-4); runnerele Actions NU au fost re-măsurate.
-- PASUL 04: CHANGES_REQUESTED — [propunerea Codex](docs/architecture/README.md), PR #6; [review Claude](docs/architecture/review-claude.md) pe `fd2ebbe`: 2 constatări MEDIUM (restore/ștergeri, kill switch și resurse), 2 LOW.
+- PASUL 04: REVIEW_PENDING — remedieri R04-1..R04-4 publicate pentru re-review Claude; [răspuns Codex](docs/architecture/remediation-r04.md). Review-ul anterior pe `fd2ebbe` rămâne CHANGES_REQUESTED; noul HEAD nu este aprobat.
 - PASUL 05–84: NOT_STARTED.
 
 ## Stări și tranziții
@@ -39,8 +39,7 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 | 01 | DONE | Codex; utilizatorul a confirmat GPT-6 Luna / Low înainte de execuție | `1e0cf44` → SHA-ul PR-ului curent; jurnal și handoff în PR | Clasa L; review independent necerut/nepretins |
 | 02 | DONE | Codex (politică); verificare protecție: Claude Sonnet 5.5 | Bază `df7d134` → branch `docs/step-02-git-policy` (PR #3) | Review independent neefectuat, necerut de plan pentru clasa T |
 | 03 | DONE | Claude Sonnet 5.5 (selectat de utilizator); audit preliminar: Codex | `08e715f` → branch `claude/blissful-galileo-9tz9fz` (PR #4, #5) | Clasa M; review independent necerut |
-
-| 04 | CHANGES_REQUESTED | Codex; runtime/efort neverificate | Bază `7f692ba`; branch `step-04/architecture` | Claude Opus 5.5, `fd2ebbe`: CHANGES_REQUESTED (R04-1..R04-5) |
+| 04 | REVIEW_PENDING | Codex; runtime/efort neverificate | Bază `7f692ba`; branch `step-04/architecture` | Claude Opus 5.5, `fd2ebbe`: CHANGES_REQUESTED (R04-1..R04-5) |
 
 Nu inventa model runtime, versiune, efort sau usage dacă nu sunt verificabile. Instrucțiunea utilizatorului pentru sesiunile curente este să nu se folosească usage; nu îl urmări și nu raporta procente.
 
@@ -55,7 +54,7 @@ Jurnalul append-only: [DECISIONS.md](DECISIONS.md). Sesiunile și handoff-urile:
 
 ## Blocaje, riscuri, limite
 
-- Rulesets GitHub pentru repo privat au fost refuzate de API în planul curent. Fără upgrade sau schimbare de vizibilitate; PASUL 02 va documenta politica aplicabilă.
+- Blocaj istoric al protecției repo privat rezolvat: repository public, protecție clasică main verificată (D02-1). Ruleset-ul separat disabled nu este mecanismul activ.
 - Host și chei API comerciale: neconfigurate; nu blochează documentarea.
 - Build/test produs, CI, deploy și API live: NOT_RUN; nu există implementare de produs în scope-ul PASULUI 01.
 
@@ -76,7 +75,7 @@ La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branc
 
 La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
 
-Punct de reluare: PASUL 04 CHANGES_REQUESTED, PR #6. Autorul rezolvă R04-1..R04-4 din `docs/architecture/review-claude.md`, apoi re-review Claude pe noul SHA. Pașii 02–03 DONE pe branchurile de lucru; integrarea PR-urilor #3–#5 în main rămâne deschisă.
+Punct de reluare: PASUL 04 REVIEW_PENDING, PR #6. Claude revede remedierile R04-1..R04-4 pe noul SHA, conform `docs/architecture/handoff.md`. Pașii 02–03 DONE pe branchurile de lucru; integrarea PR-urilor #3–#5 în main rămâne deschisă.
 
 
 ## Predare actualizată după d87acab

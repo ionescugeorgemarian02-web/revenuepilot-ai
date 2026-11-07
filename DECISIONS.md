@@ -39,3 +39,7 @@ Cererea explicită pentru PASUL 04 permite redactarea arhitecturii cu 03 neînch
 
 ## D02-1 — Închiderea pașilor 02 și 03
 Autor: Claude, după verificare din API (2026-11-07): `required_approving_review_count=1`, `enforce_admins=true`, `allow_force_pushes=false`, `allow_deletions=false`; repo `public`. Limite: nu s-a testat un push direct respins (proxy-ul sesiunii nu permite scrieri pe main); protecția este dovedită din configurație, nu din încercare. Ruleset-ul `main` rămâne disabled. Review independent: necerut. Opțiunea A/B/C → C aplicată.
+
+
+## D04-2 — Remediere după review Claude (2026-11-07)
+Autor: Codex. Acceptate R04-1..4: deletion ledger recuperabil independent de snapshot, retenție suficientă și fail closed la restore; ADR-04-4 pentru resurse finite și oprire persistentă; adapters limitați la ports/domain; corectarea stării curente. Topologia pe un singur host este țintă condiționată de resurse gratuite/autorizate, nu dovadă de hosting existent. Variantele plătite rămân supuse autorizării costurilor. Detalii și limite în docs/architecture/remediation-r04.md. Re-review Claude necesar înainte de acceptare; R04-5 informativ rămâne cerință pentru 08.

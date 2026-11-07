@@ -3,9 +3,10 @@
 Autor: Codex. Data: 2026-11-07. Recomandare canonică: GPT-6 Astra / High;
 modelul/efortul real nu sunt expuse verificabil în această sesiune.
 Status: **REVIEW_PENDING**; dependența 03 este DONE conform `d87acab`.
-Cererea explicită a utilizatorului autorizează această propunere cu dependența deschisă.
-Nu declară închise 02/03 și nu autorizează PASUL 05. Clasa H cere review real
-Claude (recomandat Opus 5.5 / High). Nu există acel review în sesiunea curentă.
+Corecție R04-4: 01–03 sunt DONE conform predării Claude `d87acab`.
+Review-ul Claude pe `fd2ebbe`, consemnat în `c377257`, a cerut modificări.
+R04-1..R04-4 sunt remediate de autor și așteaptă re-review real Claude
+(recomandat Opus 5.5 / High); nu reprezintă aprobare și nu deschid PASUL 05.
 
 Bază: `7f692ba4002e75e1224836cc05bf732f2542e0dc`, ultima predare Claude,
 PR #5, peste auditul PR #4. Main verificat: `df7d1347a99c19119544c56e57761b7d3fb46d99`.
@@ -25,8 +26,9 @@ Auditul 03 distinge mediile Codex/Claude: versiuni diferite, instalări indispon
 în mediul Claude. Nu extrapolăm accesul unuia la celălalt. GitHub rămâne depozit
 pentru cod și probe, nu baza de date a clienților sau backend comercial.
 
-Fapte: repo privat la citirea metadata în această sesiune; niciun host ori API comercial
-activat aici. Intenția de publicare consemnată de Claude nu dovedește publicarea.
+Corecție R04-4: repository public și main protected=true, reverificate din API
+la remediere. Situația anterioară rămâne în SESSION_LOG și Git. Niciun host ori
+API comercial activat aici; disponibilitatea unui VPS gratuit nu este presupusă.
 Ipoteză de proiectare: volum inițial mic și muncă asistată, de măsurat pe pilot.
 Nu există SLO, throughput, buget comercial sau prețuri validate; nu le promitem.
 
@@ -35,7 +37,7 @@ Nu există SLO, throughput, buget comercial sau prețuri validate; nu le promite
 | Variantă | Avantaje | Cost și risc | Decizie propusă |
 |---|---|---|---|
 | Monolit modular, joburi durabile în aceeași DB | O singură versiune, tranzacții locale, debug și teste simple | Izolarea resurselor slabă dacă joburile grele rămân în proces | Alegere minimă; module și porturi explicite |
-| HTTP serverless + DB + job runner extern | Scalare independentă la trafic variabil | Conexiuni DB, timeout, retries, egress și facturare per invocare; schimbări de furnizor | Opțiune viitoare, numai după probe host/cost |
+| HTTP serverless + DB + job runner extern | Scalare independentă la trafic variabil | Conexiuni DB, timeout, retries, egress și facturare per invocare; schimbări de furnizor | Nu este ținta inițială; serviciile plătite necesită autorizare și probe host/cost |
 | API + worker separat, aceeași versiune de domeniu | Limite CPU/memorie și reluare joburi fără blocarea HTTP | Două procese, coordonare deployment și job leases | Prima extracție dacă măsurătorile arată necesitatea |
 | Microservicii per agent/domeniu | Echipe și scalare independente | Consistență distribuită, observabilitate, operațiuni și cost de migrare mari | Amânat; nu există motiv măsurat acum |
 
@@ -116,8 +118,30 @@ Dependințele declarate nu dovedesc izolarea codului încă neimplementat.
   modifica politica. Ingestia URL/media cere mitigări SSRF și upload la 07/49.
 - Metadata de audit poate fi append-only în limita retenției; PII/payloadurile sunt
   separate și ștergibile. Ștergerea tenantului invalidează surse, index/cache, memorii,
-  exemple derivate și jobs. Backupurile au expirare; la restore se reaplică tombstones
-  înainte de acces. Cerințele juridice se validează separat.
+  exemple derivate și jobs. Pentru R04-1, registrul de ștergeri (deletion ledger)
+  trăiește în storage durabil separat de DB-ul operațional și de snapshoturile sale,
+  cu backup separat și o copie într-un domeniu de pierdere distinct de host. Nu este
+  suprascris de restore-ul aplicației. Furnizorul/accesul/costul vor fi verificate la
+  alegerea hostului; fără registru independent recuperabil, restore-ul rămâne blocat.
+- Ledgerul reține doar ID-uri opace nereutilizabile, scope-ul ștergerii, sequence ID,
+  moment, versiune și status, fără PII brută. Identificatorii și registrul sunt și ei
+  protejați prin acces limitat și retenție verificată juridic. Retenția este cel puțin
+  durata maximă a tuturor backupurilor restaurabile plus fereastra de restaurare/replay;
+  expirarea unei intrări cere dovada că nicio copie relevantă nu mai este restaurabilă.
+- Fluxul ștergerii: se confirmă durabil intenția în ledger înainte de finalizarea DSAR,
+  apoi se elimină/invalidează datele și derivatele; retries sunt idempotente. Un crash
+  după intenție lasă o operațiune pending care se reia. Fără confirmarea ledgerului,
+  cererea nu devine completed; tenantul rămâne suspendat cât operațiunea este pending.
+- Restore: snapshot T0, ștergere la T1, restore T0 la T2. Aplicația pornește izolată,
+  cu acces utilizatori și efecte externe oprite. Recuperează ledgerul actual independent,
+  verifică integritatea și continuitatea până la ultimul sequence confirmat, aplică
+  toate intențiile relevante inclusiv cele pending, apoi invalidează cache/index,
+  memorii, exemple și joburi și verifică absența datelor. Ledger indisponibil, incomplet
+  ori prospețime nedovedită => fail closed, fără reactivare. Un checkpoint de reluare
+  sincronizează și ștergerile sosite în timpul restore-ului; nu redeschide accesul
+  până la drenarea lor. RPO pentru ștergerile confirmate trebuie să fie zero înainte
+  de servire: dacă infrastructura aleasă nu poate proba acest lucru, nu se redeschide.
+  Procedura exactă și testele sunt la 45/77; cerințele juridice se validează separat.
 
 ## 6. ADR-04-2 — persistență și livrare de joburi
 
@@ -125,7 +149,7 @@ Dependințele declarate nu dovedesc izolarea codului încă neimplementat.
 |---|---|---|
 | PostgreSQL relațional | Țintă propusă pentru tranzacții, FK compuse, concurență, RLS | Necesită DB reală și probe de backup/conectare; serviciul nu este ales |
 | SQLite local | Eventuale demo-uri/teste portabile, numai cu limitări etichetate | Nu validează RLS/concurența PostgreSQL; migrarea necesită conversie date și teste pe motorul țintă |
-| DB managed/serverless relațională | Variantă când hostul impune limite | Probe de SQL/tranzacții, pooling, cost invocări/egress, export și restore înainte de alegere |
+| DB managed/serverless relațională | Alternativă viitoare; costul plătit necesită aprobare, nu țintă inițială | Probe de SQL/tranzacții, pooling, cost invocări/egress, export și restore înainte de alegere |
 | DB document / cache / vector store separate | Doar dacă cerințe măsurate o justifică | Cost de sincronizare, tranzacții și ștergere cross-store; nejustificat acum |
 
 Stare și eveniment outbox se scriu în aceeași tranzacție. Workerul folosește lease
@@ -155,6 +179,45 @@ review independent, canary ulterior și rollback. Fără date reale: rezultat SI
 fără concluzii de venit/viralitate și fără schimbare a ponderilor modelelor consumer.
 MCP/A2A/LangGraph/DSPy se evaluează la pașii 24/42, nu devin dependențe prin diagramă.
 
+## 7a. ADR-04-4 — resurse, oprire și mod degradat (R04-2)
+
+Țintă inițială de topologie: un singur host mic cu aplicația, workerul și PostgreSQL
+pe același VPS, numai dacă la 76 se confirmă un host disponibil/autorizat fără cost
+nou. Procesele pot fi separate pe același host fără microservicii. Nu există un VPS
+configurat acum; dacă nu există resursă gratuită adecvată, se continuă local/asistat,
+nu se cumpără infrastructură. Copia independentă a ledgerului/backupului de mai sus
+este o condiție de restore, nu un serviciu presupus disponibil gratuit.
+Serverless și DB managed plătite sunt alternative care cer aprobarea costului,
+nu variante implicit gratuite. Alegerea definitivă se validează la 76.
+
+Bugetul de RAM/CPU/disk se măsoară pe hostul ales: rezervă OS + PostgreSQL + aplicație
++ vârful workerului + marjă; definește limite și observă OOM, I/O, latența și spațiul
+liber înainte de trafic real. Nu inventăm o capacitate numerică. Concurență implicită
+propusă: un singur job activ per host, maximum unul per tenant/integrare, ajustabilă
+numai după măsurători și bugete. Limita este partajată prin lease atomic în DB,
+nu câte un contor local per worker; crash-ul nu dublează capacitatea rezervată.
+Coada are plafoane finite configurate global și per tenant (număr și dimensiune),
+deadline și politică echitabilă de selecție. Fără plafoane configurate, enqueue automat
+este dezactivat. La plafon se returnează DEFERRED/429 cu motiv și retry limitat;
+nu se pierde taskul prin acceptare falsă și nu se acumulează memorie nelimitată.
+
+Kill switch persistent, global și per tenant/integrare, cu prioritate STOP dacă
+oricare nivel este oprit. Operatorul autorizat poate opri/reporni, acțiunea și
+versiunea politicii sunt auditate; restart-ul nu îl resetează. Executorul citește
+starea durabilă proaspătă înainte de claim și înainte de fiecare apel cu efect extern,
+inclusiv fiecare retry. Citire eșuată/stare necunoscută => fără efect extern. Revalidarea
+este coordonată cu emiterea permisului de dispatch; un STOP blochează toate permisele
+ulterioare. Un apel deja autorizat/în zbor poate totuși termina: este marcat și
+reconciliat, nu promis anulat. La restore, starea implicită este STOP până la
+reconcilierea setărilor curente de oprire și revocare, nu valoarea ENABLED din backup.
+
+Când providerul, bugetul sau resursele nu permit automatizarea, taskul devine
+PAUSED/READY_FOR_MANUAL_ACTION, cu motiv vizibil și checkpoint. Exportul manual
+rămâne supus drepturilor și consimțământului; un stop de securitate nu poate fi ocolit
+prin export. Nu se lansează automat retry când operatorul a preluat acțiunea:
+claim-ul manual și confirmarea externă se înregistrează, se reconciliază orice efect
+ambiguu înainte de reluare. Reluarea cere autorizare și o nouă verificare a politicii.
+
 ## 8. Migrare la host și costuri
 
 1. La 08/12: fixează runtime/lockfile și probează motorul DB țintă; cazurile din test-plan
@@ -164,7 +227,8 @@ MCP/A2A/LangGraph/DSPy se evaluează la pașii 24/42, nu devin dependențe prin 
    autorizat, se păstrează modul local și activitățile independente ale planului.
 3. La 77: staging cu date sintetice, migrație expand/backfill/validate/contract,
    număr de rânduri și hashuri pe tenant; perioadă de compatibilitate înainte de drop.
-   Backup restaurat, healthchecks și rollback probat înainte de activare reală.
+   Backup restaurat cu ledger independent conform §5, kill switch implicit STOP,
+   healthchecks și rollback probat înainte de activare reală.
 4. La separarea workerului: conservă contractele, schema mesajului și versiunea de
    domeniu; rollout compatibil cu joburile vechi, drain și lease transfer fără dublare.
 5. Rollback de aplicație doar cât schema rămâne compatibilă; rollback date destructive

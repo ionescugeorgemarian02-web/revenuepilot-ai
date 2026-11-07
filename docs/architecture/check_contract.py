@@ -21,6 +21,8 @@ def validate(graph):
         raise ValueError('UI gateway or pure domain boundary violated')
     if set(graph['policy']) - {'domain'} or set(graph['ports']) - {'domain'}:
         raise ValueError('Policy/ports may only depend on domain')
+    if set(graph['adapters']) - {'ports', 'domain'}:
+        raise ValueError('Adapters may only depend on ports and domain')
     for entry in ['application', 'executor']:
         if not {'policy', 'domain', 'ports'} <= set(graph[entry]):
             raise ValueError('Execution/control entry needs policy, domain and ports')
@@ -43,6 +45,10 @@ def main():
     graph = json.loads(Path(__file__).with_name('dependencies.json').read_text())
     validate(graph)
     print('PASS: conceptual layer boundaries and acyclic dependency graph')
+    allowed = copy.deepcopy(graph)
+    allowed['adapters'] = ['ports', 'domain']
+    validate(allowed)
+    print('PASS: adapters may use ports and domain')
     mutations = {
         'UI bypass': ('ui', ['executor']),
         'provider import from application': ('application', graph['application'] + ['adapters']),
@@ -50,6 +56,9 @@ def main():
         'worker without policy': ('executor', ['domain', 'ports']),
         'cycle': ('application', graph['application'] + ['ui']),
         'unknown layer': ('ports', ['missing']),
+        'adapter importing application': ('adapters', ['ports', 'application']),
+        'adapter importing executor': ('adapters', ['ports', 'executor']),
+        'adapter importing policy': ('adapters', ['ports', 'policy']),
         'composition imported': ('adapters', ['composition']),
     }
     for name, (node, edges) in mutations.items():

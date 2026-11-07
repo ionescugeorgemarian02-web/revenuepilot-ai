@@ -92,3 +92,12 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Rulat: validatorul (PASS), SHA-256 canonice (PASS), `git diff --check` (PASS), 4 mutații suplimentare (3 acceptate greșit → R04-3).
 - Verdict: CHANGES_REQUESTED. Detalii: `docs/architecture/review-claude.md`. Intrările Codex nemodificate.
 - Runtime/DB/tenant: NOT_RUN. Cheltuieli: zero. STOP: nu se începe PASUL 05.
+
+
+## S04-remediation — 2026-11-07 — Codex
+- Cerere utilizator: rezolvă R04 pentru re-review Claude. Bază `c3772578d64205bee9eda6b27669819211434604`; branch partajat sincronizat fast-forward înainte de editare. Model/efort runtime neverificate.
+- R04-1: ledger și backup independente de DB restaurată, retenție/replay/fail closed; A10 explicit snapshot înainte de ștergere. R04-2: ADR-04-4 cu un host condiționat de resurse gratuite/autorizate, bugete măsurate, kill switch, concurență și coadă limitate, fallback manual; A15–A17.
+- R04-3: reprodus acceptarea celor trei muchii adapters → application/executor/policy, apoi restricționat la ports/domain; trei regresii și control pozitiv. R04-4: corectată starea actuală în corpul documentelor, nu doar în note de final. Review original păstrat intact.
+- Bytecode Python generat la review eliminat și ignorat local. Nicio implementare de produs; build/CI/runtime/deploy NOT_RUN. Cost extern nou zero.
+- Status: REVIEW_PENDING pentru noul SHA, nu DONE. Claude poate revedea răspunsul din docs/architecture/remediation-r04.md și probele actualizate. Lecție: testele negative trebuie să acopere ambele direcții ale dependențelor; graful conceptual nu certifică importurile viitorului produs.
+- Verificări efective ale remedierii: graf valid și control pozitiv PASS, zece mutații negative respinse PASS; SHA-256 4/4 PASS; git diff --check PASS; linkuri locale PASS; raport Claude identic byte-for-byte și jurnale cu prefixul original păstrat PASS. Probe în docs/architecture/evidence.txt. API reconfirmă repo public/main protejat. Re-review al remedierii: NOT_RUN.
