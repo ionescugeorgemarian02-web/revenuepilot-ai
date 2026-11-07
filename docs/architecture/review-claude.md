@@ -46,3 +46,25 @@ Fișiere examinate integral: `docs/architecture/README.md`, `handoff.md`, `test-
 ## Condiție de DONE
 
 R04-1 și R04-2 rezolvate de autor (sau respinse argumentat), R04-3 și R04-4 corectate, apoi re-review pe noul SHA. Până atunci PASUL 04: CHANGES_REQUESTED.
+
+
+---
+
+# Re-review PASUL 04 — Claude
+
+Reviewer: Claude Opus 5.5. Data: 2026-11-07. Commit examinat: `5dc5e2708b24ba9802283b6c312c8d05063d2ed4` (remedierea Codex, `remediation-r04.md`).
+
+**Verdict: APPROVED.** Toate constatările R04-1..R04-4 sunt rezolvate; R04-5 rămâne corect amânat la PASUL 08 (A01).
+
+| ID | Rezolvare | Verificat de reviewer |
+|---|---|---|
+| R04-1 | Ledger de ștergeri separat de DB și de snapshoturile ei, copie într-un alt domeniu de pierdere, retenție ≥ backupuri + fereastra de replay, doar ID-uri opace; intenție durabilă înainte de finalizarea DSAR; restore izolat, fail closed dacă ledgerul lipsește/e incomplet. A10 restaurează explicit un backup anterior ștergerii. | Citit integral §5 și A10. Corect. Limită acceptată: copia independentă poate cere un serviciu încă neales; documentul blochează restore-ul în lipsa ei, nu presupune unul gratuit. |
+| R04-2 | ADR-04-4: un singur host, fără VPS presupus; buget RAM/CPU de măsurat; concurență implicită 1 prin lease în DB; coadă finită cu DEFERRED/429; kill switch persistent global/tenant/integrare, verificat înainte de fiecare efect extern, fail closed, STOP implicit după restore; mod manual fără retry dublu. Opțiunile plătite cer aprobare. Teste A15–A17. | Citit integral §7a și A15–A17. Corect și proporționat. |
+| R04-3 | `adapters` limitat la `{ports, domain}`; 3 mutații noi + control pozitiv. | `python3 -B -I check_contract.py`: PASS, 10 mutații respinse. Mutațiile mele reluate: `application`, `executor`, `policy`, `ui` respinse; `['domain']` acceptat (corect). |
+| R04-4 | Antet și §1 corectate; `evidence.txt` regenerat. | Corect. |
+
+Alte verificări: SHA-256 canonice OK; `git diff --check` față de `main` OK; `review-claude.md` original neschimbat; bytecode-ul `__pycache__` (introdus din greșeală de commitul de review `c377257`) eliminat de autor, cu `.gitignore`.
+
+Corecție mecanică făcută de reviewer în același commit cu acest re-review: o linie goală în `test-plan.md` despărțea rândurile A15–A17 de tabel (nu se randau ca tabel). Doar linia goală a fost ștearsă; conținutul nu s-a schimbat.
+
+NOT_RUN: orice test de runtime (restore, kill switch, worker, tenant, CI). Acestea sunt contracte pentru pașii 08–77, nu dovezi.

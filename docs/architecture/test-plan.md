@@ -19,7 +19,6 @@ NOT_RUN pe produs; walkthrough-ul documentar nu este test de runtime.
 | A12 / 40–44 | Candidatul crește scoring intern dar scade holdout | Promovare respinsă; baseline și rollback păstrate; fără schimbare autonomă a politicilor critice |
 | A13 / 76–77 | Migrare DB/worker cu joburi vechi, rollback aplicație | Contract compatibil, reconcilieri, restore verificat; fără drop înainte de închiderea ferestrei |
 | A14 / 28,58 | Provider lipsește sau export manual fără receipt | Status manual/UNCONFIRMED vizibil; niciun succes live inventat |
-
 | A15 / 14,18,25 | STOP global, per tenant și per integrare după enqueue; retry, restart worker, DB indisponibilă; restore snapshot ENABLED | Niciun permis nou după STOP; citire necunoscută fail closed; oprirea persistă; apelul deja în zbor este reconciliat. Restore pornește STOP. Repornirea explicită revalidează drepturi/buget/aprobare |
 | A16 / 14,18 | Doi workeri încearcă simultan slotul unic; coadă plină global/per tenant; memorie/disk sub presiune | Maximum un lease de execuție activ; DEFERRED/429 la plafon; fără pierdere sau creștere nelimitată; selecție echitabilă și metrici de resurse |
 | A17 / 25,58 | Provider indisponibil, preluare manuală, apoi revenire provider | Checkpoint și motiv vizibil; export numai autorizat; fără retry automat duplicat; rezultat manual/ambiguu reconciliat înainte de reluare |

@@ -101,3 +101,10 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Bytecode Python generat la review eliminat și ignorat local. Nicio implementare de produs; build/CI/runtime/deploy NOT_RUN. Cost extern nou zero.
 - Status: REVIEW_PENDING pentru noul SHA, nu DONE. Claude poate revedea răspunsul din docs/architecture/remediation-r04.md și probele actualizate. Lecție: testele negative trebuie să acopere ambele direcții ale dependențelor; graful conceptual nu certifică importurile viitorului produs.
 - Verificări efective ale remedierii: graf valid și control pozitiv PASS, zece mutații negative respinse PASS; SHA-256 4/4 PASS; git diff --check PASS; linkuri locale PASS; raport Claude identic byte-for-byte și jurnale cu prefixul original păstrat PASS. Probe în docs/architecture/evidence.txt. API reconfirmă repo public/main protejat. Re-review al remedierii: NOT_RUN.
+
+
+## S04-rereview — 2026-11-07 — Claude
+- Reviewer: Claude Opus 5.5. Commit examinat: `5dc5e2708b24ba9802283b6c312c8d05063d2ed4`. Verdict: APPROVED; R04-1..R04-4 rezolvate (vezi `docs/architecture/review-claude.md`).
+- Rulat: validator (PASS, 10 mutații), mutațiile reviewerului (respinse), SHA-256 (OK), `git diff --check` (OK).
+- Corecție: linie goală în `test-plan.md` care rupea tabelul. Lecție: commitul de review `c377257` a inclus `__pycache__` prin `git add -A`; rulează Python cu `-B` și verifică `git status` înainte de commit.
+- PASUL 04: DONE pe branch; integrarea PR #3 → #6 în `main` la proprietar. Runtime NOT_RUN. Cheltuieli: zero. STOP înainte de 05.
