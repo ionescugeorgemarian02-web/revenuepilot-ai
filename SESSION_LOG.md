@@ -170,3 +170,7 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 ### S08 — verificări locale și limită curentă
 - SHA-256 canonice 4/4 PASS; validator arhitectură (control pozitiv + zece respingeri) PASS; linkuri în 13 documente PASS; `git diff --check` PASS. YAML analizat cu PyYAML 6.0.3 instalat local: trigger `workflow_dispatch` la nivelul corect, job/documentation valid și pasul smoke prezent — PASS structural. PyYAML este unealtă locală de verificare, nu dependență a produsului.
 - Build/test local Python 3.12 și 3.13 PASS. CI remote NOT_RUN deoarece Actions este dezactivat pentru cont; nu se revendică un run.
+
+### S08 — închidere după PR #10
+- PR #10 pentru 07 merged în main la `a5d77597d25d7d5253537964ec08a869099ec7b1`. PR #11 pentru 08 are baza `step-07/threat-model`; branchul 08 a fost reancorat pe main și conflictele de jurnal au fost rezolvate păstrând intrările ambelor pasuri. Baza PR #11 trebuie schimbată la main după push.
+- PASUL 08 DONE conform criteriului canonic: build zipapp și smoke HTTP executate local pe Python 3.12/3.13, cu rezultate PASS. CI remote NOT_RUN/HTTP 422 rămâne limită de mediu, nu probă pozitivă. Nu se începe 09 în această sesiune.

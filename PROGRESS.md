@@ -8,7 +8,7 @@ Repository public: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai
 Owner `ionescugeorgemarian02-web` (GitHub ID 342118131), repository ID 1449074103. Branch canonic `main`.
 Surse canonice nemodificate: [Meta-prompt V3](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf), [Plan V3](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf). PDF-urile sunt sursa de adevăr; textul extras ajută căutarea. Hashuri în `docs/canonical/SHA256SUMS`.
 
-GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API comerciale nu sunt configurate. Nu modifica `fabrica-autonoma`; nu adăuga secrete ori date clienți. Un pas per sesiune, apoi STOP. Utilizatorul a cerut explicit 08 deși 07 rămâne blocat la CI; lucrul pentru 08 se face pe branch separat, fără a declara 07 DONE. Acordul permanent al utilizatorului permite operațiile de dezvoltare necesare fără confirmări repetate (D07-1); dovezile/review-ul rămân reale.
+GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API comerciale nu sunt configurate. Nu modifica `fabrica-autonoma`; nu adăuga secrete ori date clienți. Un pas per sesiune, apoi STOP. Utilizatorul a cerut explicit 08; 07 a fost închis ulterior după reverificarea criteriului canonic și integrat prin PR #10. Acordul permanent al utilizatorului permite operațiile de dezvoltare necesare fără confirmări repetate (D07-1); dovezile/review-ul rămân reale.
 
 ## Registrul execuțiilor
 
@@ -25,7 +25,7 @@ GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API
 | 08 | DONE (CI remote NOT_RUN) | Codex; model/efort runtime neverificate | [Stack și schelet](docs/stack/step-08.md); build/test local Python 3.12 și 3.13 PASS | Clasa M; review independent necerut |
 | 09–84 | NOT_STARTED | — | 09 depinde de 08 | — |
 
-Corecție față de indexul vechi: `main` la `63ac761c0fb972d10592bdd38a3335c23a4312e8` conține 00–06. Mențiunile anterioare „main are doar 00–01”, „05/06 neintegrat” și lanțul obligatoriu de PR-uri suprapuse sunt depășite; istoria rămâne în Git și SESSION_LOG. PR #9 pentru autorizare/CI este separat și nu a fost integrat de această sesiune. Numărul curent al aprobărilor GitHub nu este dedus din auditul istoric; regulile efective se verifică la integrare, fără bypass.
+Corecție față de indexul vechi: `main` după PR #10 (`a5d7759`) conține 00–07. Mențiunile anterioare „main are doar 00–01”, „05/06 neintegrat” și lanțul obligatoriu de PR-uri suprapuse sunt depășite; istoria rămâne în Git și SESSION_LOG. PR #9 pentru autorizare/CI este separat și nu a fost integrat de această sesiune. Numărul curent al aprobărilor GitHub nu este dedus din auditul istoric; regulile efective se verifică la integrare, fără bypass.
 
 Nu inventa model runtime, versiune, efort sau usage. Utilizatorul a cerut să nu se folosească usage; nu îl urmări și nu raporta procente.
 
@@ -44,7 +44,7 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 
 - E07-1 PASS local: hashuri canonice 4/4; graf conceptual cu control pozitiv și zece mutații negative; linkuri în 13 fișiere; `git diff --check`. Comenzi în [verification](docs/security/verification.md).
 - E07-2: [PR #10](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/10), livrare `3d94c3999783631936ba407575c18983c42cb9d3`, trigger CI `d402574`. Push/HEAD remote PASS. CI remote BLOCKED/NOT_RUN: dispatch respins HTTP 422, `Actions has been disabled for this user`. Workflow active, dar zero runs/checks pentru 07. Detalii în checkpointul S07 din [SESSION_LOG](SESSION_LOG.md).
-- E07-3 NOT_RUN: toate scenariile runtime T01–T18, build/unit/integration/E2E/deploy/API live și review independent 07. Nu există implementare de produs în acest pas.
+- E07-3 NOT_RUN: toate scenariile runtime T01–T18, build/unit/integration/E2E/deploy/API live și review independent 07. În PASUL 07 nu exista implementare de produs; scheletul 08 este verificat separat.
 - Cost comercial nou activat: zero. Nu s-au creat servicii, conturi, hosting sau credențiale. Nu pretindem cost monetar Actions fără facturare.
 - Limită CI: Actions dezactivat la nivelul utilizatorului GitHub; triggerul push și dispatch explicit nu au produs o rulare. Reactivarea contului/Actions trebuie rezolvată prin mecanismele GitHub; nu este o lipsă de aprobare pentru lucru. Review-ul Claude nu mai este cerut pentru 07 (D07-2); CI remote NOT_RUN este limitare suplimentară, nu blocaj al criteriului canonic 07.
 - Riscul curent: măsurile de securitate sunt contracte propuse, nu protecții deja instalate. Review-ul independent pentru 07 a fost exceptat explicit de utilizator; nu este raportat ca efectuat.
