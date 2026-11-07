@@ -1,6 +1,6 @@
 # RevenuePilot AI — index și stare curentă
 
-Punct unic de reluare. Ultima actualizare: 2026-11-07, Codex, PASUL 09. Citește planul canonic și [predarea curentă](docs/ui/step-09.md) înainte de lucru.
+Punct unic de reluare. Ultima actualizare: 2026-11-07, Claude, PASUL 10. Citește planul canonic și [predarea curentă](docs/auth/step-10.md) înainte de lucru.
 
 ## Proiect și limite
 
@@ -24,7 +24,8 @@ GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API
 | 07 | DONE | Codex; model/efort runtime neverificate | [Threat model, 18 amenințări și politici](docs/security/README.md); PR #10 merge `a5d7759` | Review exceptat explicit de utilizator (D07-2); neefectuat |
 | 08 | DONE (CI remote NOT_RUN) | Codex; model/efort runtime neverificate | [Stack și schelet](docs/stack/step-08.md); build/test local Python 3.12 și 3.13 PASS | Clasa M; review independent necerut |
 | 09 | DONE | Codex; model/efort runtime neverificate | [UI mobil și verificări](docs/ui/step-09.md); PR #15 merge `14c575d`, Chromium 320/360/390, build și smoke local PASS | Clasa T; review independent necerut |
-| 10–84 | NOT_STARTED | — | 10 depinde de 08 | — |
+| 10 | DONE (CI remote NOT_RUN) | Claude Sonnet 5.5 | [Autentificare dev](docs/auth/step-10.md); 17 teste PASS pe Python 3.12 și 3.13; fără OAuth, persistență sau UI | Clasa M; review independent necerut |
+| 11–84 | NOT_STARTED | — | 11 depinde de 10 și 12 (12 depinde de 08) | — |
 
 Corecție față de indexul vechi: `main` după PR #11 (`eec6012`) conține 00–08. Mențiunile anterioare „main are doar 00–01”, „05/06 neintegrat” și lanțul obligatoriu de PR-uri suprapuse sunt depășite; istoria rămâne în Git și SESSION_LOG. PR #9 pentru autorizare/CI este separat și nu a fost integrat de această sesiune. Numărul curent al aprobărilor GitHub nu este dedus din auditul istoric; regulile efective se verifică la integrare, fără bypass.
 

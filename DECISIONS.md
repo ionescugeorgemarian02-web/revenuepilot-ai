@@ -75,3 +75,7 @@ Autor: Codex. Utilizatorul vrea ca agenții să gestioneze verificările fără 
 
 ## D09-1 — previzualizare mobilă cu acțiuni simulate
 Autor: Codex. PASUL 09 adaugă o singură pagină română responsive, cu navigare, campanie demonstrativă și notificări simulate. Aprobarea schimbă numai starea locală din pagină și spune explicit că nu trimite nimic; autentificarea, tenanturile, persistența și integrarea externă aparțin pașilor următori. Fără dependințe runtime noi sau cheltuieli. Interfața este servită doar pe loopback, prin shell-ul existent.
+
+
+## D10-1 — Autentificare locală stdlib, fără OAuth și fără persistență
+Autor: Claude Sonnet 5.5. Planul interzice inventarea unei conexiuni OAuth inexistente și cere flow de dezvoltare sigur cu marcaj explicit. S-a ales scrypt (stdlib), sesiuni server-side cu token hash-uit, cookie `__Host-`/HttpOnly/SameSite=Strict, utilizator dev creat doar din variabilă de mediu la rulare. Alternative respinse: JWT stateless (revocare dificilă, T01 cere revocare), bibliotecă externă (dependență nouă fără motiv măsurat la 08), parolă implicită în repo (interzis).

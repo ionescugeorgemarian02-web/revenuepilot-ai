@@ -194,3 +194,10 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 
 ### S09 — integrare și predare
 - PR #15 MERGED în main prin `14c575da81cb81cfacad6ff4ffab51573eed5c4b`. Zipapp construit pornit pe loopback și HTML verificat HTTP 200: PASS. Linkuri în 14 documente PASS. CI GitHub neconfirmat de conexiunea API; nu se inventează rezultat. PASUL 09 DONE; STOP înainte de 10. Claim Codex eliberat.
+
+
+## S10 — 2026-11-07 — PASUL 10 (Claude Sonnet 5.5)
+- Bază `4f75fee`; branch `step-10/auth`. Corecție: la începutul sesiunii am afirmat greșit că 07–09 nu sunt făcute (citisem o stare veche a `main`); utilizatorul a corectat; verificat apoi din Git că sunt integrate.
+- Livrat: `src/revenuepilot/auth.py`, rute în `app.py`, `tests/test_auth.py` (16 teste noi), `docs/auth/step-10.md`.
+- Teste: 17 PASS pe Python 3.12.3 și 3.13.18; rulare manuală pe proces real PASS. CI remote NOT_RUN. Cost zero.
+- Handoff: PASUL 11 depinde de 10 și 12; 12 (persistență) depinde de 08, deci 12 înaintea lui 11. STOP.
