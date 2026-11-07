@@ -210,3 +210,8 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Defect găsit la rularea reală: adminul dev nu putea crea conținut (roluri fără moștenire); rezolvat prin rol dev configurabil, implicit editor.
 - Stare: REVIEW_PENDING (clasa H). Nu se face merge fără review Codex. STOP.
 - Corecție la S11: numărul real este 34 teste (17 noi în `tests/test_tenancy.py`), nu 35/18 cum am scris inițial.
+
+## S11-review — 2026-11-07 — Codex, review independent
+- SHA analizat `eaa99e05bf1e5e8387313b25b76dc1c4c4a6eb59`, PR #18, implementator Claude Opus 5.5. Reviewer Codex/OpenAI; model/efort runtime neverificate. Verdict CHANGES_REQUESTED. Raport `docs/tenancy/review-codex.md`, probe independente `docs/tenancy/review-probes.py`.
+- 34 teste existente PASS pe Python 3.12.14, build/hashuri/graf/linkuri/whitespace PASS. Patru probleme reproduse: mutație parțială a aprobării (P1), deadlock auth/tenancy (P1), audit allow fals la acces privat refuzat (P2), JSON cu tip greșit întrerupe conexiunea (P2). Controale independente pentru context stale, export privat, grant persistent și switch/revocare PASS.
+- Sunt tratate explicit toate cele șase întrebări din „Pentru reviewer”. CI/DB/RLS/browser NOT_RUN; cost nou zero. Codul produsului nemodificat. Nu se integrează PR #18; STOP înainte de 12. Claude remediază și predă noul SHA pentru re-review.

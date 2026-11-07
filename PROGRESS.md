@@ -1,6 +1,6 @@
 # RevenuePilot AI — index și stare curentă
 
-Punct unic de reluare. Ultima actualizare: 2026-11-07, Claude, PASUL 11 (REVIEW_PENDING). Citește planul canonic și [predarea curentă](docs/tenancy/step-11.md) înainte de lucru.
+Punct unic de reluare. Ultima actualizare: 2026-11-07, Codex, review PASUL 11 (CHANGES_REQUESTED). Citește planul canonic și [predarea curentă](docs/tenancy/step-11.md) înainte de lucru.
 
 ## Proiect și limite
 
@@ -25,7 +25,7 @@ GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API
 | 08 | DONE (CI remote NOT_RUN) | Codex; model/efort runtime neverificate | [Stack și schelet](docs/stack/step-08.md); build/test local Python 3.12 și 3.13 PASS | Clasa M; review independent necerut |
 | 09 | DONE | Codex; model/efort runtime neverificate | [UI mobil și verificări](docs/ui/step-09.md); PR #15 merge `14c575d`, Chromium 320/360/390, build și smoke local PASS | Clasa T; review independent necerut |
 | 10 | DONE (CI remote NOT_RUN) | Claude Sonnet 5.5 | [Autentificare dev](docs/auth/step-10.md); 17 teste PASS pe Python 3.12 și 3.13; fără OAuth, persistență sau UI | Clasa M; review independent necerut |
-| 11 | REVIEW_PENDING | Claude Opus 5.5 | [Tenancy și RBAC](docs/tenancy/step-11.md); 34 teste PASS pe 3.12 și 3.13, teste de mutație | Clasa H: review Codex necesar înainte de DONE/merge |
+| 11 | CHANGES_REQUESTED | Claude Opus 5.5 | [Tenancy și RBAC](docs/tenancy/step-11.md); 34 teste PASS pe 3.12 și 3.13, teste de mutație | Clasa H: Codex CHANGES_REQUESTED, R11-1..4; re-review necesar |
 | 12–84 | NOT_STARTED | — | Corecție: 11 depinde doar de 10 (planul canonic); afirmația „10 și 12” din backlog era greșită. 12 depinde de 08 | — |
 
 Corecție față de indexul vechi: `main` după PR #11 (`eec6012`) conține 00–08. Mențiunile anterioare „main are doar 00–01”, „05/06 neintegrat” și lanțul obligatoriu de PR-uri suprapuse sunt depășite; istoria rămâne în Git și SESSION_LOG. PR #9 pentru autorizare/CI este separat și nu a fost integrat de această sesiune. Numărul curent al aprobărilor GitHub nu este dedus din auditul istoric; regulile efective se verifică la integrare, fără bypass.
@@ -54,8 +54,9 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 
 ## Reluare și predare
 
-PASUL 07 este integrat prin PR #10 (`a5d7759`); CI remote rămâne NOT_RUN (Actions dezactivat la nivel de cont). PASUL 08 a trecut buildul și testul local, conform criteriului canonic; CI nu este criteriu de acceptare explicit la 08. PR #11 este integrat în main (`eec6012`). Următorul pas eligibil este 10.
-
-PASUL 08 este DONE și integrat prin PR #11 (`eec6012`), după build/test local pe Python 3.12 și 3.13. PASUL 09 este integrat în main; STOP înainte de 10. Model recomandat pentru 08: GPT-6.1 Sol / Medium sau Claude Sonnet 5.5 / Medium. STOP înainte de 09.
+Reluare: Claude remediază R11-1..4 din [review-ul Codex](docs/tenancy/review-codex.md), apoi Codex verifică noul SHA. PASUL 11 rămâne CHANGES_REQUESTED; PR #18 nu se integrează. STOP înainte de 12.
 
 Istoric: [SESSION_LOG.md](SESSION_LOG.md), [DECISIONS.md](DECISIONS.md). Șablon: [SESSION_TEMPLATE.md](SESSION_TEMPLATE.md). Documentele vechi de handoff sunt instantanee istorice; acest index și predarea 08 descriu punctul curent.
+
+
+Review independent PASUL 11: Codex, SHA `eaa99e05bf1e5e8387313b25b76dc1c4c4a6eb59`, verdict **CHANGES_REQUESTED**; [raport și remediere R11-1..4](docs/tenancy/review-codex.md). Nu integra PR #18 și nu începe 12 înainte de remediere/re-review.
