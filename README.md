@@ -28,3 +28,7 @@ Git păstrează codul și documentele, nu găzduiește aplicația sau baza de da
 ## Securitate — PASUL 07
 
 [Model de amenințări și politici de acces](docs/security/README.md) · [Predare](docs/security/handoff.md). BLOCKED (CI); review-ul Claude a fost exceptat de utilizator; controalele runtime sunt propuse, nu implementate.
+
+## Schelet minim — PASUL 08
+
+[Stack, build și test local](docs/stack/step-08.md). `/health` local-only; dependența 07 și CI remote rămân blocate.

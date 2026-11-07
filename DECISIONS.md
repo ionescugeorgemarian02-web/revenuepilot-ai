@@ -64,3 +64,6 @@ Autor: Codex, la instrucțiunea explicită a utilizatorului: „Nu trebuie să f
 
 ## D07-3 — corectarea blocajului CI față de criteriul canonic
 Autor: Codex. La pregătirea lui 08 s-a reverificat PASUL 07 din plan: criteriul de acceptare este registrul cu mitigări testabile, severitate, owner, aprobări și cazuri negative; nu cere o rulare GitHub Actions. Această livrare există și a trecut verificările locale. Review-ul independent a fost exceptat explicit de utilizator prin D07-2. Prin urmare 07 poate fi DONE cu CI remote NOT_RUN ca limitare, nu BLOCKED. Afirmația anterioară că integrarea așteaptă obligatoriu CI a fost prea strictă și este corectată; eroarea GitHub HTTP 422 rămâne consemnată, fără rezultat inventat.
+
+## D08-1 — stack minim fără dependențe comerciale
+Autor: Codex. Utilizatorul cere PASUL 08 în timp ce 07 are CI blocat. Instrucțiunea explicită permite implementarea lui 08 pe branch separat peste 07, dar nu transformă 07 în DONE și nu inventează o rulare Actions. Pentru schelet se folosește Python 3.12.14 fixat local, cod compatibil 3.12–3.13, fără biblioteci externe; zipapp prin stdlib și health endpoint pe loopback. Hostul viitor nu este cunoscut, deci alegerea serverului public rămâne ulterioară. Stare 08 TESTING până când dependența 07/CI este rezolvată; fără 09.
