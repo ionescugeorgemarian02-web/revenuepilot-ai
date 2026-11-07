@@ -11,6 +11,7 @@ import re
 import secrets
 import sys
 import threading
+import time
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -123,6 +124,16 @@ class HttpTraceTest(unittest.TestCase):
         self.thread.join(timeout=2)
         self.server.server_close()
 
+    def done_trace(self, trace_id, tenant_id, timeout=3.0):
+        """`request.completed` is emitted after the response is written, so a client can see the
+        response a moment before the event exists; wait (bounded) for it instead of racing."""
+        deadline = time.monotonic() + timeout
+        while True:
+            events = self.obs.trace(trace_id, tenant_id)
+            if any(e["name"] == "request.completed" for e in events) or time.monotonic() > deadline:
+                return events
+            time.sleep(0.005)
+
     def req(self, method, path, body=None, cookie=None, extra=None):
         conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=3)
         host = f"127.0.0.1:{self.port}"
@@ -160,7 +171,7 @@ class HttpTraceTest(unittest.TestCase):
         cookie, _ = self.login("A-editor")
         status, headers, _ = self.req("POST", "/api/resources", {"kind": "brief", "title": "t", "body": "b"}, cookie)
         self.assertEqual(status, 201)
-        events = self.obs.trace(headers["x-trace-id"], self.w.orgs["A"])
+        events = self.done_trace(headers["x-trace-id"], self.w.orgs["A"])
         self.assertEqual([e["name"] for e in events], ["request.received", "authz.decision", "request.completed"])
         self.assertEqual([e["seq"] for e in events], sorted(e["seq"] for e in events))
         self.assertEqual(events[1]["fields"], {"action": "resource.create", "target": "new", "decision": "allow"})
@@ -176,8 +187,8 @@ class HttpTraceTest(unittest.TestCase):
         status, headers, _ = self.req("GET", "/api/resources/r1", cookie=cookie_b)  # B's own r1 does not exist
         status2, headers2, _ = self.req("GET", "/api/export", cookie=cookie_b)  # viewer cannot export
         self.assertEqual((status, status2), (404, 403))
-        e1 = self.obs.trace(headers["x-trace-id"], self.w.orgs["B"])
-        e2 = self.obs.trace(headers2["x-trace-id"], self.w.orgs["B"])
+        e1 = self.done_trace(headers["x-trace-id"], self.w.orgs["B"])
+        e2 = self.done_trace(headers2["x-trace-id"], self.w.orgs["B"])
         self.assertEqual([x["fields"].get("decision") for x in e1 if x["name"] == "authz.decision"], ["not_found"])
         self.assertEqual([x["fields"].get("decision") for x in e2 if x["name"] == "authz.decision"], ["forbidden"])
         audit_trace_ids = {a.trace_id for a in self.w.tenancy.audit if a.decision in ("not_found", "forbidden")}
@@ -188,7 +199,7 @@ class HttpTraceTest(unittest.TestCase):
         cookie, _ = self.login("A-editor")
         _, headers, _ = self.req("GET", "/api/resources", cookie=cookie)
         tid = headers["x-trace-id"]
-        self.assertTrue(self.obs.trace(tid, self.w.orgs["A"]))
+        self.assertTrue(self.done_trace(tid, self.w.orgs["A"]))
         self.assertEqual(self.obs.trace(tid, self.w.orgs["B"]), [])
         for bad in ("", "../x", "A" * 16, tid + "0", None):
             self.assertEqual(self.obs.trace(bad, self.w.orgs["A"]), [])
@@ -223,7 +234,7 @@ class HttpTraceTest(unittest.TestCase):
         self.w.tenancy.search = boom
         status, headers, _ = self.req("GET", "/api/resources", cookie=cookie)
         self.assertEqual(status, 500)
-        events = self.obs.trace(headers["x-trace-id"], self.w.orgs["A"])
+        events = self.done_trace(headers["x-trace-id"], self.w.orgs["A"])
         error = [e for e in events if e["name"] == "request.error"]
         self.assertEqual(error[0]["fields"], {"error_class": "RuntimeError"})
         self.assertEqual(error[0]["level"], "error")

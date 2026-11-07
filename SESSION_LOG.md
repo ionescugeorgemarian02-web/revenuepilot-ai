@@ -242,3 +242,10 @@ S11-review — publicare: raportul/probele/indexul au fost împinse pe branchul 
 - Bază `7d7330d`; branch `step-13/events`. Livrat: `observability.py`, integrare în `app.py`/`tenancy.py`, `tests/test_observability.py` (14 teste), `docs/observability/step-13.md`, D13-1.
 - Teste: 70 PASS pe 3.12 și 3.13; 12 mutații detectate. Defecte proprii găsite și corectate: telefon vs ID-uri, `request.error` lipsă pe 500, conexiuni SQLite nelăsate închise.
 - Codex neutilizat (clasa T). Cost zero. CI remote NOT_RUN.
+
+
+## S14 — 2026-11-07 — PASUL 14 (Claude Sonnet 5.5)
+- Bază `ea45a5f`; branch `step-14/budgets`. Livrat: `guardrails.py`, eveniment `budget.decision` în observabilitate, `tests/test_guardrails.py` (20 teste), `docs/budgets/step-14.md`, D14-1.
+- Teste: 90 PASS pe 3.12 și 3.13; 16 mutații (15 detectate, 1 echivalent). Teste scrise greșit de mine și corectate: breaker vs plafon task, prag de aprobare al lui B, test de idempotență confuz.
+- Defect intermitent din pasul 13 găsit prin rulări repetate (`request.completed` emis după răspuns): test corectat cu așteptare mărginită, comportamentul documentat. Lecție: o suită nouă se rulează de mai multe ori, nu o singură dată.
+- Codex neutilizat (clasa M). Cost zero. CI remote NOT_RUN.

@@ -36,6 +36,7 @@ EVENTS: dict[str, frozenset[str]] = {
     "auth.login": frozenset({"outcome", "reason"}),
     "auth.logout": frozenset(),
     "authz.decision": frozenset({"action", "target", "decision"}),
+    "budget.decision": frozenset({"action", "decision", "provider", "amount_minor", "currency"}),
 }
 LEVELS = frozenset({"info", "warning", "error"})
 MAX_VALUE = 200
