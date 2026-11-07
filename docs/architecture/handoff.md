@@ -33,3 +33,7 @@ Lecție candidată: citirea exclusivă a main ar fi omis auditul Claude din PR #
 fetch și inspecția branchurilor au identificat restricții diferite între medii.
 Domeniu de aplicare: handoff între sesiuni cu PR-uri suprapuse; nu dovedește că orice
 branch neintegrat este aprobat. Nu se promovează automat ca politică de produs.
+
+Referință publicată: PR #6, https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/6 .
+Commitul arhitecturii: `a7270c47c13116e2b101d99b3ca1dc4aaa56d34f`.
+Există un commit ulterior numai pentru aceste referințe; citește întregul HEAD al PR-ului.

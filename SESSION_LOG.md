@@ -66,3 +66,8 @@ Adaugă o intrare per sesiune Codex/Claude. Nu rescrie intrări precedente; core
 - Validare efectivă: `python3 docs/architecture/check_contract.py` PASS (graf + șapte mutații negative); `sha256sum -c SHA256SUMS` în docs/canonical PASS. Aceste probe nu validează produsul; 14 scenarii viitoare au oracle și etapă, NOT_RUN pe cod runtime.
 - Status: REVIEW_PENDING, cu dependența 03 deschisă. Review Claude real necesar; niciun review inventat. Build/CI/deploy/API live NOT_RUN. Fără costuri externe noi.
 - Lecție candidată: auditul Claude există pe branch neintegrat și trebuie consultat la reluare; nu se confundă cu aprobare în main. Predare: docs/architecture/handoff.md; lease autor eliberat la publicare pentru review. STOP înainte de 05.
+
+### S04 — checkpoint publicat
+- PR draft #6: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/6 ; bază `claude/blissful-galileo-9tz9fz`, head `step-04/architecture`.
+- Commitul propunerii: `a7270c47c13116e2b101d99b3ca1dc4aaa56d34f`, push reușit și HEAD verificabil prin PR/Git. Intrarea de față adaugă numai referința de predare.
+- Review-ul trebuie să citească HEAD-ul actual al PR-ului (inclusiv această notă), nu să presupună că SHA-ul inițial este ultimul. Status REVIEW_PENDING; dependența 03 încă neînchisă. Lease Codex eliberat.
