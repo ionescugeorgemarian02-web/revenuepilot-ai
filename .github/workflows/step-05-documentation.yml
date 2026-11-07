@@ -4,13 +4,6 @@ on:
     branches:
       - 'step-05/**'
   pull_request:
-    paths:
-      - 'README.md'
-      - 'PROGRESS.md'
-      - 'docs/canonical/**'
-      - 'docs/architecture/**'
-      - 'scripts/verify_docs.py'
-      - '.github/workflows/step-05-documentation.yml'
 permissions:
   contents: read
 concurrency:

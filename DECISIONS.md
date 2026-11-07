@@ -53,3 +53,7 @@ D05-1 — actualizare după rulare: GitHub Actions run 42351190538 a trecut pe f
 
 ## D06-1 — Lucrul continuă pe lanțul de branch-uri, fără integrare în main
 Autor: Claude Sonnet 5.5, la cererea explicită a proprietarului, care nu vrea să facă operații Git. `main` rămâne la pasul 01; starea reală este pe `step-06/baseline`. Risc: o sesiune care citește doar `main` vede starea veche; atenuat prin `Punct de reluare` din `PROGRESS.md`. Protecția `main` (PR obligatoriu, 0 aprobări, fără force-push) rămâne. Remediere ulterioară posibilă: proprietarul schimbă branch-ul implicit sau integrează o dată.
+
+
+## D06-2 — Autorizare permanentă a proprietarului pentru merge
+Autor: Claude Sonnet 5.5. Proprietarul a scris „Autorizez tot” ca răspuns la propunerea: agenții pot da merge la PR-uri în `main` după CI verde și fără CHANGES_REQUESTED; excepție — pașii de clasă H doar după review real din familia opusă. Aplicat prima dată la PR #8 (merge `63ac761`, CI verde pe `b9bbea8`). Limite: nu acoperă schimbări de setări ale repo-ului (blocate de proxy), costuri, secrete sau modificarea documentelor canonice; protecția `main` (PR obligatoriu, fără force-push) rămâne. „Tot” este interpretat în limitele acestei propoziții; un agent nu extinde autorizarea peste ea. Workflow-ul CI rulează acum la fiecare PR, ca verificarea `documentation` să poată fi făcută obligatorie de proprietar.

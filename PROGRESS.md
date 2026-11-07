@@ -79,7 +79,7 @@ La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branc
 
 La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
 
-Punct de reluare: PASUL 06 DONE pe `step-06/baseline` (peste `step-04/architecture` care conține 02–05). SURSA DE ADEVĂR PENTRU STARE = ACEST BRANCH, nu `main` (main are doar 00–01, decizia proprietarului de a nu integra). O sesiune nouă pornește din `step-06/baseline`. Următorul: PASUL 07.
+Punct de reluare: PASUL 06 DONE și integrat în `main` (PR #8, merge `63ac761`). `main` este sursa de adevăr. Următorul: PASUL 07 (clasa H). Autorizare permanentă a proprietarului: vezi D06-2.
 
 
 ## Integrare în main — stare curentă

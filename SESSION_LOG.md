@@ -130,3 +130,8 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Cifre economice: toate IPOTEZĂ/N/A; nimic inventat. K03/K04 necalculate din timpi reali.
 - Teste: verificările CI documentare rulate local (vezi commit). Produs: NOT_RUN. Cheltuieli: zero.
 - Handoff: PASUL 07 (clasa H). STOP.
+
+
+## S06b — 2026-11-07 — integrare în main (Claude Sonnet 5.5)
+- Autorizare proprietar (D06-2). PR #8 scos din draft și integrat în `main`: merge `63ac761`. CI pe PR: success pe `b9bbea8`.
+- Workflow-ul rulează la toate PR-urile. PR-urile vechi #3–#6 rămân de închis ca „integrate prin #8”.
