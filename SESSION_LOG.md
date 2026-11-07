@@ -123,3 +123,10 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Cererea utilizatorului: finalizează complet PASUL 05. Confirmate două rulări GitHub Actions pe HEAD final `ce52da3`: push #42351263418 și PR #42351267008, ambele completed/success. Teste runtime NOT_RUN, conform scope.
 - PR #3, primul din lanț, are REVIEW_REQUIRED. `gh pr merge 3 --merge --match-head-commit b73fc9b...` a fost refuzat de protecția lui main. Nu s-a folosit `--admin` sau alt bypass. PR-urile #3–#7 rămân deschise.
 - Verdict: PASUL 05 DONE pe branch/PR cu CI dovedit; integrarea în main este BLOCKED până la review GitHub valid al PR #3 și merge ulterior în ordine. Nicio modificare de produs ori cheltuială nouă.
+
+
+## S06 — 2026-11-07 — PASUL 06 (Claude Sonnet 5.5)
+- Bază `4d2bd75`; branch `step-06/baseline`. Livrat: `docs/planning/baseline-kpi.md` (17 indicatori, 30/60/90, 9 riscuri), `docs/planning/backlog.md` (pașii 07–15 cu dependențe, acceptanțe, risc).
+- Cifre economice: toate IPOTEZĂ/N/A; nimic inventat. K03/K04 necalculate din timpi reali.
+- Teste: verificările CI documentare rulate local (vezi commit). Produs: NOT_RUN. Cheltuieli: zero.
+- Handoff: PASUL 07 (clasa H). STOP.

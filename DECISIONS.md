@@ -49,3 +49,7 @@ Autor: Codex. Acceptate R04-1..4: deletion ledger recuperabil independent de sna
 Autor: Codex. PASUL 04 DONE pe branch, după re-review Claude. Alegere: workflow GitHub Actions read-only pentru integritatea surselor și contractul arhitectural, plus verificare de linkuri și whitespace; niciun provider, pachet nou sau secret. Alternativele de build/test runtime nu sunt executabile înaintea scheletului din 08. Până la job real, starea 05 rămâne TESTING, nu DONE. Costul efectiv Actions se verifică din cont; repo public nu este garanție de quota nelimitată.
 
 D05-1 — actualizare după rulare: GitHub Actions run 42351190538 a trecut pe fd646a6; aceasta verifică CI documentar efectiv, fără a pretinde teste de produs. CI pe main încă nu există cât PR-urile #3–#7 sunt deschise.
+
+
+## D06-1 — Lucrul continuă pe lanțul de branch-uri, fără integrare în main
+Autor: Claude Sonnet 5.5, la cererea explicită a proprietarului, care nu vrea să facă operații Git. `main` rămâne la pasul 01; starea reală este pe `step-06/baseline`. Risc: o sesiune care citește doar `main` vede starea veche; atenuat prin `Punct de reluare` din `PROGRESS.md`. Protecția `main` (PR obligatoriu, 0 aprobări, fără force-push) rămâne. Remediere ulterioară posibilă: proprietarul schimbă branch-ul implicit sau integrează o dată.

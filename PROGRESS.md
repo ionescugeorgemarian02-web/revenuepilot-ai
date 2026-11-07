@@ -18,8 +18,8 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 - PASUL 03: DONE — audit în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunile 1–6). Repo public din decizia C (D03-4); runnerele Actions NU au fost re-măsurate.
 - PASUL 04: DONE — [arhitectura](docs/architecture/README.md), PR #6. Re-review Claude Opus 5.5 pe `5dc5e27`: R04-1..R04-4 rezolvate, APPROVED ([review](docs/architecture/review-claude.md)). Integrarea în `main` după PR #3 → #4 → #5.
 - PASUL 05: DONE pe branch — [verificări fără host](docs/ci/step-05.md), PR #7; pe commitul final `ce52da3c3cfc6c808ce929fee7ff5f03eea913c2`, rulările Actions #42351263418 (push) și #42351267008 (PR) au PASS. PR-urile #3–#7 încă trebuie integrate în ordine în main.
-- PASUL 06: READY conform dependenței 05, neînceput; recomandare GPT-6 Luna / Low sau Claude Haiku 5.5 / Low.
-- PASUL 07–84: NOT_STARTED.
+- PASUL 06: DONE pe branch `step-06/baseline` — [KPI, riscuri, 30/60/90](docs/planning/baseline-kpi.md) și [backlog 07–15](docs/planning/backlog.md). Toate cifrele economice sunt IPOTEZĂ; valorile de produs sunt N/A. Clasa L, review independent necerut. Neintegrat în `main`.
+- PASUL 07–84: NOT_STARTED. Următorul eligibil: PASUL 07 (clasa H: Astra/High sau Opus 5.5/High, review din familia opusă).
 
 ## Stări și tranziții
 
@@ -79,7 +79,7 @@ La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branc
 
 La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
 
-Punct de reluare: PASUL 05 DONE pe branch (PR #7, Actions #42351263418 și #42351267008 PASS pe HEAD final). Integrarea PR-urilor #3–#7 în main rămâne deschisă, main protejat. Următorul pas eligibil este 06, model recomandat GPT-6 Luna / Low sau Claude Haiku 5.5 / Low. STOP după 05.
+Punct de reluare: PASUL 06 DONE pe `step-06/baseline` (peste `step-04/architecture` care conține 02–05). SURSA DE ADEVĂR PENTRU STARE = ACEST BRANCH, nu `main` (main are doar 00–01, decizia proprietarului de a nu integra). O sesiune nouă pornește din `step-06/baseline`. Următorul: PASUL 07.
 
 
 ## Integrare în main — stare curentă
