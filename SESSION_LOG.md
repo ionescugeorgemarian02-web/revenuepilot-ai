@@ -209,3 +209,4 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Teste: 35 PASS pe 3.12.3 și 3.13.18; 5 mutații, una nedetectată inițial → test adăugat. Rulare manuală pe proces real PASS. CI remote NOT_RUN.
 - Defect găsit la rularea reală: adminul dev nu putea crea conținut (roluri fără moștenire); rezolvat prin rol dev configurabil, implicit editor.
 - Stare: REVIEW_PENDING (clasa H). Nu se face merge fără review Codex. STOP.
+- Corecție la S11: numărul real este 34 teste (17 noi în `tests/test_tenancy.py`), nu 35/18 cum am scris inițial.

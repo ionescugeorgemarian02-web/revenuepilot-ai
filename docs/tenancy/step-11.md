@@ -22,7 +22,7 @@ Citire după ID, listare, căutare, memorie (același drum filtrat), creare cu `
 Reguli suplimentare: ultimul admin nu poate fi eliminat sau retrogradat; granturile doar către membri ai aceluiași tenant; eliminarea unui membru îi retrage granturile; ștergerea cu copii este refuzată; o editare anulează aprobarea (aprobarea e legată de versiune, A08); schimbarea organizației rotește tokenul de sesiune; un utilizator cu mai multe organizații trebuie să aleagă explicit.
 
 ## Dovezi rulate efectiv
-- `python3 -B -I -m unittest discover -s tests`: **35 teste PASS** pe Python 3.12.3 și 3.13.18 (17 din pasul 10 adaptate la noul model, 18 noi în `tests/test_tenancy.py`).
+- `python3 -B -I -m unittest discover -s tests`: **34 teste PASS** pe Python 3.12.3 și 3.13.18 (16 de autentificare din pasul 10 adaptate la noul model, 1 smoke, 17 noi în `tests/test_tenancy.py`).
 - 3 organizații sintetice din 3 industrii (agenție, clinică, brutărie), fiecare cu admin, 2 editori, approver, viewer; un utilizator membru în 2 organizații cu roluri diferite.
 - **Teste de mutație** (cod stricat intenționat, apoi restaurat): căutare în toate tenanturile → 4 eșecuri; membership vechi acceptat → 1; grant către alt tenant → 1; tenant din sesiune fără recitirea membership-ului → 2; căutarea ignoră obiectele private → inițial **0 eșecuri (lacună)**, test adăugat, acum 1. Concluzie: testele detectează aceste scurgeri; nu dovedește absența altora.
 - Rulare manuală pe procesul real: login dev → creare resursă 201 → căutare 200 → export ca editor 403.
