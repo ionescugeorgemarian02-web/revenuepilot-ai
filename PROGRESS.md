@@ -17,7 +17,8 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 - PASUL 02: DONE — politica în [GIT_POLICY.md](GIT_POLICY.md). Protecția clasică pe `main` verificată din API (2026-11-07): PR cu 1 aprobare, `enforce_admins=true`, force-push și ștergere interzise. Ruleset-ul `main` rămâne `disabled` (nefolosit). Integrarea în `main` se face prin PR #3 → #4 → #5, doar de proprietar.
 - PASUL 03: DONE — audit în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunile 1–6). Repo public din decizia C (D03-4); runnerele Actions NU au fost re-măsurate.
 - PASUL 04: DONE — [arhitectura](docs/architecture/README.md), PR #6. Re-review Claude Opus 5.5 pe `5dc5e27`: R04-1..R04-4 rezolvate, APPROVED ([review](docs/architecture/review-claude.md)). Integrarea în `main` după PR #3 → #4 → #5.
-- PASUL 05–84: NOT_STARTED.
+- PASUL 05: TESTING — [verificări fără host](docs/ci/step-05.md), branch `step-05/ci-no-host`; rezultatele locale PASS, CI remote încă neconfirmat.
+- PASUL 06–84: NOT_STARTED.
 
 ## Stări și tranziții
 
@@ -40,6 +41,8 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 | 02 | DONE | Codex (politică); verificare protecție: Claude Sonnet 5.5 | Bază `df7d134` → branch `docs/step-02-git-policy` (PR #3) | Review independent neefectuat, necerut de plan pentru clasa T |
 | 03 | DONE | Claude Sonnet 5.5 (selectat de utilizator); audit preliminar: Codex | `08e715f` → branch `claude/blissful-galileo-9tz9fz` (PR #4, #5) | Clasa M; review independent necerut |
 | 04 | DONE | Codex; runtime/efort neverificate | Bază `7f692ba`; branch `step-04/architecture`, remediere `5dc5e27` | Claude Opus 5.5: CHANGES_REQUESTED pe `fd2ebbe`, APPROVED pe `5dc5e27` |
+
+| 05 | TESTING | Codex; runtime/efort neverificate | Bază `b9607d23f8d16d52a1e7f8bfd27be377dd530499`; workflow documentar pe branch | CI remote în așteptare; produsul nu există |
 
 Nu inventa model runtime, versiune, efort sau usage dacă nu sunt verificabile. Instrucțiunea utilizatorului pentru sesiunile curente este să nu se folosească usage; nu îl urmări și nu raporta procente.
 
@@ -75,9 +78,14 @@ La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branc
 
 La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
 
-Punct de reluare: PASUL 04 DONE (PR #6). Proprietarul integrează PR #3 → #4 → #5 → #6 în `main`. Următorul pas: PASUL 05 (GPT-6.1 Sol / Medium sau Claude Sonnet 5.5 / Medium), neînceput.
+Punct de reluare: PASUL 05 TESTING pe branchul propriu. Verifică jobul GitHub Actions și dovezile din docs/ci/step-05.md înainte de DONE; apoi STOP. PR-urile #3–#6 rămân suprapuse, main protejat.
 
 
 ## Predare actualizată după d87acab
 
 01–03 DONE, conform evidenței Claude și confirmării utilizatorului. Repo public și main protected=true reverificate din API. PR-urile #3–#5 sunt încă deschise; închiderea documentată a pașilor nu înseamnă că au fost integrate în main. PR #6 rămâne REVIEW_PENDING și include acum istoricul Claude. Următoarea activitate este review 04, recomandat Claude Opus 5.5 / High. PASUL 05 nu este început.
+
+
+## S05 — checkpoint curent
+
+PASUL 04 a fost aprobat de Claude pe `5dc5e27` și marcat DONE în `b9607d2`. PASUL 05 rulează doar verificări documentare și nu adaugă produs/hosting. Local: hashuri canonice 4/4 PASS, validator conceptual și zece mutații negative PASS, linkuri relative PASS. GitHub Actions: NOT_RUN până la job observat. Model recomandat după 05: GPT-6 Luna / Low pentru PASUL 06, dacă este disponibil.

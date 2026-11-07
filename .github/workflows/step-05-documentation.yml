@@ -1,0 +1,35 @@
+name: Step 05 documentation checks
+on:
+  push:
+    branches:
+      - 'step-05/**'
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'PROGRESS.md'
+      - 'docs/canonical/**'
+      - 'docs/architecture/**'
+      - 'scripts/verify_docs.py'
+      - '.github/workflows/step-05-documentation.yml'
+permissions:
+  contents: read
+concurrency:
+  group: step-05-docs-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 2
+      - name: Canonical source integrity
+        working-directory: docs/canonical
+        run: sha256sum -c SHA256SUMS
+      - name: Architecture contract
+        run: python3 -B -I docs/architecture/check_contract.py
+      - name: Local documentation links
+        run: python3 -B -I scripts/verify_docs.py
+      - name: Git whitespace
+        run: git diff --check HEAD^ HEAD

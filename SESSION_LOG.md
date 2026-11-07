@@ -108,3 +108,10 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Rulat: validator (PASS, 10 mutații), mutațiile reviewerului (respinse), SHA-256 (OK), `git diff --check` (OK).
 - Corecție: linie goală în `test-plan.md` care rupea tabelul. Lecție: commitul de review `c377257` a inclus `__pycache__` prin `git add -A`; rulează Python cu `-B` și verifică `git status` înainte de commit.
 - PASUL 04: DONE pe branch; integrarea PR #3 → #6 în `main` la proprietar. Runtime NOT_RUN. Cheltuieli: zero. STOP înainte de 05.
+
+
+## S05 — 2026-11-07 — PASUL 05 (Codex)
+- Autor: Codex; model/efort runtime neverificate. Bază `b9607d23f8d16d52a1e7f8bfd27be377dd530499`, PASUL 04 DONE înregistrat după review Claude; branch `step-05/ci-no-host`.
+- Scope: verificare locală și CI documentară fără host; workflow read-only cu checkout pinned, SHA-256, graf conceptual, linkuri și diff whitespace. Cost comercial nou zero; rularea GitHub Actions/limita efectivă se raportează din job.
+- Local PASS: hashuri canonice 4/4, graf și zece mutații negative, linkuri relative. CI încă de observat. Build/integrare/UI/live/deploy ale produsului NOT_RUN; nu există module.
+- Status înainte de push: TESTING; predare în docs/ci/step-05.md. Nu executa PASUL 06 în aceeași sesiune.
