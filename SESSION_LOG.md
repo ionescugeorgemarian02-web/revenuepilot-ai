@@ -57,3 +57,8 @@ Adaugă o intrare per sesiune Codex/Claude. Nu rescrie intrări precedente; core
 - Stare: 03 rămâne IMPLEMENTED; 02 rămâne BLOCKED până după publicare și aplicarea/dovada protecției.
 - Pas manual unic pentru telefon (proprietar): GitHub → repository → Settings → General → Danger Zone → Change visibility → Make public. După aceea o sesiune nouă reia 02: aplică protecția `main`, verifică Actions, apoi închide 02 și 03.
 - Teste produs, build, CI: NOT_RUN. Cheltuieli: zero.
+
+
+## S03c — 2026-11-07 — PASUL 03, actualizare după publicare (Claude)
+- Verificat: repo public; protecție main absentă (404); PUT blocat de proxy-ul sesiunii (403). Audit actualizat în `AUDIT_PASUL_03.md` §6.
+- Stare: 03 IMPLEMENTED; 02 BLOCKED. Pas manual proprietar: Settings → Branches → regulă pe `main` (PR obligatoriu, 1 aprobare, fără force-push). Teste produs/CI: NOT_RUN.
