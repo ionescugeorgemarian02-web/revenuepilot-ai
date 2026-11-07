@@ -15,7 +15,8 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 - PASUL 00: DONE — repository separat și privat, surse canonice importate, push verificat. Merge commit `1e0cf4451aac1f59e88e849f8e997a999fbfcd91`; PR #1.
 - PASUL 01: DONE prin PR-ul acestei livrări. A creat indexul, reguli de stare, istoric, decizii, tracker de blocaje/dovezi și handoff.
 - PASUL 02: BLOCKED — politica este pregătită în [GIT_POLICY.md](GIT_POLICY.md), dar main este neprotejat și accesul la protecție a returnat HTTP 403. Nu considera pasul închis.
-- PASUL 03–84: NOT_STARTED; urmează dependențele și recomandările modelului din plan.
+- PASUL 03: IMPLEMENTED, nu DONE — auditul complet este în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunea „verificare completă”, Claude). DONE așteaptă închiderea PASULUI 02, care cere o decizie a proprietarului (opțiunile A/B/C din §2 al auditului).
+- PASUL 04–84: NOT_STARTED; urmează dependențele și recomandările modelului din plan.
 
 ## Stări și tranziții
 
@@ -35,7 +36,8 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 |---|---|---|---|---|
 | 00 | DONE | Codex; modelul exact nu a fost verificat atunci | `590e4d1` → `1e0cf44`; surse și progres publicate prin PR #1 | Review independent nepretins |
 | 01 | DONE | Codex; utilizatorul a confirmat GPT-6 Luna / Low înainte de execuție | `1e0cf44` → SHA-ul PR-ului curent; jurnal și handoff în PR | Clasa L; review independent necerut/nepretins |
-| 02 | BLOCKED | Codex; model runtime/efort neverificat | Bază `df7d1347a99c19119544c56e57761b7d3fb46d99`; politică pregătită pe branch dedicat | Review independent neefectuat; protecția main neconfirmată |
+| 02 | BLOCKED | Codex; model runtime/efort neverificat | Bază `df7d1347a99c19119544c56e57761b7d3fb46d99`; politică pregătită pe branch dedicat | Review independent neefectuat; protecția main neconfirmată. Cauză identificată în audit 03: limită de plan GitHub (repo privat, fără Pro), nu permisiuni |
+| 03 | IMPLEMENTED | Claude Sonnet 5.5 (selectat de utilizator); audit preliminar anterior: Codex | Bază `08e715f046840a27dc1921b70db55f4c5943cbee` → branch `claude/step-03-audit-verificat` | Clasa M; review independent necerut, nepretins. DONE blocat de dependența 02 |
 
 Nu inventa model runtime, versiune, efort sau usage dacă nu sunt verificabile. Instrucțiunea utilizatorului pentru sesiunile curente este să nu se folosească usage; nu îl urmări și nu raporta procente.
 
