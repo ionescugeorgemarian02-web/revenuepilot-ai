@@ -94,3 +94,7 @@ Autor: Claude Sonnet 5.5, la instrucțiunea proprietarului („cota Codex se ter
 
 ## D12-1 — SQLite local pentru persistență demo, schemă pregătită pentru PostgreSQL
 Autor: Claude Sonnet 5.5. SQLite (stdlib) pentru a avea migrații, constrângeri și teste reale fără dependențe sau costuri; PostgreSQL rămâne ținta (ADR-04-2), alegerea hostului la 76. Izolarea între tenanturi este impusă de chei străine compuse `(tenant_id, id)`, nu doar de filtre. `TenancyService` nu este legat încă de store (declarat); legarea cere reluarea testelor de izolare pe store. Alternative respinse: fișiere JSON (fără integritate), ORM/bibliotecă externă (dependență nouă fără motiv măsurat), PostgreSQL local (necesită instalare/servicii fără host ales).
+
+
+## D13-1 — Evenimente cu schemă închisă și redacție la sursă, în memorie
+Autor: Claude Sonnet 5.5. Un eveniment poate conține doar câmpurile declarate pentru tipul lui, valori scalare redactate înainte de stocare; erorile se loghează doar ca clasă. Trace ID generat de server (nu acceptat de la client), propagat prin `contextvars` către auditul din pasul 11. Lanț de hash și buffer mărginit în loc de loguri libere. Alternative respinse: biblioteca `logging` cu filtre (permite câmpuri arbitrare), OpenTelemetry (dependență nouă fără motiv măsurat), loguri persistente acum (retenție și acces nedefinite încă). Limita: redacție pe tipare, doar memorie.
