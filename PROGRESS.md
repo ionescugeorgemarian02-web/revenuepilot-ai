@@ -15,7 +15,7 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 - PASUL 00: DONE — repository separat și privat, surse canonice importate, push verificat. Merge commit `1e0cf4451aac1f59e88e849f8e997a999fbfcd91`; PR #1.
 - PASUL 01: DONE prin PR-ul acestei livrări. A creat indexul, reguli de stare, istoric, decizii, tracker de blocaje/dovezi și handoff.
 - PASUL 02: BLOCKED — politica este pregătită în [GIT_POLICY.md](GIT_POLICY.md), dar main este neprotejat și accesul la protecție a returnat HTTP 403. Nu considera pasul închis.
-- PASUL 03: IMPLEMENTED, nu DONE — auditul complet este în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunea „verificare completă”, Claude). DONE așteaptă închiderea PASULUI 02, care cere o decizie a proprietarului (opțiunile A/B/C din §2 al auditului).
+- PASUL 03: IMPLEMENTED, nu DONE — auditul complet este în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunea „verificare completă”, Claude). DONE așteaptă închiderea PASULUI 02. Proprietarul a ales opțiunea C (repo public, D03-4); repo-ul este încă privat până la acțiunea manuală a proprietarului, apoi se reia 02 (protecție main).
 - PASUL 04–84: NOT_STARTED; urmează dependențele și recomandările modelului din plan.
 
 ## Stări și tranziții
