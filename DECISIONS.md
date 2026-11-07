@@ -28,3 +28,10 @@ Autor: Claude. GET protecție și GET rulesets returnează mesaj de plan GitHub 
 
 ## D03-3 — Versiuni fixate la PASUL 08
 Autor: Claude. Mediile Codex și Claude diferă (Python 3.12 vs 3.13, Node 24 vs 22, git/gh diferite) și pachetele noi nu pot fi instalate în mediul Claude. PASUL 08 trebuie să fixeze versiuni și lockfile și să nu depindă de instalări posibile doar într-un singur motor.
+
+## D03-4 — Proprietarul alege opțiunea C (repository public)
+Autor: Claude; decizia aparține proprietarului (mesaj din sesiune, 2026-11-07). Efect: protecția `main`, rulesets și runnerele Actions standard devin disponibile doar după ce repository-ul este public. Starea verificată la momentul deciziei: `private=true`, protecția și rulesets returnează HTTP 403 (plan). Agentul NU a schimbat vizibilitatea: acțiunea este greu reversibilă (conținutul poate fi indexat/copiat) și se face manual de proprietar. Înainte de publicare: conținutul repo-ului este doar documentație (planul V3, jurnale); nu conține secrete sau date personale verificate în această sesiune, dar proprietarul confirmă că acceptă expunerea strategiei și a planului. Din acel moment, orice commit nou este public: nu se adaugă secrete, date de clienți sau strategie comercială sensibilă.
+
+
+## D02-1 — Închiderea pașilor 02 și 03
+Autor: Claude, după verificare din API (2026-11-07): `required_approving_review_count=1`, `enforce_admins=true`, `allow_force_pushes=false`, `allow_deletions=false`; repo `public`. Limite: nu s-a testat un push direct respins (proxy-ul sesiunii nu permite scrieri pe main); protecția este dovedită din configurație, nu din încercare. Ruleset-ul `main` rămâne disabled. Review independent: necerut. Opțiunea A/B/C → C aplicată.

@@ -48,3 +48,22 @@ Adaugă o intrare per sesiune Codex/Claude. Nu rescrie intrări precedente; core
 - Teste produs, build, CI, deploy, API live, review independent: NOT_RUN. Cheltuieli: zero.
 - Stare: IMPLEMENTED; nu DONE (dependența 02 BLOCKED).
 - Handoff: proprietarul alege A/B/C (AUDIT_PASUL_03.md §2); se închid 02 și 03 și se integrează PR-urile; apoi PASUL 04 (Astra/High sau Opus/High, review din familia opusă). STOP.
+
+
+## S03b — 2026-11-07 — PASUL 03, continuare după decizia C (Claude)
+- Autor: Claude Sonnet 5.5. Bază: `4e83d32` (PR #4).
+- Premisă: auditul S03 exista deja; nu a fost refăcut. Reverificat în mediul curent: repo încă `private`, protecție/rulesets HTTP 403 (plan), Docker daemon absent, nicio cheie API runtime.
+- Modificări: decizia D03-4 (opțiunea C aleasă de proprietar), stare actualizată în `PROGRESS.md`. Vizibilitatea NU a fost schimbată de agent.
+- Stare: 03 rămâne IMPLEMENTED; 02 rămâne BLOCKED până după publicare și aplicarea/dovada protecției.
+- Pas manual unic pentru telefon (proprietar): GitHub → repository → Settings → General → Danger Zone → Change visibility → Make public. După aceea o sesiune nouă reia 02: aplică protecția `main`, verifică Actions, apoi închide 02 și 03.
+- Teste produs, build, CI: NOT_RUN. Cheltuieli: zero.
+
+
+## S03c — 2026-11-07 — PASUL 03, actualizare după publicare (Claude)
+- Verificat: repo public; protecție main absentă (404); PUT blocat de proxy-ul sesiunii (403). Audit actualizat în `AUDIT_PASUL_03.md` §6.
+- Stare: 03 IMPLEMENTED; 02 BLOCKED. Pas manual proprietar: Settings → Branches → regulă pe `main` (PR obligatoriu, 1 aprobare, fără force-push). Teste produs/CI: NOT_RUN.
+
+
+## S03d — 2026-11-07 — închidere 02 și 03 (Claude)
+- Verificat din API protecția clasică pe `main` (vezi D02-1). 02 și 03: DONE în `PROGRESS.md`. Teste produs/CI: NOT_RUN; Actions nemăsurat. Cheltuieli: zero.
+- Handoff: proprietarul integrează PR #3 → #4 → #5. PASUL 04 neînceput de această sesiune; PR #6 există, neverificat. STOP.

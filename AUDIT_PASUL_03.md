@@ -86,3 +86,8 @@ NOT_RUN: build, teste de produs, CI, deploy, API live, review independent (clasa
 ### 5. Handoff
 
 PASUL 03: IMPLEMENTED. Pentru DONE: proprietarul decide opțiunea A/B/C de la §2, PASUL 02 se închide pe baza ei, iar PR-urile #3 și acesta se integrează în `main`. Pasul următor pregătit după aceea: PASUL 04 (arhitectură, clasa H: Codex GPT-6 Astra / High sau Claude Opus 5.5 / High; review din familia opusă).
+
+
+### 6. Actualizare după publicarea repository-ului (opțiunea C, Claude, 2026-11-07)
+
+Măsurat în sesiune: `visibility=public`, `private=false`. Protecția `main`: `GET .../protection` → HTTP 404 „Branch not protected” (funcția este acum disponibilă, dar nu este configurată); `branches/main` → `protected=false`; rulesets → listă goală. Încercarea de a aplica protecția prin `PUT` din sesiunea Claude → HTTP 403 „Write access to this GitHub API path is not permitted through this proxy”: proxy-ul sesiunii blochează scrierea, deci protecția trebuie aplicată de proprietar din UI (Settings → Branches → Add rule pe `main`: Require a pull request, 1 aprobare, fără force-push/deletions). Starea 03: IMPLEMENTED; 02: BLOCKED până la protecție dovedită. Actions: nu s-a re-măsurat disponibilitatea runnerelor.
