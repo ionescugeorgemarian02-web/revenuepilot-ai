@@ -33,3 +33,8 @@ Adaugă o intrare per sesiune Codex/Claude. Nu rescrie intrări precedente; core
 - PASUL 03: audit preliminar în `AUDIT_PASUL_03.md`, BLOCKED de dependența 02; niciun DONE declarat.
 - Teste: versiuni și spațiu citite; GitHub Actions permissions HTTP 403, runs 0; CI și deploy NOT_RUN. `pdftotext --version` eșuat din cauza sintaxei.
 - Handoff: rezolvă protecția și review-ul PASULUI 02, apoi reia auditul 03. Nu a fost activat niciun serviciu plătit.
+
+## S02-acces — 2026-11-07 — autorizare configurare protecție
+- Autor: Codex. Utilizatorul a autorizat explicit configurarea protecției main.
+- Încercare efectivă: PUT `repos/ionescugeorgemarian02-web/revenuepilot-ai/branches/main/protection` cu review obligatoriu, enforce_admins și fără force-push/deletions. GitHub a returnat HTTP 403 `Resource not accessible by integration`; protecția nu a fost aplicată.
+- Niciun instrument browser/desktop disponibil în această sesiune. Status PASUL 02 rămâne BLOCKED; auditul preliminar PASUL 03 rămâne pe branch separat, dependent de 02. Nu s-a schimbat visibilitatea repository-ului și nu s-a achiziționat niciun plan.
