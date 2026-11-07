@@ -201,3 +201,11 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Livrat: `src/revenuepilot/auth.py`, rute în `app.py`, `tests/test_auth.py` (16 teste noi), `docs/auth/step-10.md`.
 - Teste: 17 PASS pe Python 3.12.3 și 3.13.18; rulare manuală pe proces real PASS. CI remote NOT_RUN. Cost zero.
 - Handoff: PASUL 11 depinde de 10 și 12; 12 (persistență) depinde de 08, deci 12 înaintea lui 11. STOP.
+
+
+## S11 — 2026-11-07 — PASUL 11 (Claude Opus 5.5)
+- Bază `e78ff99`; branch `step-11/tenancy`. Corecție: dependența lui 11 este doar 10 (eroarea mea din backlog-ul 06).
+- Livrat: `src/revenuepilot/tenancy.py`, integrare în `auth.py`/`app.py`, `tests/test_tenancy.py` (18 teste), adaptarea `tests/test_auth.py`, `docs/tenancy/step-11.md`.
+- Teste: 35 PASS pe 3.12.3 și 3.13.18; 5 mutații, una nedetectată inițial → test adăugat. Rulare manuală pe proces real PASS. CI remote NOT_RUN.
+- Defect găsit la rularea reală: adminul dev nu putea crea conținut (roluri fără moștenire); rezolvat prin rol dev configurabil, implicit editor.
+- Stare: REVIEW_PENDING (clasa H). Nu se face merge fără review Codex. STOP.
