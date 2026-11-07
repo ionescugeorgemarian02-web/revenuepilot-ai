@@ -57,3 +57,12 @@ Adaugă o intrare per sesiune Codex/Claude. Nu rescrie intrări precedente; core
 - Stare: 03 rămâne IMPLEMENTED; 02 rămâne BLOCKED până după publicare și aplicarea/dovada protecției.
 - Pas manual unic pentru telefon (proprietar): GitHub → repository → Settings → General → Danger Zone → Change visibility → Make public. După aceea o sesiune nouă reia 02: aplică protecția `main`, verifică Actions, apoi închide 02 și 03.
 - Teste produs, build, CI: NOT_RUN. Cheltuieli: zero.
+
+
+## S04 — 2026-11-07 — arhitectură propusă (Codex)
+- Autor: Codex; model/efort runtime neverificate. Recomandarea planului: GPT-6 Astra / High. Scope autorizat explicit de utilizator: executarea PASULUI 04, fără solicitări suplimentare de aprobare.
+- Bază: `7f692ba4002e75e1224836cc05bf732f2542e0dc`, ultima predare Claude; branch separat `step-04/architecture`. Main era `df7d1347a99c19119544c56e57761b7d3fb46d99`; PR-urile 3/4/5 deschise. Dependența 03 IMPLEMENTED, nu DONE.
+- Schimbări: diagramă conceptuală text, comparații monolit/serverless/worker/DB, tenant boundaries, relații de domeniu, migrare/rollback, costuri și ADR-uri în docs/architecture. Istoricul și documentele Claude păstrate.
+- Validare efectivă: `python3 docs/architecture/check_contract.py` PASS (graf + șapte mutații negative); `sha256sum -c SHA256SUMS` în docs/canonical PASS. Aceste probe nu validează produsul; 14 scenarii viitoare au oracle și etapă, NOT_RUN pe cod runtime.
+- Status: REVIEW_PENDING, cu dependența 03 deschisă. Review Claude real necesar; niciun review inventat. Build/CI/deploy/API live NOT_RUN. Fără costuri externe noi.
+- Lecție candidată: auditul Claude există pe branch neintegrat și trebuie consultat la reluare; nu se confundă cu aprobare în main. Predare: docs/architecture/handoff.md; lease autor eliberat la publicare pentru review. STOP înainte de 05.

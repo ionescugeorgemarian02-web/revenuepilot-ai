@@ -1,0 +1,10 @@
+{
+  "ui": ["application"],
+  "application": ["policy", "domain", "ports"],
+  "executor": ["policy", "domain", "ports"],
+  "policy": ["domain"],
+  "domain": [],
+  "ports": ["domain"],
+  "adapters": ["ports"],
+  "composition": ["ui", "application", "executor", "adapters"]
+}

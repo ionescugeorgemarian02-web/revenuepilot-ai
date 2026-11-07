@@ -1,0 +1,18 @@
+PASS: conceptual layer boundaries and acyclic dependency graph
+PASS: rejected UI bypass
+PASS: rejected provider import from application
+PASS: rejected domain coupled to storage
+PASS: rejected worker without policy
+PASS: rejected cycle
+PASS: rejected unknown layer
+PASS: rejected composition imported
+NOT_RUN: application behavior, authorization, database, workers, live providers
+RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf: OK
+RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.txt: OK
+RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf: OK
+RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.txt: OK
+PASS: git diff --check (no whitespace errors)
+PASS: relative links in README, PROGRESS and architecture Markdown resolve
+PASS: SESSION_LOG.md and DECISIONS.md preserve the complete base content as prefix
+PASS: canonical files unchanged relative to 7f692ba4002e75e1224836cc05bf732f2542e0dc
+NOT_RUN: independent Claude review; step 03 not DONE
