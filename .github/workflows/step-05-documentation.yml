@@ -3,29 +3,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'step-05/**'
-      - 'step-07/**'
-      - 'step-08/**'
+      - main
   pull_request:
-    paths:
-      - 'README.md'
-      - 'PROGRESS.md'
-      - 'docs/canonical/**'
-      - 'docs/architecture/**'
-      - 'docs/security/**'
-      - 'docs/stack/**'
-      - 'src/**'
-      - 'tests/**'
-      - 'pyproject.toml'
-      - '.python-version'
-      - 'requirements.lock'
-      - 'scripts/build_skeleton.py'
-      - 'scripts/verify_docs.py'
-      - '.github/workflows/step-05-documentation.yml'
 permissions:
   contents: read
 concurrency:
-  group: step-05-docs-${{ github.ref }}
+  group: foundation-checks-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   documentation:
