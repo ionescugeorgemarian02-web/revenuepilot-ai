@@ -4,7 +4,7 @@ Punct unic de reluare: această pagină. Sesiunea următoare citește planul can
 
 ## Proiect și limite
 
-Repository privat: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai
+Repository public: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai
 Owner `ionescugeorgemarian02-web` (GitHub ID 342118131), repository ID 1449074103. Branch canonic `main`.
 Surse canonice nemodificate: [Meta-prompt V3](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf), [Plan V3](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf). PDF-urile sunt sursa de adevăr; textul extras ajută căutarea. Hashuri în `docs/canonical/SHA256SUMS`.
 
@@ -14,8 +14,12 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 
 - PASUL 00: DONE — repository separat și privat, surse canonice importate, push verificat. Merge commit `1e0cf4451aac1f59e88e849f8e997a999fbfcd91`; PR #1.
 - PASUL 01: DONE prin PR-ul acestei livrări. A creat indexul, reguli de stare, istoric, decizii, tracker de blocaje/dovezi și handoff.
-- PASUL 02: READY, următorul pas conform dependenței. Planul recomandă GPT-6.1 Terra / Medium sau Claude Sonnet 5.5 / Medium. Neînceput.
-- PASUL 03–84: NOT_STARTED; urmează dependențele și recomandările modelului din plan.
+- PASUL 02: DONE — politica în [GIT_POLICY.md](GIT_POLICY.md). Protecția clasică pe `main` verificată din API (2026-11-07): PR cu 1 aprobare, `enforce_admins=true`, force-push și ștergere interzise. Ruleset-ul `main` rămâne `disabled` (nefolosit). Integrarea în `main` se face prin PR #3 → #4 → #5, doar de proprietar.
+- PASUL 03: DONE — audit în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunile 1–6). Repo public din decizia C (D03-4); runnerele Actions NU au fost re-măsurate.
+- PASUL 04: DONE — [arhitectura](docs/architecture/README.md), PR #6. Re-review Claude Opus 5.5 pe `5dc5e27`: R04-1..R04-4 rezolvate, APPROVED ([review](docs/architecture/review-claude.md)). Integrarea în `main` după PR #3 → #4 → #5.
+- PASUL 05: DONE pe branch — [verificări fără host](docs/ci/step-05.md), PR #7; pe commitul final `ce52da3c3cfc6c808ce929fee7ff5f03eea913c2`, rulările Actions #42351263418 (push) și #42351267008 (PR) au PASS. PR-urile #3–#7 încă trebuie integrate în ordine în main.
+- PASUL 06: DONE pe branch `step-06/baseline` — [KPI, riscuri, 30/60/90](docs/planning/baseline-kpi.md) și [backlog 07–15](docs/planning/backlog.md). Toate cifrele economice sunt IPOTEZĂ; valorile de produs sunt N/A. Clasa L, review independent necerut. Neintegrat în `main`.
+- PASUL 07–84: NOT_STARTED. Următorul eligibil: PASUL 07 (clasa H: Astra/High sau Opus 5.5/High, review din familia opusă).
 
 ## Stări și tranziții
 
@@ -35,7 +39,11 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 |---|---|---|---|---|
 | 00 | DONE | Codex; modelul exact nu a fost verificat atunci | `590e4d1` → `1e0cf44`; surse și progres publicate prin PR #1 | Review independent nepretins |
 | 01 | DONE | Codex; utilizatorul a confirmat GPT-6 Luna / Low înainte de execuție | `1e0cf44` → SHA-ul PR-ului curent; jurnal și handoff în PR | Clasa L; review independent necerut/nepretins |
-| 02 | READY | Model recomandat: GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium | Depinde de 01; încă neînceput | De stabilit conform planului |
+| 02 | DONE | Codex (politică); verificare protecție: Claude Sonnet 5.5 | Bază `df7d134` → branch `docs/step-02-git-policy` (PR #3) | Review independent neefectuat, necerut de plan pentru clasa T |
+| 03 | DONE | Claude Sonnet 5.5 (selectat de utilizator); audit preliminar: Codex | `08e715f` → branch `claude/blissful-galileo-9tz9fz` (PR #4, #5) | Clasa M; review independent necerut |
+| 04 | DONE | Codex; runtime/efort neverificate | Bază `7f692ba`; branch `step-04/architecture`, remediere `5dc5e27` | Claude Opus 5.5: CHANGES_REQUESTED pe `fd2ebbe`, APPROVED pe `5dc5e27` |
+
+| 05 | DONE | Codex; runtime/efort neverificate | Bază `b9607d23f8d16d52a1e7f8bfd27be377dd530499`; PR #7, Actions #42351263418 și #42351267008 PASS pe HEAD final | Clasa M; review independent necerut/nepretins |
 
 Nu inventa model runtime, versiune, efort sau usage dacă nu sunt verificabile. Instrucțiunea utilizatorului pentru sesiunile curente este să nu se folosească usage; nu îl urmări și nu raporta procente.
 
@@ -50,7 +58,7 @@ Jurnalul append-only: [DECISIONS.md](DECISIONS.md). Sesiunile și handoff-urile:
 
 ## Blocaje, riscuri, limite
 
-- Rulesets GitHub pentru repo privat au fost refuzate de API în planul curent. Fără upgrade sau schimbare de vizibilitate; PASUL 02 va documenta politica aplicabilă.
+- Blocaj istoric al protecției repo privat rezolvat: repository public, protecție clasică main verificată (D02-1). Ruleset-ul separat disabled nu este mecanismul activ.
 - Host și chei API comerciale: neconfigurate; nu blochează documentarea.
 - Build/test produs, CI, deploy și API live: NOT_RUN; nu există implementare de produs în scope-ul PASULUI 01.
 
@@ -71,4 +79,20 @@ La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branc
 
 La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
 
-Punct de reluare după acest PR: PASUL 02 READY; model recomandat GPT-6.1 Terra / Medium (alternativ Claude Sonnet 5.5 / Medium).
+Punct de reluare: PASUL 06 DONE pe `step-06/baseline` (peste `step-04/architecture` care conține 02–05). SURSA DE ADEVĂR PENTRU STARE = ACEST BRANCH, nu `main` (main are doar 00–01, decizia proprietarului de a nu integra). O sesiune nouă pornește din `step-06/baseline`. Următorul: PASUL 07.
+
+
+## Integrare în main — stare curentă
+
+Pașii 01–05 au dovezi de finalizare pe branchuri/PR; PR-urile #3–#7 sunt încă deschise. `main` rămâne protejat. La 2026-11-07, PR #3 a raportat `REVIEW_REQUIRED`, iar `gh pr merge 3 --merge --match-head-commit b73fc9b` a fost respins de regula branchului. Nu s-a folosit bypass `--admin`; integrarea cere review GitHub valid, apoi merge în ordine. Această limită ține de integrarea în main, nu de rezultatul CI al PASULUI 05.
+
+## S05 — checkpoint curent
+
+PASUL 04 a fost aprobat de Claude pe `5dc5e27` și marcat DONE în `b9607d2`. PASUL 05 a rulat doar verificări documentare și nu a adăugat produs/hosting. Local: hashuri canonice 4/4 PASS, validator conceptual și zece mutații negative PASS, linkuri relative PASS. GitHub Actions #42351263418 și #42351267008: PASS efectiv pe ce52da3; workflow activ. Model recomandat după 05: GPT-6 Luna / Low pentru PASUL 06, dacă este disponibil.
+
+
+## Dovezi PASUL 05
+
+- E05-1 PASS local: `sha256sum -c SHA256SUMS` 4/4, `python3 -B -I docs/architecture/check_contract.py` 10 mutații negative, `python3 -B -I scripts/verify_docs.py` 7 fișiere, `git diff --check`.
+- E05-2 PASS GitHub Actions pe HEAD final `ce52da3c3cfc6c808ce929fee7ff5f03eea913c2`: [push run 42351263418](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/actions/runs/42351263418) și [PR run 42351267008](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/actions/runs/42351267008), ambele `completed/success`. CI pe main NOT_RUN; PR-urile sunt încă suprapuse.
+- E05-3 NOT_RUN: build, unit, integrare, UI/E2E, live APIs, deployment ale produsului; produsul nu are încă module. Costuri externe noi zero. A apărut avertisment de deprecere Node 20 pentru actions/checkout v4, fără eșec de job; actualizare ulterioară cu pin verificat.
