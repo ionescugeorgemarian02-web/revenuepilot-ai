@@ -1,0 +1,10 @@
+[project]
+name = "revenuepilot-ai"
+version = "0.0.0"
+description = "Minimal local skeleton for RevenuePilot AI"
+requires-python = ">=3.12,<3.14"
+dependencies = []
+
+[tool.revenuepilot]
+step = 8
+external_dependencies = 0

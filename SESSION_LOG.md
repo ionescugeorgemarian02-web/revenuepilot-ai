@@ -159,3 +159,18 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 
 ### S07 — corecție după reverificarea criteriului canonic
 - PASUL 07: DONE pe branch; registrul T01–T18 și politicile sunt livrate, probele locale PASS, review-ul exceptat prin D07-2. CI remote NOT_RUN/HTTP 422 este limitare suplimentară, nu condiție de acceptare din plan. Înregistrările BLOCKED anterioare rămân istoric și sunt corectate explicit prin D07-3. Integrarea PR #10 urmează cu verificarea regulilor GitHub reale.
+
+## S08 — 2026-11-07 — schelet minim (Codex)
+- Autor: Codex; model/efort runtime neverificate. Recomandarea planului GPT-6.1 Sol / Medium. Cerere explicită utilizator: continuă cu 08. Bază `d4fcb1a4c25a551a19d69c71d3c75bec0628ea6c`, branch separat `step-08/minimal-skeleton` peste 07. Dependența 05 DONE; 07 BLOCKED (CI), deci 08 nu este marcat DONE.
+- Livrare: Python stdlib, versiune 3.12.14 în `.python-version`, suport declarat 3.12–3.13, zero dependențe terțe, zipapp build, endpoint HTTP loopback `/health`, test real 200/JSON și 404. Corectat și workflowul invalid introdus anterior: `workflow_dispatch` rătăcit sub `jobs.documentation`; acum jobul are doar `runs-on`/steps. CI extins pentru build/test, când Actions va fi disponibil.
+- Probe inițiale: Python 3.12.14 și 3.13 locale, build PASS (1384 bytes), unittest smoke PASS (1 test pe fiecare). Nu este test de auth/tenant/DB și nu dovedește un host public. API/live/deploy/memorie produs NOT_RUN. Cost comercial nou zero.
+- Baseline 06: apare un test produs executat local, fără KPI comercial ori economie măsurată. Riscuri: contul GitHub are Actions dezactivat (422); 07 rămâne deschis; stdlib HTTP este doar shell local. Lecție: verificați YAML structural după editări automate; simpla prezență a triggerului nu dovedește un job valid.
+- Status: TESTING pe branch, predare docs/stack/step-08.md. STOP înainte de 09.
+
+### S08 — verificări locale și limită curentă
+- SHA-256 canonice 4/4 PASS; validator arhitectură (control pozitiv + zece respingeri) PASS; linkuri în 13 documente PASS; `git diff --check` PASS. YAML analizat cu PyYAML 6.0.3 instalat local: trigger `workflow_dispatch` la nivelul corect, job/documentation valid și pasul smoke prezent — PASS structural. PyYAML este unealtă locală de verificare, nu dependență a produsului.
+- Build/test local Python 3.12 și 3.13 PASS. CI remote NOT_RUN deoarece Actions este dezactivat pentru cont; nu se revendică un run.
+
+### S08 — închidere după PR #10
+- PR #10 pentru 07 merged în main la `a5d77597d25d7d5253537964ec08a869099ec7b1`. PR #11 pentru 08 are baza `step-07/threat-model`; branchul 08 a fost reancorat pe main și conflictele de jurnal au fost rezolvate păstrând intrările ambelor pasuri. Baza PR #11 trebuie schimbată la main după push.
+- PASUL 08 DONE conform criteriului canonic: build zipapp și smoke HTTP executate local pe Python 3.12/3.13, cu rezultate PASS. CI remote NOT_RUN/HTTP 422 rămâne limită de mediu, nu probă pozitivă. Nu se începe 09 în această sesiune.
