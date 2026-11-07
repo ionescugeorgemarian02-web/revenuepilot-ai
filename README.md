@@ -2,7 +2,7 @@
 
 Punct unic de pornire pentru sesiunile viitoare. Executat exclusiv PASUL 00 la 2026-11-07.
 
-**PASUL 00: publicare în curs.** Repository privat: [ionescugeorgemarian02-web/revenuepilot-ai](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai). Starea verificată și dovezile se află în registrul de progres.
+**PASUL 00: DONE. PASUL 01: READY, neexecutat.** Repository privat: [ionescugeorgemarian02-web/revenuepilot-ai](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai). Starea verificată și dovezile se află în registrul de progres.
 
 - [Meta-prompt canonic V3, PDF original](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf) · [text integral extras](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.txt)
 - [Plan canonic V3, PDF original](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf) · [text integral extras](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.txt)

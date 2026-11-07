@@ -1,0 +1,9 @@
+PASS: remote byte-for-byte docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf
+PASS: remote byte-for-byte docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.txt
+PASS: remote byte-for-byte docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf
+PASS: remote byte-for-byte docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.txt
+PASS: remote byte-for-byte docs/canonical/SHA256SUMS
+PASS: GitHub private / ADMIN / push=true confirmate prin conector si CLI
+PASS: push real si ls-remote SHA 9b7f56eddbbdc85e76269c237658939a282deeb9
+PASS: git fsck --full; ambele commituri initiale sunt stramosi ai HEAD
+NOT_RUN: build, teste produs, CI, deploy, API live; fara produs in PASUL 00
