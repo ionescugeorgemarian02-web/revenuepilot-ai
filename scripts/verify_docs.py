@@ -1,9 +1,14 @@
-"""Check local Markdown links in the project entrypoints and architecture notes."""
+"""Check local Markdown links in the project entrypoints and architecture/security notes."""
 import re
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
-files = [root / 'README.md', root / 'PROGRESS.md', *sorted((root / 'docs/architecture').glob('*.md'))]
+files = [
+    root / 'README.md',
+    root / 'PROGRESS.md',
+    *sorted((root / 'docs/architecture').glob('*.md')),
+    *sorted((root / 'docs/security').glob('*.md')),
+]
 errors = []
 for source in files:
     content = source.read_text(encoding='utf-8')

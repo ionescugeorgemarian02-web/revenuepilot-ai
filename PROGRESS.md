@@ -1,6 +1,6 @@
 # RevenuePilot AI — index și stare curentă
 
-Punct unic de reluare: această pagină. Sesiunea următoare citește planul canonic și cel mai recent handoff înainte de lucru.
+Punct unic de reluare. Ultima actualizare: 2026-11-07, Codex, PASUL 07. Citește planul canonic și [predarea curentă](docs/security/handoff.md) înainte de lucru.
 
 ## Proiect și limite
 
@@ -8,91 +8,50 @@ Repository public: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai
 Owner `ionescugeorgemarian02-web` (GitHub ID 342118131), repository ID 1449074103. Branch canonic `main`.
 Surse canonice nemodificate: [Meta-prompt V3](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf), [Plan V3](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf). PDF-urile sunt sursa de adevăr; textul extras ajută căutarea. Hashuri în `docs/canonical/SHA256SUMS`.
 
-GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației, baza de date și cheile API comerciale nu sunt configurate. Nu modifica `fabrica-autonoma`; nu adăuga secrete ori date personale; nu activa cheltuieli fără autorizare. Un pas per sesiune, apoi STOP.
+GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API comerciale nu sunt configurate. Nu modifica `fabrica-autonoma`; nu adăuga secrete ori date clienți. Un pas per sesiune, apoi STOP. Acordul permanent al utilizatorului permite operațiile de dezvoltare necesare fără confirmări repetate (D07-1); dovezile/review-ul rămân reale.
 
-## Pas curent
+## Registrul execuțiilor
 
-- PASUL 00: DONE — repository separat și privat, surse canonice importate, push verificat. Merge commit `1e0cf4451aac1f59e88e849f8e997a999fbfcd91`; PR #1.
-- PASUL 01: DONE prin PR-ul acestei livrări. A creat indexul, reguli de stare, istoric, decizii, tracker de blocaje/dovezi și handoff.
-- PASUL 02: DONE — politica în [GIT_POLICY.md](GIT_POLICY.md). Protecția clasică pe `main` verificată din API (2026-11-07): PR cu 1 aprobare, `enforce_admins=true`, force-push și ștergere interzise. Ruleset-ul `main` rămâne `disabled` (nefolosit). Integrarea în `main` se face prin PR #3 → #4 → #5, doar de proprietar.
-- PASUL 03: DONE — audit în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunile 1–6). Repo public din decizia C (D03-4); runnerele Actions NU au fost re-măsurate.
-- PASUL 04: DONE — [arhitectura](docs/architecture/README.md), PR #6. Re-review Claude Opus 5.5 pe `5dc5e27`: R04-1..R04-4 rezolvate, APPROVED ([review](docs/architecture/review-claude.md)). Integrarea în `main` după PR #3 → #4 → #5.
-- PASUL 05: DONE pe branch — [verificări fără host](docs/ci/step-05.md), PR #7; pe commitul final `ce52da3c3cfc6c808ce929fee7ff5f03eea913c2`, rulările Actions #42351263418 (push) și #42351267008 (PR) au PASS. PR-urile #3–#7 încă trebuie integrate în ordine în main.
-- PASUL 06: DONE pe branch `step-06/baseline` — [KPI, riscuri, 30/60/90](docs/planning/baseline-kpi.md) și [backlog 07–15](docs/planning/backlog.md). Toate cifrele economice sunt IPOTEZĂ; valorile de produs sunt N/A. Clasa L, review independent necerut. Neintegrat în `main`.
-- PASUL 07–84: NOT_STARTED. Următorul eligibil: PASUL 07 (clasa H: Astra/High sau Opus 5.5/High, review din familia opusă).
+| Pas | Status | Autor / model declarat | Dovezi / rezultat | Review |
+|---|---|---|---|---|
+| 00 | DONE | Codex; model exact neverificat atunci | `1e0cf44`, PR #1; surse canonice și repository separat | Independent nepretins |
+| 01 | DONE | Codex; Luna / Low declarat de utilizator atunci | index, jurnale, decizii și handoff în main | Clasa L |
+| 02 | DONE | Codex politică; Claude Sonnet 5.5 verificare | [GIT_POLICY](GIT_POLICY.md), D02-1; main protejat | Clasa T |
+| 03 | DONE | Claude Sonnet 5.5; audit preliminar Codex | [Audit](AUDIT_PASUL_03.md), repository public | Clasa M |
+| 04 | DONE | Codex; model/efort runtime neverificate | [Arhitectură](docs/architecture/README.md), remediere `5dc5e27`, inclusă în main | Claude Opus 5.5 APPROVED: [raport](docs/architecture/review-claude.md) |
+| 05 | DONE | Codex; model/efort runtime neverificate | [Probe CI](docs/ci/step-05.md), PR #7 integrat `4d2bd75`; Actions #42351263418 și #42351267008 PASS pe `ce52da3` | Clasa M |
+| 06 | DONE | Claude Sonnet 5.5 | [Baseline KPI](docs/planning/baseline-kpi.md), [backlog](docs/planning/backlog.md), PR #8 integrat `63ac761` | Clasa L |
+| 07 | DONE (CI remote NOT_RUN) | Codex; model/efort runtime neverificate | [Threat model, 18 amenințări și politici](docs/security/README.md); baza `63ac761`, branch `step-07/threat-model` | Review exceptat explicit de utilizator (D07-2); neefectuat |
+| 08–84 | NOT_STARTED | — | 08 depinde de 05 și 07, conform planului canonic | — |
+
+Corecție față de indexul vechi: `main` la `63ac761c0fb972d10592bdd38a3335c23a4312e8` conține 00–06. Mențiunile anterioare „main are doar 00–01”, „05/06 neintegrat” și lanțul obligatoriu de PR-uri suprapuse sunt depășite; istoria rămâne în Git și SESSION_LOG. PR #9 pentru autorizare/CI este separat și nu a fost integrat de această sesiune. Numărul curent al aprobărilor GitHub nu este dedus din auditul istoric; regulile efective se verifică la integrare, fără bypass.
+
+Nu inventa model runtime, versiune, efort sau usage. Utilizatorul a cerut să nu se folosească usage; nu îl urmări și nu raporta procente.
 
 ## Stări și tranziții
 
 Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTING`, `REVIEW_PENDING`, `CHANGES_REQUESTED`, `VERIFIED`, `DONE`, `BLOCKED`, `DEFERRED`, `FAILED`.
 
-1. La start, verifică repository, branch, HEAD, worktree, acest index și ultimul handoff.
-2. `NOT_STARTED → READY` numai când dependențele sunt DONE și pasul este autorizat/modelul potrivit.
-3. `READY → CLAIMED → IN_PROGRESS → IMPLEMENTED → TESTING`; înregistrează autor, model declarat, SHA de bază și scop.
-4. `TESTING → VERIFIED → DONE` doar cu criterii și dovezi reale, commit/push și review real când este cerut. Nu deduce testele din cod sau din plan.
-5. Lipsa dependenței/accesului duce la `BLOCKED` ori `DEFERRED`, cu probă și pas de deblocare. Nu sări peste dependențe.
-6. Review-ul independent este scris de reviewer, separat de autor. Fără reviewer disponibil, păstrează `REVIEW_PENDING` când planul îl cere.
-7. Istoricul este append-only. Corecțiile noi indică intrarea anterioară; fără force-push.
+1. La start: fetch; confirmă repository, branch, HEAD și worktree; citește indexul, planul și ultima intrare de jurnal.
+2. READY cere dependențe DONE și scope autorizat. Înregistrează autorul, modelul verificabil/declarat, baza, branchul și claim-ul înainte de lucru.
+3. Parcurge CLAIMED → IN_PROGRESS → IMPLEMENTED → TESTING; raportează testele efective, nu cele deduse din documentație.
+4. VERIFIED/DONE cer criterii, commit/push, probe și review real când este cerut. Fără reviewer pentru H: REVIEW_PENDING, exceptând o derogare explicită a utilizatorului consemnată în decizii (07: D07-2).
+5. Lipsa accesului/dependenței: BLOCKED/DEFERRED, cu probă și cale de rezolvare. Nu sări peste dependențe.
+6. Jurnalele de sesiuni și decizii sunt append-only; review-ul aparține reviewerului și identifică SHA-ul. Fără force-push ori review inventat.
 
-## Registrul execuțiilor
+## Dovezi și limite curente
 
-| Pas | Status | Autor / model declarat | Bază → rezultat | Review |
-|---|---|---|---|---|
-| 00 | DONE | Codex; modelul exact nu a fost verificat atunci | `590e4d1` → `1e0cf44`; surse și progres publicate prin PR #1 | Review independent nepretins |
-| 01 | DONE | Codex; utilizatorul a confirmat GPT-6 Luna / Low înainte de execuție | `1e0cf44` → SHA-ul PR-ului curent; jurnal și handoff în PR | Clasa L; review independent necerut/nepretins |
-| 02 | DONE | Codex (politică); verificare protecție: Claude Sonnet 5.5 | Bază `df7d134` → branch `docs/step-02-git-policy` (PR #3) | Review independent neefectuat, necerut de plan pentru clasa T |
-| 03 | DONE | Claude Sonnet 5.5 (selectat de utilizator); audit preliminar: Codex | `08e715f` → branch `claude/blissful-galileo-9tz9fz` (PR #4, #5) | Clasa M; review independent necerut |
-| 04 | DONE | Codex; runtime/efort neverificate | Bază `7f692ba`; branch `step-04/architecture`, remediere `5dc5e27` | Claude Opus 5.5: CHANGES_REQUESTED pe `fd2ebbe`, APPROVED pe `5dc5e27` |
+- E07-1 PASS local: hashuri canonice 4/4; graf conceptual cu control pozitiv și zece mutații negative; linkuri în 12 fișiere; `git diff --check`. Comenzi în [verification](docs/security/verification.md).
+- E07-2: [PR #10](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/10), livrare `3d94c3999783631936ba407575c18983c42cb9d3`, trigger CI `d402574`. Push/HEAD remote PASS. CI remote BLOCKED/NOT_RUN: dispatch respins HTTP 422, `Actions has been disabled for this user`. Workflow active, dar zero runs/checks pentru 07. Detalii în checkpointul S07 din [SESSION_LOG](SESSION_LOG.md).
+- E07-3 NOT_RUN: toate scenariile runtime T01–T18, build/unit/integration/E2E/deploy/API live și review independent 07. Nu există implementare de produs în acest pas.
+- Cost comercial nou activat: zero. Nu s-au creat servicii, conturi, hosting sau credențiale. Nu pretindem cost monetar Actions fără facturare.
+- Limită CI: Actions dezactivat la nivelul utilizatorului GitHub; triggerul push și dispatch explicit nu au produs o rulare. Reactivarea contului/Actions trebuie rezolvată prin mecanismele GitHub; nu este o lipsă de aprobare pentru lucru. Review-ul Claude nu mai este cerut pentru 07 (D07-2); CI remote NOT_RUN este limitare suplimentară, nu blocaj al criteriului canonic 07.
+- Riscul curent: măsurile de securitate sunt contracte propuse, nu protecții deja instalate. Review-ul independent pentru 07 a fost exceptat explicit de utilizator; nu este raportat ca efectuat.
 
-| 05 | DONE | Codex; runtime/efort neverificate | Bază `b9607d23f8d16d52a1e7f8bfd27be377dd530499`; PR #7, Actions #42351263418 și #42351267008 PASS pe HEAD final | Clasa M; review independent necerut/nepretins |
+## Reluare și predare
 
-Nu inventa model runtime, versiune, efort sau usage dacă nu sunt verificabile. Instrucțiunea utilizatorului pentru sesiunile curente este să nu se folosească usage; nu îl urmări și nu raporta procente.
+Reluarea este **verificarea CI pentru PASUL 07** din `step-07/threat-model`, după fetch și verificarea SHA-ului curent. Utilizatorul a precizat „Nu trebuie să facă Claude review”; D07-2 elimină această condiție pentru 07. Nu se așteaptă un reviewer și nu se cere o nouă confirmare. Ultima încercare de dispatch a reconfirmat HTTP 422 (`Actions has been disabled for this user`). PASUL 07 îndeplinește criteriul canonic prin documente și verificări locale; CI remote nu este criteriu de acceptare la 07. Integrează PR #10 prin mecanismele GitHub disponibile, consemnând CI NOT_RUN. După reactivarea Actions, rulează verificările suplimentare și consemnează rezultatul.
 
-## Decizii curente
+După DONE 07: PASUL 08, GPT-6.1 Sol / Medium sau Claude Sonnet 5.5 / Medium; dependențe 05,07. În această sesiune STOP înainte de 08.
 
-Jurnalul append-only: [DECISIONS.md](DECISIONS.md). Sesiunile și handoff-urile: [SESSION_LOG.md](SESSION_LOG.md). Șablon: [SESSION_TEMPLATE.md](SESSION_TEMPLATE.md).
-
-- D00-1: permisiunea de creare remote a lipsit inițial; proprietarul a creat repo privat, după care push-ul a fost verificat. Istoric: `docs/step-00-initial-blocker.md`.
-- D00-2: PDF-urile originale, textul extras și hashurile rămân împreună; fără import de cod din alte proiecte.
-- D01-1: `PROGRESS.md` este singurul index pentru starea curentă; jurnalul de sesiuni și decizii rămân append-only, evitând statusuri concurente.
-- D01-2: autorul consemnează modelul selectat de utilizator; modelul intern neverificabil este etichetat ca atare.
-
-## Blocaje, riscuri, limite
-
-- Blocaj istoric al protecției repo privat rezolvat: repository public, protecție clasică main verificată (D02-1). Ruleset-ul separat disabled nu este mecanismul activ.
-- Host și chei API comerciale: neconfigurate; nu blochează documentarea.
-- Build/test produs, CI, deploy și API live: NOT_RUN; nu există implementare de produs în scope-ul PASULUI 01.
-
-## Dovezi
-
-| ID | Pas | Probă | Rezultat |
-|---|---|---|---|
-| E00-1 | 00 | Extragere pdftotext 11 + 34 pagini, comparație byte-for-byte și `sha256sum -c` | PASS |
-| E00-2 | 00 | GitHub repo metadata, permisiuni admin/push, push și citire fișiere remote | PASS |
-| E00-3 | 00 | PR #1, `git fsck --full`; istorice inițiale păstrate | PASS |
-| E01-1 | 01 | Planul canonic și registrul reluate; dependența 00 verificată | PASS |
-| E01-2 | 01 | Linkuri locale, consistența indexului și diff whitespace | Se consemnează după verificare |
-| E01-3 | 01 | Push, PR și HEAD main comparat | Se consemnează după verificare |
-
-## Procedura de reluare și handoff
-
-La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branch, HEAD și worktree; citește indexul, pasul din plan și ultima intrare din `SESSION_LOG.md`; selectează primul pas READY cu dependențe închise.
-
-La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
-
-Punct de reluare: PASUL 06 DONE pe `step-06/baseline` (peste `step-04/architecture` care conține 02–05). SURSA DE ADEVĂR PENTRU STARE = ACEST BRANCH, nu `main` (main are doar 00–01, decizia proprietarului de a nu integra). O sesiune nouă pornește din `step-06/baseline`. Următorul: PASUL 07.
-
-
-## Integrare în main — stare curentă
-
-Pașii 01–05 au dovezi de finalizare pe branchuri/PR; PR-urile #3–#7 sunt încă deschise. `main` rămâne protejat. La 2026-11-07, PR #3 a raportat `REVIEW_REQUIRED`, iar `gh pr merge 3 --merge --match-head-commit b73fc9b` a fost respins de regula branchului. Nu s-a folosit bypass `--admin`; integrarea cere review GitHub valid, apoi merge în ordine. Această limită ține de integrarea în main, nu de rezultatul CI al PASULUI 05.
-
-## S05 — checkpoint curent
-
-PASUL 04 a fost aprobat de Claude pe `5dc5e27` și marcat DONE în `b9607d2`. PASUL 05 a rulat doar verificări documentare și nu a adăugat produs/hosting. Local: hashuri canonice 4/4 PASS, validator conceptual și zece mutații negative PASS, linkuri relative PASS. GitHub Actions #42351263418 și #42351267008: PASS efectiv pe ce52da3; workflow activ. Model recomandat după 05: GPT-6 Luna / Low pentru PASUL 06, dacă este disponibil.
-
-
-## Dovezi PASUL 05
-
-- E05-1 PASS local: `sha256sum -c SHA256SUMS` 4/4, `python3 -B -I docs/architecture/check_contract.py` 10 mutații negative, `python3 -B -I scripts/verify_docs.py` 7 fișiere, `git diff --check`.
-- E05-2 PASS GitHub Actions pe HEAD final `ce52da3c3cfc6c808ce929fee7ff5f03eea913c2`: [push run 42351263418](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/actions/runs/42351263418) și [PR run 42351267008](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/actions/runs/42351267008), ambele `completed/success`. CI pe main NOT_RUN; PR-urile sunt încă suprapuse.
-- E05-3 NOT_RUN: build, unit, integrare, UI/E2E, live APIs, deployment ale produsului; produsul nu are încă module. Costuri externe noi zero. A apărut avertisment de deprecere Node 20 pentru actions/checkout v4, fără eșec de job; actualizare ulterioară cu pin verificat.
+Istoric: [SESSION_LOG.md](SESSION_LOG.md), [DECISIONS.md](DECISIONS.md). Șablon: [SESSION_TEMPLATE.md](SESSION_TEMPLATE.md). Documentele vechi de handoff sunt instantanee istorice; acest index și predarea 07 descriu punctul curent.

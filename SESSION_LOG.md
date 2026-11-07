@@ -130,3 +130,32 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Cifre economice: toate IPOTEZĂ/N/A; nimic inventat. K03/K04 necalculate din timpi reali.
 - Teste: verificările CI documentare rulate local (vezi commit). Produs: NOT_RUN. Cheltuieli: zero.
 - Handoff: PASUL 07 (clasa H). STOP.
+
+## S07 — 2026-11-07 — PASUL 07 (Codex)
+- Autor: Codex; model/efort runtime neverificate. Recomandare canonică autor Astra / High, reviewer Claude Opus 5.5 / High. Usage nefolosit conform instrucțiunii utilizatorului.
+- Claim: 2026-11-07T12:47:38Z, bază `63ac761c0fb972d10592bdd38a3335c23a4312e8`, branch `step-07/threat-model`; scope exclusiv 07. Dependența 04 DONE, aprobată Claude; main include deja 00–06 prin PR #8. Nu există modificări anterioare în worktree la preluare.
+- Livrare: frontiere/adversari/active, registru T01–T18 cu severitate, owner, aprobări, mitigări, negativ+oracle și pozitiv; matrice de acces, contract policy-as-code, granturi finite, STOP și incident response. Date exclusiv sintetice; fără module, host, API ori acțiuni externe de produs.
+- Corecții: indexul vechi avea main/integrarea 05–06 depășite și README indica review 04 pending; sincronizate cu dovezile Git. Jurnalele anterioare și sursele canonice păstrate. Link checker extins la docs/security; workflow include path-ul security. PR #9 rămâne separat.
+- Verificări locale efective: SHA-256 4/4 PASS; validator graf, control pozitiv și zece mutații negative PASS; linkuri 12 fișiere PASS; git diff --check PASS. CI remote încă de observat la acest checkpoint. Runtime T01–T18, build/deploy/API live și review independent 07 NOT_RUN.
+- Baseline: R02/R03/R06/R07/R08/R09 din 06 detaliate, fără reducere de risc/KPI măsurată. Cost comercial nou activat zero; Actions fără cost monetar dedus. Memorie: numai documentare Git; politicile viitoare nu sunt învățate automat din conținut extern.
+- Lecție: granturile de dezvoltare nu sunt granturi tenant; testul negativ fără control pozitiv poate accepta un sistem care refuză tot. Nu s-a invocat un reviewer fictiv.
+- Stare: IMPLEMENTED → TESTING → REVIEW_PENDING după verificările locale; predare docs/security/handoff.md. Lipsa review-ului real este limita pentru DONE. STOP înainte de 08; claim-ul se eliberează după publicare, în checkpointul următor.
+
+### S07 — checkpoint publicat și diagnostic CI
+- Commit documentar: `3d94c3999783631936ba407575c18983c42cb9d3`; push și HEAD remote confirmate. PR #10: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/10 (base main). Dreptul de scriere este demonstrat prin push/crearea PR, fără modificarea protecțiilor.
+- GitHub API după creare: workflow `410148933` active, dar actions/runs returnează total_count=0 și check-runs pentru HEAD tot 0. Citirea vechiului run #42351267008 returnează 404 în mediul curent; nu se șterge dovada istorică, dar nu se pretinde că a fost reverificată acum. CI 07 rămâne NOT_RUN până la o rulare efectivă.
+- Se adaugă trigger push pentru step-07/** și workflow_dispatch în același workflow read-only, pentru declanșare explicită fără host/secrete. CI nu este înlocuit cu un status artificial.
+
+### S07 — predare finală și limită de infrastructură
+- Commit trigger/evidență: `d402574`; push reușit. `gh workflow run step-05-documentation.yml --ref step-07/threat-model` → FAIL HTTP 422: `Actions has been disabled for this user`. Nu este o cerere de aprobare și nu poate fi rezolvată prin eliminarea review-ului. CI remote BLOCKED, joburi NOT_RUN; nu există run URL sau succes inventat.
+- Trigger push/dispatch pregătit pentru momentul reactivării Actions; reviewerul poate evalua conținutul acum. Înainte de integrare, CI real pe HEAD trebuie observat și consemnat. Nu s-au schimbat setări de cont/protecții și nu s-au creat costuri/cred.
+- Lease/claim Codex eliberat la acest checkpoint. Continuă Claude Opus 5.5 / High cu review real al HEAD-ului PR #10, apoi remediere după caz. Autorul a livrat documentarea 07; status REVIEW_PENDING cu blocaj CI explicit, nu DONE. STOP înainte de 08. Nicio modificare în fabrica-autonoma.
+
+### S07 — eliminarea condiției de review la instrucțiunea utilizatorului
+- Autor: Codex; baza `b71c74198d020a77c033fb2aa0dfcad5c82e4114`, branch `step-07/threat-model`, PR #10. Utilizatorul spune „Nu trebuie să facă Claude review”; decizia D07-2 înlocuiește condiția de review pentru acest pas. Nu se solicită alt reviewer și nu se declară un review efectuat.
+- Indexul, documentele curente și predarea sunt actualizate: BLOCKED (CI), documentare implementată. Intrările istorice REVIEW_PENDING sunt păstrate ca istoric, nu ca stare curentă.
+- Verificare efectivă: PR #10 OPEN, HEAD b71c741, mergeStateStatus CLEAN, statusCheckRollup gol. Reîncercarea `gh workflow run step-05-documentation.yml --ref step-07/threat-model` eșuează HTTP 422, `Actions has been disabled for this user`. Acest blocaj nu este eliminat de derogarea de review.
+- Scope: documentarea deciziei și sincronizarea stării; fără modificări runtime sau pasul 08. Claim eliberat după push; reluare la deblocarea CI, fără review Claude.
+
+### S07 — corecție după reverificarea criteriului canonic
+- PASUL 07: DONE pe branch; registrul T01–T18 și politicile sunt livrate, probele locale PASS, review-ul exceptat prin D07-2. CI remote NOT_RUN/HTTP 422 este limitare suplimentară, nu condiție de acceptare din plan. Înregistrările BLOCKED anterioare rămân istoric și sunt corectate explicit prin D07-3. Integrarea PR #10 urmează cu verificarea regulilor GitHub reale.
