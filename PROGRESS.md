@@ -1,6 +1,6 @@
 # RevenuePilot AI — index și stare curentă
 
-Punct unic de reluare. Ultima actualizare: 2026-11-07, Codex, review PASUL 11 (CHANGES_REQUESTED). Citește planul canonic și [predarea curentă](docs/tenancy/step-11.md) înainte de lucru.
+Punct unic de reluare. Ultima actualizare: 2026-11-07, Claude, PASUL 12 (DONE). Citește planul canonic și [predarea curentă](docs/storage/step-12.md) înainte de lucru.
 
 ## Proiect și limite
 
@@ -26,7 +26,8 @@ GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API
 | 09 | DONE | Codex; model/efort runtime neverificate | [UI mobil și verificări](docs/ui/step-09.md); PR #15 merge `14c575d`, Chromium 320/360/390, build și smoke local PASS | Clasa T; review independent necerut |
 | 10 | DONE (CI remote NOT_RUN) | Claude Sonnet 5.5 | [Autentificare dev](docs/auth/step-10.md); 17 teste PASS pe Python 3.12 și 3.13; fără OAuth, persistență sau UI | Clasa M; review independent necerut |
 | 11 | DONE | Claude Opus 5.5 (implementare); Codex `gpt-6-astra`/medium (review, pornit de Claude) | [Tenancy și RBAC](docs/tenancy/step-11.md); 40 teste PASS pe 3.12 și 3.13 (rulate de autor); 2 runde de review, R11-1..4 remediate | Codex: CHANGES_REQUESTED pe `eaa99e0`, APPROVED pe `d0c078d` ([raport](docs/tenancy/review-codex.md)); limită: Codex a rulat 22/40 teste (sandbox fără socketuri) |
-| 12–84 | NOT_STARTED | — | Corecție: 11 depinde doar de 10 (planul canonic); afirmația „10 și 12” din backlog era greșită. 12 depinde de 08 | — |
+| 12 | DONE | Claude Sonnet 5.5 | [Persistență](docs/storage/step-12.md); 56 teste PASS pe 3.12 și 3.13, 7 mutații detectate; SQLite local, nelegat încă de API | Clasa M: review independent necerut, Codex neutilizat (D11-2) |
+| 13–84 | NOT_STARTED | — | 13 (clasă T) depinde de 11 și 12 | — |
 
 Corecție față de indexul vechi: `main` după PR #11 (`eec6012`) conține 00–08. Mențiunile anterioare „main are doar 00–01”, „05/06 neintegrat” și lanțul obligatoriu de PR-uri suprapuse sunt depășite; istoria rămâne în Git și SESSION_LOG. PR #9 pentru autorizare/CI este separat și nu a fost integrat de această sesiune. Numărul curent al aprobărilor GitHub nu este dedus din auditul istoric; regulile efective se verifică la integrare, fără bypass.
 
@@ -54,9 +55,9 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 
 ## Reluare și predare
 
-Reluare: Claude remediază R11-1..4 din [review-ul Codex](docs/tenancy/review-codex.md), apoi Codex verifică noul SHA. PASUL 11 rămâne CHANGES_REQUESTED; PR #18 nu se integrează. STOP înainte de 12.
+Reluare: PASUL 11 DONE (Codex APPROVED pe `d0c078d`, PR #18 integrat `09130e7`) și PASUL 12 DONE (PR de integrare în curs). Următorul pas eligibil: 13 (clasă T; Codex neutilizat). La 15 și 17 (clasă H) se folosesc Codex `gpt-6-astra`/medium și advisor; vezi [codex-loop.md](docs/collab/codex-loop.md).
 
 Istoric: [SESSION_LOG.md](SESSION_LOG.md), [DECISIONS.md](DECISIONS.md). Șablon: [SESSION_TEMPLATE.md](SESSION_TEMPLATE.md). Documentele vechi de handoff sunt instantanee istorice; acest index și predarea 08 descriu punctul curent.
 
 
-Review independent PASUL 11: Codex, SHA `eaa99e05bf1e5e8387313b25b76dc1c4c4a6eb59`, verdict **CHANGES_REQUESTED**; [raport și remediere R11-1..4](docs/tenancy/review-codex.md). Nu integra PR #18 și nu începe 12 înainte de remediere/re-review.
+Istoric review PASUL 11: Codex pe `eaa99e0` CHANGES_REQUESTED (R11-1..4), remediat; pe `d0c078d` APPROVED. [Raport complet](docs/tenancy/review-codex.md) (intrările vechi sunt păstrate; verdictul curent e secțiunea a doua).
