@@ -230,3 +230,9 @@ S11-review — publicare: raportul/probele/indexul au fost împinse pe branchul 
 - Primul apel Codex orchestrat de Claude (trigger 17:52 UTC): `gpt-6-astra`, efort medium, read-only, un singur apel, 18.387 tokeni. Verdict APPROVED pe `d0c078d`.
 - Limită: sandbox-ul Codex fără socketuri → 22/40 teste rulate de el; testele HTTP (18) rulate doar de autor (40 PASS). Promptul exact și răspunsul integral sunt în `docs/tenancy/review-codex.md`.
 - Pasul 11: DONE. Clasa H respectată (review din familia opusă pe SHA-ul final), cu transparență privind orchestrarea.
+
+
+## S12 — 2026-11-07 — PASUL 12 (Claude Sonnet 5.5)
+- Bază `09130e7`; branch `step-12/persistence`. Livrat: `src/revenuepilot/storage.py`, `tests/test_storage.py` (16 teste), `docs/storage/step-12.md`, D12-1.
+- Teste: 56 PASS pe 3.12 și 3.13; 7 mutații detectate. Defect propriu găsit și corectat: `visible_resources` fără verificare de membership. Un test al meu era greșit (părinte self-reference), corectat; garda statică pe sursă era fragilă, înlocuită cu garda pe SQL urmărit la execuție.
+- Codex: neutilizat (clasa M, D11-2). Cost zero. CI remote NOT_RUN.
