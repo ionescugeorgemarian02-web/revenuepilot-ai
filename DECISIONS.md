@@ -19,3 +19,12 @@ Autor: Codex; utilizatorul a confirmat Luna / Low. Se înregistrează selecția 
 
 ## D01-3 — Usage
 Autor: Codex la instrucțiunea utilizatorului. Usage-ul nu se urmărește și nu se deduce. Handoff-ul se actualizează la finalul sesiunii, fără prag procentual.
+
+## D03-1 — Executarea lui 03 cu dependența 02 deschisă
+Autor: Claude, la cererea explicită a utilizatorului, care credea 02 închis. Auditul nu modifică și nu închide 02; rezultatul este IMPLEMENTED, nu DONE. Motiv: auditul este documentare read-only, iar blocajul 02 nu depinde de el; marcarea DONE ar fi ocolit regula „nu sări peste dependențe”.
+
+## D03-2 — Cauza blocajului 02 și lipsa deciziei agentului
+Autor: Claude. GET protecție și GET rulesets returnează mesaj de plan GitHub (Pro sau repo public). Corectează interpretarea „doar permisiuni”. Alegerea între control procedural (A), plan plătit (B) și repo public (C) este a proprietarului; agentul nu schimbă vizibilitatea sau planul. Opțiunile sunt în `AUDIT_PASUL_03.md` §2.
+
+## D03-3 — Versiuni fixate la PASUL 08
+Autor: Claude. Mediile Codex și Claude diferă (Python 3.12 vs 3.13, Node 24 vs 22, git/gh diferite) și pachetele noi nu pot fi instalate în mediul Claude. PASUL 08 trebuie să fixeze versiuni și lockfile și să nu depindă de instalări posibile doar într-un singur motor.
