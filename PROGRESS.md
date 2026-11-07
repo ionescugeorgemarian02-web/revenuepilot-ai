@@ -16,7 +16,7 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 - PASUL 01: DONE prin PR-ul acestei livrări. A creat indexul, reguli de stare, istoric, decizii, tracker de blocaje/dovezi și handoff.
 - PASUL 02: DONE — politica în [GIT_POLICY.md](GIT_POLICY.md). Protecția clasică pe `main` verificată din API (2026-11-07): PR cu 1 aprobare, `enforce_admins=true`, force-push și ștergere interzise. Ruleset-ul `main` rămâne `disabled` (nefolosit). Integrarea în `main` se face prin PR #3 → #4 → #5, doar de proprietar.
 - PASUL 03: DONE — audit în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunile 1–6). Repo public din decizia C (D03-4); runnerele Actions NU au fost re-măsurate.
-- PASUL 04: REVIEW_PENDING — [propunerea Codex](docs/architecture/README.md), PR #6. Dependența 03 este acum DONE conform d87acab; rămâne review-ul independent Claude.
+- PASUL 04: CHANGES_REQUESTED — [propunerea Codex](docs/architecture/README.md), PR #6; [review Claude](docs/architecture/review-claude.md) pe `fd2ebbe`: 2 constatări MEDIUM (restore/ștergeri, kill switch și resurse), 2 LOW.
 - PASUL 05–84: NOT_STARTED.
 
 ## Stări și tranziții
@@ -40,7 +40,7 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 | 02 | DONE | Codex (politică); verificare protecție: Claude Sonnet 5.5 | Bază `df7d134` → branch `docs/step-02-git-policy` (PR #3) | Review independent neefectuat, necerut de plan pentru clasa T |
 | 03 | DONE | Claude Sonnet 5.5 (selectat de utilizator); audit preliminar: Codex | `08e715f` → branch `claude/blissful-galileo-9tz9fz` (PR #4, #5) | Clasa M; review independent necerut |
 
-| 04 | REVIEW_PENDING | Codex; runtime/efort neverificate | Bază `7f692ba4002e75e1224836cc05bf732f2542e0dc`; branch `step-04/architecture` | Claude necesar; dependența 03 DONE |
+| 04 | CHANGES_REQUESTED | Codex; runtime/efort neverificate | Bază `7f692ba`; branch `step-04/architecture` | Claude Opus 5.5, `fd2ebbe`: CHANGES_REQUESTED (R04-1..R04-5) |
 
 Nu inventa model runtime, versiune, efort sau usage dacă nu sunt verificabile. Instrucțiunea utilizatorului pentru sesiunile curente este să nu se folosească usage; nu îl urmări și nu raporta procente.
 
@@ -76,7 +76,7 @@ La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branc
 
 La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
 
-Punct de reluare: PASUL 04 REVIEW_PENDING, PR #6. Pașii 02–03 DONE pe branchurile de lucru; integrarea PR-urilor #3–#5 în main rămâne deschisă.
+Punct de reluare: PASUL 04 CHANGES_REQUESTED, PR #6. Autorul rezolvă R04-1..R04-4 din `docs/architecture/review-claude.md`, apoi re-review Claude pe noul SHA. Pașii 02–03 DONE pe branchurile de lucru; integrarea PR-urilor #3–#5 în main rămâne deschisă.
 
 
 ## Predare actualizată după d87acab
