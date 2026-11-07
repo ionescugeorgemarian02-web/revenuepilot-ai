@@ -15,6 +15,7 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from revenuepilot.app import Handler, ThreadingHTTPServer
 from revenuepilot.auth import AuthService, hash_password, verify_password
+from revenuepilot.tenancy import TenancyService
 
 
 class Clock:
@@ -28,13 +29,18 @@ class Clock:
 class AuthHttpTest(unittest.TestCase):
     def setUp(self) -> None:
         self.clock = Clock()
-        self.auth = AuthService(clock=self.clock)
+        self.tenancy = TenancyService()
+        self.auth = AuthService(clock=self.clock, tenancy=self.tenancy)
+        self.tenancy.user_exists = self.auth.user_exists
         self.pw_a = secrets.token_urlsafe(18)
         self.pw_b = secrets.token_urlsafe(18)
-        self.user_a = self.auth.add_user("synthetic-a@example.invalid", self.pw_a, "tenant-a", "editor")
-        self.user_b = self.auth.add_user("synthetic-b@example.invalid", self.pw_b, "tenant-b", "viewer")
+        self.user_a = self.auth.add_user("synthetic-a@example.invalid", self.pw_a)
+        self.user_b = self.auth.add_user("synthetic-b@example.invalid", self.pw_b)
+        self.org_a = self.tenancy.create_organization("Synthetic A", self.user_a.user_id)
+        self.org_b = self.tenancy.create_organization("Synthetic B", self.user_b.user_id)
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
         self.server.auth = self.auth
+        self.server.tenancy = self.tenancy
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
         self.port = self.server.server_port
@@ -73,7 +79,7 @@ class AuthHttpTest(unittest.TestCase):
 
     # --- unauthorized access ------------------------------------------
     def test_unauthenticated_access_denied(self):
-        for path in ("/api/me", "/api/tenants/tenant-a/whoami"):
+        for path in ("/api/me", f"/api/tenants/{self.org_a}/whoami"):
             status, _, body = self.req("GET", path)
             self.assertEqual((status, body), (401, {"error": "unauthenticated"}))
 
@@ -90,7 +96,7 @@ class AuthHttpTest(unittest.TestCase):
         self.assertEqual(body["auth_mode"], "dev-local-only")
         self.assertEqual(headers["Cache-Control"], "no-store")
         status, _, me = self.req("GET", "/api/me", cookie=cookie)
-        self.assertEqual((status, me["tenant_id"], me["role"]), (200, "tenant-a", "editor"))
+        self.assertEqual((status, me["tenant_id"], me["role"]), (200, self.org_a, "admin"))
 
     def test_bad_credentials_are_indistinguishable(self):
         wrong = self.login(password="x" * 20)[:3:2]
@@ -135,14 +141,14 @@ class AuthHttpTest(unittest.TestCase):
     # --- wrong identity --------------------------------------------------
     def test_tenant_is_taken_from_session_not_client(self):
         _, _, _, cookie_a = self.login()
-        self.assertEqual(self.req("GET", "/api/tenants/tenant-a/whoami", cookie=cookie_a)[0], 200)
-        other = self.req("GET", "/api/tenants/tenant-b/whoami", cookie=cookie_a)
+        self.assertEqual(self.req("GET", f"/api/tenants/{self.org_a}/whoami", cookie=cookie_a)[0], 200)
+        other = self.req("GET", f"/api/tenants/{self.org_b}/whoami", cookie=cookie_a)
         missing = self.req("GET", "/api/tenants/no-such-tenant/whoami", cookie=cookie_a)
         self.assertEqual((other[0], other[2]), (403, {"error": "forbidden"}))
         self.assertEqual((missing[0], missing[2]), (403, {"error": "forbidden"}))  # no tenant enumeration
         _, _, _, cookie_b = self.login("synthetic-b@example.invalid", self.pw_b)
-        self.assertEqual(self.req("GET", "/api/me", cookie=cookie_b)[2]["tenant_id"], "tenant-b")
-        self.assertEqual(self.req("GET", "/api/tenants/tenant-a/whoami", cookie=cookie_b)[0], 403)
+        self.assertEqual(self.req("GET", "/api/me", cookie=cookie_b)[2]["tenant_id"], self.org_b)
+        self.assertEqual(self.req("GET", f"/api/tenants/{self.org_a}/whoami", cookie=cookie_b)[0], 403)
 
     # --- brute force -----------------------------------------------------
     def test_lockout_after_repeated_failures_and_recovery(self):
@@ -202,24 +208,26 @@ class AuthUnitTest(unittest.TestCase):
         self.assertFalse(verify_password("a" * 100_000, h1))
 
     def test_store_keeps_no_plaintext_secrets(self):
-        auth = AuthService()
+        tenancy = TenancyService()
+        auth = AuthService(tenancy=tenancy)
         pw = secrets.token_urlsafe(18)
-        user = auth.add_user("synthetic@example.invalid", pw, "tenant-x", "viewer")
+        user = auth.add_user("synthetic@example.invalid", pw)
+        org = tenancy.create_organization("Synthetic X", user.user_id)
         token, _ = auth.login("synthetic@example.invalid", pw, "c")
         self.assertNotIn(pw, repr(auth._users))
         self.assertTrue(user.password_hash.startswith("scrypt$"))
         self.assertNotIn(token, auth._sessions)  # only a hash of the token is stored
-        self.assertEqual(auth.authenticate(token).tenant_id, "tenant-x")
+        self.assertEqual(auth.authenticate(token).tenant_id, org)
 
     def test_input_validation_and_session_cap(self):
         auth = AuthService(max_sessions_per_user=2)
         pw = secrets.token_urlsafe(18)
-        for args in (("ab", pw, "t", "viewer"), ("valid-name", "short", "t", "viewer"), ("valid-name", pw, "t", "root"), ("valid-name", pw, "", "viewer")):
+        for args in (("ab", pw), ("valid-name", "short"), ("x" * 65, pw)):
             with self.assertRaises(ValueError):
                 auth.add_user(*args)
-        auth.add_user("valid-name", pw, "t", "viewer")
+        auth.add_user("valid-name", pw)
         with self.assertRaises(ValueError):
-            auth.add_user("VALID-NAME", pw, "t", "viewer")
+            auth.add_user("VALID-NAME", pw)
         tokens = [auth.login("valid-name", pw, "c")[0] for _ in range(3)]
         live = [t for t in tokens if self._ok(auth, t)]
         self.assertEqual(len(live), 2)

@@ -201,3 +201,32 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Livrat: `src/revenuepilot/auth.py`, rute în `app.py`, `tests/test_auth.py` (16 teste noi), `docs/auth/step-10.md`.
 - Teste: 17 PASS pe Python 3.12.3 și 3.13.18; rulare manuală pe proces real PASS. CI remote NOT_RUN. Cost zero.
 - Handoff: PASUL 11 depinde de 10 și 12; 12 (persistență) depinde de 08, deci 12 înaintea lui 11. STOP.
+
+
+## S11 — 2026-11-07 — PASUL 11 (Claude Opus 5.5)
+- Bază `e78ff99`; branch `step-11/tenancy`. Corecție: dependența lui 11 este doar 10 (eroarea mea din backlog-ul 06).
+- Livrat: `src/revenuepilot/tenancy.py`, integrare în `auth.py`/`app.py`, `tests/test_tenancy.py` (18 teste), adaptarea `tests/test_auth.py`, `docs/tenancy/step-11.md`.
+- Teste: 35 PASS pe 3.12.3 și 3.13.18; 5 mutații, una nedetectată inițial → test adăugat. Rulare manuală pe proces real PASS. CI remote NOT_RUN.
+- Defect găsit la rularea reală: adminul dev nu putea crea conținut (roluri fără moștenire); rezolvat prin rol dev configurabil, implicit editor.
+- Stare: REVIEW_PENDING (clasa H). Nu se face merge fără review Codex. STOP.
+- Corecție la S11: numărul real este 34 teste (17 noi în `tests/test_tenancy.py`), nu 35/18 cum am scris inițial.
+
+## S11-review — 2026-11-07 — Codex, review independent
+- SHA analizat `eaa99e05bf1e5e8387313b25b76dc1c4c4a6eb59`, PR #18, implementator Claude Opus 5.5. Reviewer Codex/OpenAI; model/efort runtime neverificate. Verdict CHANGES_REQUESTED. Raport `docs/tenancy/review-codex.md`, probe independente `docs/tenancy/review-probes.py`.
+- 34 teste existente PASS pe Python 3.12.14, build/hashuri/graf/linkuri/whitespace PASS. Patru probleme reproduse: mutație parțială a aprobării (P1), deadlock auth/tenancy (P1), audit allow fals la acces privat refuzat (P2), JSON cu tip greșit întrerupe conexiunea (P2). Controale independente pentru context stale, export privat, grant persistent și switch/revocare PASS.
+- Sunt tratate explicit toate cele șase întrebări din „Pentru reviewer”. CI/DB/RLS/browser NOT_RUN; cost nou zero. Codul produsului nemodificat. Nu se integrează PR #18; STOP înainte de 12. Claude remediază și predă noul SHA pentru re-review.
+
+S11-review — publicare: raportul/probele/indexul au fost împinse pe branchul PR #18 în `5f00836`. Evenimentul formal REQUEST_CHANGES a fost refuzat de GitHub HTTP 422 („Review Can not request changes on your own pull request”), deoarece agenții folosesc același cont. Verdictul a fost publicat ca un comentariu de review pe PR; starea persistentă este CHANGES_REQUESTED. Nu s-a făcut merge.
+
+
+## S11b — 2026-11-07 — remediere R11 (Claude Opus 5.5)
+- Review Codex pe `eaa99e0`: CHANGES_REQUESTED, 4 constatări (2 P1, 2 P2), toate reproduse și de mine cu probele lui.
+- Remediere: update atomic, ordine unică a lock-urilor între servicii, audit cu decizie finală, validare de tip + plasă 500. 6 teste de regresie noi, verificate că eșuează pe `eaa99e0`.
+- Lecție: un test de concurență trebuie rulat și pe codul defect; prima mea versiune trecea fals pentru că nu forța ordinea.
+- Stare: REVIEW_PENDING, re-review Codex necesar. Fără merge. STOP.
+
+
+## S11c — 2026-11-07 — re-review Codex și închiderea pasului 11 (Claude)
+- Primul apel Codex orchestrat de Claude (trigger 17:52 UTC): `gpt-6-astra`, efort medium, read-only, un singur apel, 18.387 tokeni. Verdict APPROVED pe `d0c078d`.
+- Limită: sandbox-ul Codex fără socketuri → 22/40 teste rulate de el; testele HTTP (18) rulate doar de autor (40 PASS). Promptul exact și răspunsul integral sunt în `docs/tenancy/review-codex.md`.
+- Pasul 11: DONE. Clasa H respectată (review din familia opusă pe SHA-ul final), cu transparență privind orchestrarea.

@@ -13,7 +13,10 @@ import hmac
 import secrets
 import threading
 import time
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
+
+if TYPE_CHECKING:
+    from .tenancy import TenancyService
 
 SCRYPT_N = 2**14
 SCRYPT_R = 8
@@ -22,7 +25,6 @@ SCRYPT_MAX_N = 2**15  # refuse stored hashes that would force excessive CPU/RAM
 SCRYPT_MAXMEM = 64 * 1024 * 1024
 MIN_PASSWORD = 12
 MAX_PASSWORD = 256
-ROLES = frozenset({"viewer", "editor", "approver", "admin"})
 
 
 class AuthError(Exception):
@@ -72,8 +74,6 @@ class User:
     user_id: str
     username: str
     password_hash: str
-    tenant_id: str
-    role: str
     active: bool = True
     auth_version: int = 1
 
@@ -84,15 +84,20 @@ class Session:
     created_at: float
     last_seen: float
     auth_version: int
+    active_org: str | None = None
 
 
 @dataclass(frozen=True)
 class Principal:
-    """Identity derived server-side on every request; never taken from the client."""
+    """Identity derived server-side on every request; never taken from the client.
+
+    tenant_id/role are None when the session has no active organization or the
+    membership was revoked; callers must then deny tenant-scoped access.
+    """
 
     user_id: str
-    tenant_id: str
-    role: str
+    tenant_id: str | None
+    role: str | None
 
 
 class AuthService:
@@ -105,7 +110,9 @@ class AuthService:
         lockout_seconds: int = 60,
         max_sessions_per_user: int = 5,
         cookie_secure: bool = True,
+        tenancy: "TenancyService | None" = None,
     ) -> None:
+        self.tenancy = tenancy
         self._clock = clock
         self.idle_ttl = idle_ttl
         self.absolute_ttl = absolute_ttl
@@ -134,19 +141,34 @@ class AuthService:
     def _key(token: str) -> str:
         return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
-    def add_user(self, username: str, password: str, tenant_id: str, role: str) -> User:
+    def add_user(self, username: str, password: str) -> User:
+        """Users are global identities; organization access comes only from memberships."""
         name = self._norm(username)
         _check_new_password(password)
-        if role not in ROLES or not tenant_id:
-            raise ValueError("invalid role or tenant")
         password_hash = hash_password(password)
         with self._lock:
             if name in self._by_name:
                 raise ValueError("username exists")
-            user = User(secrets.token_hex(8), name, password_hash, tenant_id, role)
+            user = User("u_" + secrets.token_hex(8), name, password_hash)
             self._users[user.user_id] = user
             self._by_name[name] = user.user_id
             return user
+
+    def user_exists(self, user_id: str) -> bool:
+        with self._lock:
+            return user_id in self._users
+
+    def _principal(self, user: User, org_id: str | None) -> Principal:
+        m = self.tenancy.membership(user.user_id, org_id) if self.tenancy and org_id else None
+        return Principal(user.user_id, m.org_id if m else None, m.role if m else None)
+
+    def _initial_org(self, user_id: str, requested: object) -> str | None:
+        orgs = self.tenancy.organizations_of(user_id) if self.tenancy else []
+        if requested is not None:
+            if requested not in orgs:
+                raise AuthError("forbidden_organization")
+            return requested
+        return orgs[0] if len(orgs) == 1 else None  # several memberships: caller must choose
 
     def deactivate_user(self, user_id: str) -> None:
         with self._lock:
@@ -167,7 +189,7 @@ class AuthService:
         count, _ = self._failures.get(key, (0, 0.0))
         self._failures[key] = (count + 1, now + self.lockout_seconds)
 
-    def login(self, username: object, password: object, client_id: str) -> tuple[str, Principal]:
+    def login(self, username: object, password: object, client_id: str, organization_id: object = None) -> tuple[str, Principal]:
         try:
             name = self._norm(username)
         except ValueError:
@@ -189,10 +211,13 @@ class AuthService:
                 self._record_failure(key, now)
                 raise AuthError("invalid_credentials")
             self._failures.pop(key, None)
-            token = self._create_session(user, now)
-            return token, Principal(user.user_id, user.tenant_id, user.role)
+        org = self._initial_org(user.user_id, organization_id)
+        with self._lock:
+            token = self._create_session(user, now, org)
+        # Lock order rule (R11-2): TenancyService is only called with the auth lock released.
+        return token, self._principal(user, org)
 
-    def _create_session(self, user: User, now: float) -> str:
+    def _create_session(self, user: User, now: float, active_org: str | None = None) -> str:
         self._purge(now)
         mine = sorted(
             (k for k, s in self._sessions.items() if s.user_id == user.user_id),
@@ -201,7 +226,7 @@ class AuthService:
         for old in mine[: max(0, len(mine) - self.max_sessions_per_user + 1)]:
             del self._sessions[old]
         token = secrets.token_urlsafe(32)
-        self._sessions[self._key(token)] = Session(user.user_id, now, now, user.auth_version)
+        self._sessions[self._key(token)] = Session(user.user_id, now, now, user.auth_version, active_org)
         return token
 
     def _purge(self, now: float) -> None:
@@ -231,7 +256,26 @@ class AuthService:
                 del self._sessions[key]
                 raise AuthError("unauthenticated")
             session.last_seen = now
-            return Principal(user.user_id, user.tenant_id, user.role)
+            active_org = session.active_org
+        # Membership is re-read on every request: revocation takes effect immediately.
+        return self._principal(user, active_org)
+
+    def switch_organization(self, token: str | None, org_id: object) -> tuple[str, Principal]:
+        """Changing tenant re-checks membership and rotates the session token."""
+        principal = self.authenticate(token)
+        if not isinstance(org_id, str) or not self.tenancy or self.tenancy.membership(principal.user_id, org_id) is None:
+            raise AuthError("forbidden_organization")
+        with self._lock:
+            old = self._sessions.pop(self._key(token), None)
+            user = self._users.get(principal.user_id)
+            if old is None or user is None:
+                raise AuthError("unauthenticated")
+            new_token = secrets.token_urlsafe(32)
+            self._sessions[self._key(new_token)] = Session(user.user_id, old.created_at, self._clock(), old.auth_version, org_id)
+        principal = self._principal(user, org_id)
+        if principal.tenant_id is None:  # membership removed during the switch: refuse explicitly
+            raise AuthError("forbidden_organization")
+        return new_token, principal
 
     def logout(self, token: str | None) -> None:
         if token:
@@ -259,6 +303,7 @@ class AuthService:
             user.password_hash = new_hash
             user.auth_version += 1
             self._failures.pop(key, None)
+            active = next((s.active_org for k, s in self._sessions.items() if k == self._key(token)), None)
             for k in [k for k, s in self._sessions.items() if s.user_id == user.user_id]:
                 del self._sessions[k]
-            return self._create_session(user, now)
+            return self._create_session(user, now, active)
