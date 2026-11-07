@@ -17,8 +17,8 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 - PASUL 02: DONE — politica în [GIT_POLICY.md](GIT_POLICY.md). Protecția clasică pe `main` verificată din API (2026-11-07): PR cu 1 aprobare, `enforce_admins=true`, force-push și ștergere interzise. Ruleset-ul `main` rămâne `disabled` (nefolosit). Integrarea în `main` se face prin PR #3 → #4 → #5, doar de proprietar.
 - PASUL 03: DONE — audit în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunile 1–6). Repo public din decizia C (D03-4); runnerele Actions NU au fost re-măsurate.
 - PASUL 04: DONE — [arhitectura](docs/architecture/README.md), PR #6. Re-review Claude Opus 5.5 pe `5dc5e27`: R04-1..R04-4 rezolvate, APPROVED ([review](docs/architecture/review-claude.md)). Integrarea în `main` după PR #3 → #4 → #5.
-- PASUL 05: DONE pe branch — [verificări fără host](docs/ci/step-05.md), PR #7; pe commitul final `ce52da3c3cfc6c808ce929fee7ff5f03eea913c2`, rulările Actions #42351263418 (push) și #42351267008 (PR) au PASS. PR-urile #3–#7 încă trebuie integrate în ordine în main.
-- PASUL 06: DONE pe branch `step-06/baseline` — [KPI, riscuri, 30/60/90](docs/planning/baseline-kpi.md) și [backlog 07–15](docs/planning/backlog.md). Toate cifrele economice sunt IPOTEZĂ; valorile de produs sunt N/A. Clasa L, review independent necerut. Neintegrat în `main`.
+- PASUL 05: DONE (în main) — [verificări fără host](docs/ci/step-05.md), PR #7; pe commitul final `ce52da3c3cfc6c808ce929fee7ff5f03eea913c2`, rulările Actions #42351263418 (push) și #42351267008 (PR) au PASS. PR-urile #3–#7 încă trebuie integrate în ordine în main.
+- PASUL 06: DONE (în main, PR #8) — [KPI, riscuri, 30/60/90](docs/planning/baseline-kpi.md) și [backlog 07–15](docs/planning/backlog.md). Toate cifrele economice sunt IPOTEZĂ; valorile de produs sunt N/A. Clasa L, review independent necerut. Integrat în `main`.
 - PASUL 07–84: NOT_STARTED. Următorul eligibil: PASUL 07 (clasa H: Astra/High sau Opus 5.5/High, review din familia opusă).
 
 ## Stări și tranziții

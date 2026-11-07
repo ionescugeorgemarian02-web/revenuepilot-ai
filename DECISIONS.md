@@ -57,3 +57,5 @@ Autor: Claude Sonnet 5.5, la cererea explicită a proprietarului, care nu vrea s
 
 ## D06-2 — Autorizare permanentă a proprietarului pentru merge
 Autor: Claude Sonnet 5.5. Proprietarul a scris „Autorizez tot” ca răspuns la propunerea: agenții pot da merge la PR-uri în `main` după CI verde și fără CHANGES_REQUESTED; excepție — pașii de clasă H doar după review real din familia opusă. Aplicat prima dată la PR #8 (merge `63ac761`, CI verde pe `b9bbea8`). Limite: nu acoperă schimbări de setări ale repo-ului (blocate de proxy), costuri, secrete sau modificarea documentelor canonice; protecția `main` (PR obligatoriu, fără force-push) rămâne. „Tot” este interpretat în limitele acestei propoziții; un agent nu extinde autorizarea peste ea. Workflow-ul CI rulează acum la fiecare PR, ca verificarea `documentation` să poată fi făcută obligatorie de proprietar.
+
+Notă la D06-1: depășită de integrarea PR #8; `main` este din nou sursa de adevăr.
