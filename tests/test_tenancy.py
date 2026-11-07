@@ -209,6 +209,133 @@ class TenancyServiceTest(unittest.TestCase):
                 self.t.create(ed, *args)
 
 
+class R11RemediationTest(unittest.TestCase):
+    """Regression tests for the Codex review findings R11-1..R11-4 on eaa99e0."""
+
+    def setUp(self) -> None:
+        self.w = World()
+        self.t = self.w.tenancy
+        self.ed = self.w.ctx("A-editor", "A")
+        self.t.create(self.ed, "campaign", "Titlu aprobat", "corp aprobat")
+
+    def test_r11_1_rejected_update_changes_nothing(self):
+        self.t.approve(self.w.ctx("A-approver", "A"), "r1")
+        before = self.t.get(self.ed, "r1")
+        for kwargs in ({"title": "UNAPPROVED", "body": ""}, {"title": "", "body": "nou"}, {"title": "ok", "body": []}, {}):
+            with self.assertRaises(ValueError, msg=str(kwargs)):
+                self.t.update(self.ed, "r1", **kwargs)
+            self.assertEqual(self.t.get(self.ed, "r1"), before)
+        self.assertEqual(before["status"], "approved")
+        after = self.t.update(self.ed, "r1", title="Titlu nou")
+        self.assertEqual((after["status"], after["version"], after["body"]), ("draft", 2, "corp aprobat"))
+
+    def _assert_no_cross_service_lock(self):
+        auth, t = self.w.auth, self.t
+        real_membership, real_orgs, real_exists = t.membership, t.organizations_of, t.user_exists
+
+        def membership(*a):
+            self.assertFalse(auth._lock.locked(), "TenancyService called while holding the auth lock")
+            return real_membership(*a)
+
+        def orgs(*a):
+            self.assertFalse(auth._lock.locked(), "TenancyService called while holding the auth lock")
+            return real_orgs(*a)
+
+        def exists(uid):
+            self.assertFalse(t._lock._is_owned(), "AuthService called while holding the tenancy lock")
+            return real_exists(uid)
+
+        t.membership, t.organizations_of, t.user_exists = membership, orgs, exists
+
+    def test_r11_2_single_lock_order_between_services(self):
+        self._assert_no_cross_service_lock()
+        token, principal = self.w.auth.login("a-admin@example.invalid", self.w.passwords["A-admin"], "c")
+        self.assertEqual(principal.role, "admin")
+        self.w.auth.authenticate(token)
+        self.t.add_member(self.w.ctx("A-admin", "A"), self.w.users["B-viewer"], "viewer")
+        self.t.add_member(self.w.ctx("C-admin", "C"), self.w.users["A-admin"], "viewer")
+        self.w.auth.switch_organization(token, self.w.orgs["C"])
+
+    def test_r11_2_interleaving_login_and_add_member_completes(self):
+        """The exact interleaving that deadlocked on eaa99e0 must now finish."""
+        auth, t = self.w.auth, self.t
+        login_at_principal, member_at_exists = threading.Event(), threading.Event()
+        real_principal, real_exists = auth._principal, t.user_exists
+
+        def principal(*a):
+            login_at_principal.set()
+            member_at_exists.wait(3)
+            return real_principal(*a)
+
+        def exists(uid):
+            member_at_exists.set()
+            return real_exists(uid)
+
+        auth._principal, t.user_exists = principal, exists
+        results = {}
+        login = threading.Thread(target=lambda: results.setdefault("login", auth.login(
+            "a-admin@example.invalid", self.w.passwords["A-admin"], "c")[1]), daemon=True)
+        member = threading.Thread(target=lambda: results.setdefault("member", t.add_member(
+            self.w.ctx("A-admin", "A"), self.w.users["C-viewer"], "viewer")), daemon=True)
+        login.start()  # force the order: login must be inside _principal before add_member starts
+        self.assertTrue(login_at_principal.wait(5))
+        member.start()
+        self.assertTrue(member_at_exists.wait(5))
+        login.join(5)
+        member.join(5)
+        self.assertFalse(login.is_alive() or member.is_alive(), "deadlock: threads still blocked")
+        self.assertEqual(results["login"].role, "admin")
+        self.assertEqual(t.membership(self.w.users["C-viewer"], self.w.orgs["A"]).role, "viewer")
+        self.assertFalse(auth._lock.locked())
+        self.assertTrue(t._lock.acquire(blocking=False))
+        t._lock.release()
+
+    def test_r11_3_final_decision_is_audited(self):
+        self.t.create(self.ed, "brief", "Privat", "continut-privat", visibility="private")  # r2
+        viewer = self.w.ctx("A-viewer", "A")
+        cases = [
+            (lambda: self.t.get(viewer, "r2"), ("resource.read", "not_found")),     # private
+            (lambda: self.t.get(viewer, "r99"), ("resource.read", "not_found")),    # missing: same code
+            (lambda: self.t.get(viewer, "r1"), ("resource.read", "allow")),
+            (lambda: self.t.update(self.w.ctx("A-editor2", "A"), "r1", body="x"), ("resource.update_own", "not_owner")),
+            (lambda: self.t.remove_member(self.w.ctx("B-admin", "B"), self.w.users["B-admin"]), ("membership.manage", "last_admin")),
+            (lambda: self.t.create(self.ed, [], "t", "b"), ("resource.create", "invalid_request")),
+        ]
+        for op, expected in cases:
+            before = len(self.t.audit)
+            try:
+                op()
+            except (AccessDenied, NotFound, ValueError):
+                pass
+            new = [(e.action, e.decision) for e in self.t.audit[before:]]
+            self.assertEqual(new, [expected])  # exactly one final decision, never a false allow
+        self.assertNotIn("continut-privat", repr(self.t.audit))
+
+    def test_r11_4_wrong_json_types_rejected_by_service(self):
+        admin = self.w.ctx("A-admin", "A")
+        bad = [[], {}, 1, None, 1.5, True]
+        for value in bad:
+            for call in (
+                lambda v: self.t.create(self.ed, v, "t", "b"),
+                lambda v: self.t.create(self.ed, "brief", v, "b"),
+                lambda v: self.t.create(self.ed, "brief", "t", v),
+                lambda v: self.t.create(self.ed, "brief", "t", "b", visibility=v),
+                lambda v: self.t.add_member(admin, self.w.users["B-viewer"], v),
+                lambda v: self.t.add_member(admin, v, "viewer"),
+                lambda v: self.t.search(self.ed, v),
+            ):
+                with self.assertRaises(ValueError, msg=repr(value)):
+                    call(value)
+            if value is not None:
+                for call in (
+                    lambda v: self.t.create(self.ed, "brief", "t", "b", parent_id=v),
+                    lambda v: self.t.grant_read(self.ed, "r1", v),
+                    lambda v: self.t.remove_member(admin, v),
+                ):
+                    with self.assertRaises(ValueError, msg=repr(value)):
+                        call(value)
+
+
 class TenancyHttpTest(unittest.TestCase):
     def setUp(self) -> None:
         self.w = World()
@@ -284,6 +411,30 @@ class TenancyHttpTest(unittest.TestCase):
         self.assertEqual(self.req("POST", "/api/resources", {"kind": "brief", "title": "t", "body": "b"}, new_cookie)[0], 201)
         self.assertEqual(self.login("A-viewer", "B")[0], 403)
         self.assertEqual(self.login("A-viewer", "A")[1]["role"], "viewer")
+
+    def test_r11_4_wrong_json_types_return_400_not_disconnect(self):
+        _, _, editor = self.login("A-editor")
+        _, _, admin = self.login("A-admin")
+        good = {"kind": "brief", "title": "t", "body": "b"}
+        self.assertEqual(self.req("POST", "/api/resources", good, editor)[0], 201)  # positive control
+        for value in ([], {}, 7, None, True):
+            for field in ("kind", "title", "body", "visibility", "parent_id"):
+                if field == "parent_id" and value is None:
+                    continue
+                status, _, data = self.req("POST", "/api/resources", {**good, field: value}, editor)
+                self.assertEqual((status, data), (400, {"error": "invalid_request"}), f"{field}={value!r}")
+            for path, body, cookie in (
+                ("/api/resources/r1/update", {"title": value}, editor),
+                ("/api/resources/r1/grant", {"user_id": value}, editor),
+                ("/api/members", {"user_id": self.w.users["A-viewer"], "role": value}, admin),
+                ("/api/members", {"user_id": value, "role": "viewer"}, admin),
+                ("/api/members/remove", {"user_id": value}, admin),
+            ):
+                status, _, data = self.req("POST", path, body, cookie)
+                self.assertEqual((status, data), (400, {"error": "invalid_request"}), f"{path} {body!r}")
+            status, _, _ = self.req("POST", "/auth/switch", {"organization_id": value}, editor)
+            self.assertEqual(status, 403)
+        self.assertEqual(self.req("GET", "/api/resources/r1", cookie=editor)[2]["title"], "t")
 
     def test_membership_removal_over_http_cuts_access_immediately(self):
         _, _, viewer = self.login("B-viewer")

@@ -16,6 +16,7 @@ these rules. Invariants:
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 import secrets
 import threading
@@ -143,56 +144,87 @@ class TenancyService:
                 raise AccessDenied("no_membership")
             return AccessContext(user_id, m.org_id, m.role, m.version)
 
-    def _require(self, ctx: AccessContext, permission: str, target: str = "-") -> Membership:
-        """Re-validate the membership as it is *now*, then check the permission."""
+    def _require(self, ctx: AccessContext, permission: str) -> Membership:
+        """Re-validate the membership as it is *now*, then check the permission.
+
+        Does not audit by itself: the enclosing `_decision` records the final outcome.
+        """
         m = self._members.get((ctx.tenant_id, ctx.user_id))
         if m is None or m.version != ctx.membership_version:
-            self._log(ctx.tenant_id, ctx.user_id, permission, target, "stale_membership")
             raise AccessDenied("stale_membership")
         if permission not in ROLE_PERMISSIONS[m.role]:
-            self._log(ctx.tenant_id, ctx.user_id, permission, target, "forbidden")
             raise AccessDenied("forbidden")
-        self._log(ctx.tenant_id, ctx.user_id, permission, target, "allow")
         return m
 
-    def _deny(self, ctx: AccessContext, action: str, target: str, code: str) -> None:
-        self._log(ctx.tenant_id, ctx.user_id, action, target, code)
-        raise AccessDenied(code)
+    @contextmanager
+    def _decision(self, ctx: AccessContext, action: str, target: object):
+        """Hold the lock for the whole operation and audit exactly one *final* decision.
+
+        allow is recorded only when the operation completes; denials, "not_found"
+        (missing or invisible, indistinguishable) and "invalid_request" are recorded
+        with the same generic codes the caller receives. No content is logged.
+        """
+        tgt = target if isinstance(target, str) and len(target) <= 64 else "-"
+        with self._lock:
+            try:
+                yield
+            except AccessDenied as error:
+                self._log(ctx.tenant_id, ctx.user_id, action, tgt, error.code)
+                raise
+            except NotFound:
+                self._log(ctx.tenant_id, ctx.user_id, action, tgt, "not_found")
+                raise
+            except ValueError:
+                self._log(ctx.tenant_id, ctx.user_id, action, tgt, "invalid_request")
+                raise
+            self._log(ctx.tenant_id, ctx.user_id, action, tgt, "allow")
 
     def _log(self, tenant: str, user: str, action: str, target: str, decision: str) -> None:
         self.audit.append(AuditEntry(self._clock(), tenant, user, action, target, decision))
 
-    def add_member(self, ctx: AccessContext, user_id: str, role: str) -> None:
-        with self._lock:
-            self._require(ctx, "membership.manage", "member:" + str(user_id))
-            if role not in ROLE_PERMISSIONS or not isinstance(user_id, str) or not self.user_exists(user_id):
-                raise ValueError("invalid user or role")
-            current = self._members.get((ctx.tenant_id, user_id))
-            if current and current.role == "admin" and role != "admin":
-                self._ensure_other_admin(ctx.tenant_id, user_id)
-            self._set_member(ctx.tenant_id, user_id, role)
+    @staticmethod
+    def _user_id(value: object) -> str:
+        if not isinstance(value, str) or not (1 <= len(value) <= 64):
+            raise ValueError("invalid user_id")
+        return value
 
-    def remove_member(self, ctx: AccessContext, user_id: str) -> None:
-        with self._lock:
-            self._require(ctx, "membership.manage", "member:" + str(user_id))
-            current = self._members.get((ctx.tenant_id, user_id))
+    def add_member(self, ctx: AccessContext, user_id: object, role: object) -> None:
+        # Lock order rule: TenancyService never calls into AuthService while holding its own
+        # lock, and AuthService never calls TenancyService while holding its lock (R11-2).
+        exists = isinstance(user_id, str) and self.user_exists(user_id)
+        with self._decision(ctx, "membership.manage", "member"):
+            self._require(ctx, "membership.manage")
+            uid = self._user_id(user_id)
+            if not isinstance(role, str) or role not in ROLE_PERMISSIONS or not exists:
+                raise ValueError("invalid user or role")
+            current = self._members.get((ctx.tenant_id, uid))
+            if current and current.role == "admin" and role != "admin":
+                self._ensure_other_admin(ctx.tenant_id, uid)
+            self._set_member(ctx.tenant_id, uid, role)
+
+    def remove_member(self, ctx: AccessContext, user_id: object) -> None:
+        with self._decision(ctx, "membership.manage", "member"):
+            self._require(ctx, "membership.manage")
+            uid = self._user_id(user_id)
+            current = self._members.get((ctx.tenant_id, uid))
             if current is None:
                 raise NotFound()
             if current.role == "admin":
-                self._ensure_other_admin(ctx.tenant_id, user_id)
+                self._ensure_other_admin(ctx.tenant_id, uid)
             self._version += 1  # removal also invalidates contexts issued earlier
-            del self._members[(ctx.tenant_id, user_id)]
+            del self._members[(ctx.tenant_id, uid)]
             for r in self._resources[ctx.tenant_id].values():
-                r.grants.discard(user_id)
+                r.grants.discard(uid)
 
     def _ensure_other_admin(self, org_id: str, leaving: str) -> None:
         if not any(m.role == "admin" and m.user_id != leaving for (o, _), m in self._members.items() if o == org_id):
             raise AccessDenied("last_admin")
 
     def members(self, ctx: AccessContext) -> list[dict]:
-        with self._lock:
-            self._require(ctx, "membership.manage", "members")
-            return [{"user_id": m.user_id, "role": m.role} for (o, _), m in sorted(self._members.items()) if o == ctx.tenant_id]
+        with self._decision(ctx, "membership.manage", "members"):
+            self._require(ctx, "membership.manage")
+            result = [{"user_id": m.user_id, "role": m.role} for (o, _), m in sorted(self._members.items()) if o == ctx.tenant_id]
+        return result
 
     # --- resources -----------------------------------------------------
     def _partition(self, ctx: AccessContext) -> dict[str, Resource]:
@@ -208,11 +240,16 @@ class TenancyService:
             raise NotFound()
         return r
 
-    def create(self, ctx: AccessContext, kind: str, title: str, body: str, visibility: str = "tenant", parent_id: str | None = None) -> dict:
-        with self._lock:
-            self._require(ctx, "resource.create", "new")
-            if kind not in KINDS or visibility not in VISIBILITIES:
-                raise ValueError("invalid kind or visibility")
+    def create(self, ctx: AccessContext, kind: object, title: object, body: object,
+               visibility: object = "tenant", parent_id: object = None) -> dict:
+        with self._decision(ctx, "resource.create", "new"):
+            self._require(ctx, "resource.create")
+            if not isinstance(kind, str) or kind not in KINDS:
+                raise ValueError("invalid kind")
+            if not isinstance(visibility, str) or visibility not in VISIBILITIES:
+                raise ValueError("invalid visibility")
+            if parent_id is not None and not isinstance(parent_id, str):
+                raise ValueError("invalid parent_id")
             title, body = _text(title, "title", 200), _text(body, "body")
             if parent_id is not None:
                 self._find(ctx, parent_id)  # parent must be visible in the same tenant
@@ -220,71 +257,82 @@ class TenancyService:
             local_id = f"r{self._counters[ctx.tenant_id]}"
             r = Resource(ctx.tenant_id, local_id, kind, title, body, ctx.user_id, visibility, parent_id)
             self._resources[ctx.tenant_id][local_id] = r
-            return r.public()
+            result = r.public()
+        return result
 
-    def get(self, ctx: AccessContext, local_id: str) -> dict:
-        with self._lock:
-            self._require(ctx, "resource.read", str(local_id))
-            return self._find(ctx, local_id).public()
+    def get(self, ctx: AccessContext, local_id: object) -> dict:
+        with self._decision(ctx, "resource.read", local_id):
+            self._require(ctx, "resource.read")
+            result = self._find(ctx, local_id).public()
+        return result
 
-    def search(self, ctx: AccessContext, query: str = "", kind: str | None = None) -> list[dict]:
+    def search(self, ctx: AccessContext, query: object = "", kind: object = None) -> list[dict]:
         """Query, search and memory retrieval share this single tenant-filtered path."""
-        with self._lock:
-            self._require(ctx, "resource.read", "search")
-            q = (query or "").lower()[:200]
-            return [
+        with self._decision(ctx, "resource.read", "search"):
+            self._require(ctx, "resource.read")
+            if not isinstance(query, str) or (kind is not None and not isinstance(kind, str)):
+                raise ValueError("invalid query")
+            q = query.lower()[:200]
+            result = [
                 r.public() for r in self._partition(ctx).values()
                 if self._visible(ctx, r) and (kind is None or r.kind == kind)
                 and (not q or q in r.title.lower() or q in r.body.lower())
             ]
+        return result
 
-    def update(self, ctx: AccessContext, local_id: str, title: str | None = None, body: str | None = None) -> dict:
-        with self._lock:
-            self._require(ctx, "resource.update_own", str(local_id))
+    def update(self, ctx: AccessContext, local_id: object, title: object = None, body: object = None) -> dict:
+        with self._decision(ctx, "resource.update_own", local_id):
+            self._require(ctx, "resource.update_own")
             r = self._find(ctx, local_id)
             if r.owner_id != ctx.user_id:
-                self._deny(ctx, "resource.update_own", local_id, "not_owner")
-            if title is not None:
-                r.title = _text(title, "title", 200)
-            if body is not None:
-                r.body = _text(body, "body")
+                raise AccessDenied("not_owner")
+            # Validate every field before any mutation: a rejected update changes nothing (R11-1).
+            new_title = r.title if title is None else _text(title, "title", 200)
+            new_body = r.body if body is None else _text(body, "body")
+            if title is None and body is None:
+                raise ValueError("nothing to update")
+            r.title, r.body = new_title, new_body
             r.version += 1
             if r.status == "approved":  # an approval covers one exact version only
                 r.status, r.approved_version = "draft", None
-            return r.public()
+            result = r.public()
+        return result
 
-    def delete(self, ctx: AccessContext, local_id: str) -> None:
-        with self._lock:
-            self._require(ctx, "resource.delete_own", str(local_id))
+    def delete(self, ctx: AccessContext, local_id: object) -> None:
+        with self._decision(ctx, "resource.delete_own", local_id):
+            self._require(ctx, "resource.delete_own")
             r = self._find(ctx, local_id)
             if r.owner_id != ctx.user_id:
-                self._deny(ctx, "resource.delete_own", local_id, "not_owner")
-            if any(c.parent_id == local_id for c in self._partition(ctx).values()):
-                self._deny(ctx, "resource.delete_own", local_id, "has_children")
-            del self._resources[ctx.tenant_id][local_id]
+                raise AccessDenied("not_owner")
+            if any(c.parent_id == r.local_id for c in self._partition(ctx).values()):
+                raise AccessDenied("has_children")
+            del self._resources[ctx.tenant_id][r.local_id]
 
-    def grant_read(self, ctx: AccessContext, local_id: str, user_id: str) -> None:
-        with self._lock:
-            self._require(ctx, "resource.grant_own", str(local_id))
+    def grant_read(self, ctx: AccessContext, local_id: object, user_id: object) -> None:
+        with self._decision(ctx, "resource.grant_own", local_id):
+            self._require(ctx, "resource.grant_own")
             r = self._find(ctx, local_id)
             if r.owner_id != ctx.user_id:
-                self._deny(ctx, "resource.grant_own", local_id, "not_owner")
-            if (ctx.tenant_id, user_id) not in self._members:
-                self._deny(ctx, "resource.grant_own", local_id, "not_member")  # never grant across tenants
-            r.grants.add(user_id)
+                raise AccessDenied("not_owner")
+            uid = self._user_id(user_id)
+            if (ctx.tenant_id, uid) not in self._members:
+                raise AccessDenied("not_member")  # never grant across tenants
+            r.grants.add(uid)
 
-    def approve(self, ctx: AccessContext, local_id: str) -> dict:
-        with self._lock:
-            self._require(ctx, "resource.approve", str(local_id))
+    def approve(self, ctx: AccessContext, local_id: object) -> dict:
+        with self._decision(ctx, "resource.approve", local_id):
+            self._require(ctx, "resource.approve")
             r = self._find(ctx, local_id)
             if r.owner_id == ctx.user_id:
-                self._deny(ctx, "resource.approve", local_id, "self_approval")
+                raise AccessDenied("self_approval")
             r.status, r.approved_version = "approved", r.version
-            return r.public()
+            result = r.public()
+        return result
 
     def export(self, ctx: AccessContext) -> dict:
         """Segregated export: only the caller's tenant partition, only what the caller may read."""
-        with self._lock:
-            self._require(ctx, "export", "export")
-            items = [r.public() for r in self._partition(ctx).values() if self._visible(ctx, r)]
-            return {"tenant_id": ctx.tenant_id, "exported_by": ctx.user_id, "items": items}
+        with self._decision(ctx, "export", "export"):
+            self._require(ctx, "export")
+            result = {"tenant_id": ctx.tenant_id, "exported_by": ctx.user_id,
+                      "items": [r.public() for r in self._partition(ctx).values() if self._visible(ctx, r)]}
+        return result

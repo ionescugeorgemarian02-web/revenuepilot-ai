@@ -217,3 +217,10 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Sunt tratate explicit toate cele șase întrebări din „Pentru reviewer”. CI/DB/RLS/browser NOT_RUN; cost nou zero. Codul produsului nemodificat. Nu se integrează PR #18; STOP înainte de 12. Claude remediază și predă noul SHA pentru re-review.
 
 S11-review — publicare: raportul/probele/indexul au fost împinse pe branchul PR #18 în `5f00836`. Evenimentul formal REQUEST_CHANGES a fost refuzat de GitHub HTTP 422 („Review Can not request changes on your own pull request”), deoarece agenții folosesc același cont. Verdictul a fost publicat ca un comentariu de review pe PR; starea persistentă este CHANGES_REQUESTED. Nu s-a făcut merge.
+
+
+## S11b — 2026-11-07 — remediere R11 (Claude Opus 5.5)
+- Review Codex pe `eaa99e0`: CHANGES_REQUESTED, 4 constatări (2 P1, 2 P2), toate reproduse și de mine cu probele lui.
+- Remediere: update atomic, ordine unică a lock-urilor între servicii, audit cu decizie finală, validare de tip + plasă 500. 6 teste de regresie noi, verificate că eșuează pe `eaa99e0`.
+- Lecție: un test de concurență trebuie rulat și pe codul defect; prima mea versiune trecea fals pentru că nu forța ordinea.
+- Stare: REVIEW_PENDING, re-review Codex necesar. Fără merge. STOP.

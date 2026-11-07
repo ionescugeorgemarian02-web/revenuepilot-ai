@@ -1,7 +1,7 @@
 # PASUL 11 — multi-tenant, RBAC și izolare
 
 Autor: Claude Opus 5.5 (selectat de utilizator; recomandat de plan pentru clasa H). Data: 2026-11-07. Bază: `e78ff99` (`main`, 10 DONE). Branch `step-11/tenancy`.
-**Status: REVIEW_PENDING.** Clasa H cere review independent din familia opusă (Codex) înainte de DONE și merge (D10-2).
+**Status: REVIEW_PENDING (re-review).** Review Codex pe `eaa99e0`: CHANGES_REQUESTED ([raport](review-codex.md)); remediere în [remediation-r11.md](remediation-r11.md). Clasa H: DONE și merge doar după re-review Codex pe noul SHA (D10-2).
 
 Dependență conform planului canonic: doar 10. Backlog-ul de la pasul 06 afirma greșit „10 și 12”; corectat aici și în `PROGRESS.md`.
 

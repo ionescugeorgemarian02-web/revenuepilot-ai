@@ -229,6 +229,8 @@ class Handler(BaseHTTPRequestHandler):
             self._send(403, {"error": error.code})
         except ValueError:
             self._send(400, {"error": "invalid_request"})
+        except Exception:  # last resort: never drop the connection; not reported as a client error
+            self._send(500, {"error": "internal_error"})
 
     def log_message(self, format: str, *args: object) -> None:
         pass  # never log request lines: they could carry identifiers

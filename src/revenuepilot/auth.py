@@ -214,7 +214,8 @@ class AuthService:
         org = self._initial_org(user.user_id, organization_id)
         with self._lock:
             token = self._create_session(user, now, org)
-            return token, self._principal(user, org)
+        # Lock order rule (R11-2): TenancyService is only called with the auth lock released.
+        return token, self._principal(user, org)
 
     def _create_session(self, user: User, now: float, active_org: str | None = None) -> str:
         self._purge(now)
@@ -271,7 +272,10 @@ class AuthService:
                 raise AuthError("unauthenticated")
             new_token = secrets.token_urlsafe(32)
             self._sessions[self._key(new_token)] = Session(user.user_id, old.created_at, self._clock(), old.auth_version, org_id)
-        return new_token, self._principal(user, org_id)
+        principal = self._principal(user, org_id)
+        if principal.tenant_id is None:  # membership removed during the switch: refuse explicitly
+            raise AuthError("forbidden_organization")
+        return new_token, principal
 
     def logout(self, token: str | None) -> None:
         if token:
