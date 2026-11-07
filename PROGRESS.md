@@ -31,6 +31,9 @@ Un repository separat, preferabil privat, ambele PDF-uri originale și textele i
 
 Baseline: commit local cu 00 BLOCKED și remote creat manual cu un README. Rezultat urmărit: ambele istorice păstrate, surse și stare accesibile pe GitHub. Raportul istoric al refuzurilor GraphQL/REST rămâne în docs/step-00-initial-blocker.md și Git.
 
+PR de publicare: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/1. Verificat MERGEABLE / CLEAN, fără CI sau review obligatoriu raportat; nu se pretinde review independent.
+Limită opțională verificată: GET /rulesets returnează HTTP 403, solicitând GitHub Pro sau repository public. Nu schimbăm vizibilitatea și nu cumpărăm abonament; politica Git și protecțiile se tratează la pasul 02.
+
 Blocaje curente pentru PASUL 00: niciunul. Refuzul de creare inițial a fost rezolvat prin crearea manuală.
 
 ## Decizii, limite și lecție
