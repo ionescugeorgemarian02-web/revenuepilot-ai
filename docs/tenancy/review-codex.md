@@ -53,3 +53,47 @@ CI remote, DB/RLS/cache/workeri, audit persistent, browser și Python 3.13 în a
 ## Publicare GitHub
 
 Raport/probe/index publicate pe branchul PR #18 în `5f00836`. GitHub a refuzat evenimentul formal REQUEST_CHANGES pe SHA-ul analizat cu HTTP 422: `Review Can not request changes on your own pull request` (aceeași identitate GitHub pentru autor și reviewer). Verdictul independent Codex este publicat ca un comentariu pe PR și în acest raport; nu se pretinde o aprobare sau un review formal GitHub acceptat. PR-ul rămâne deschis, fără merge.
+
+
+---
+
+# Re-review independent PASUL 11 — Codex (a doua rundă)
+
+**Verdict: APPROVED** pentru remedierile R11-1..R11-4, cu limitele de mai jos. Commit revizuit: `d0c078dd972a9261225ba66d05eebc00d2540c3a` (HEAD verificat egal cu `origin/step-11/tenancy` înainte de apel). Data: 2026-11-07.
+
+**Cum a fost produs acest review (transparență):** a fost pornit de Claude Sonnet 5.5 din containerul sesiunii Claude, folosind Codex CLI 0.167.0 logat cu abonamentul ChatGPT Plus al proprietarului, model `gpt-6-astra`, efort `medium`, `--sandbox read-only --ephemeral`. Independența constă în modelul diferit (familia OpenAI); orchestratorul și autorul pachetului de intrare este Claude, deci Codex a văzut materialul ales de Claude (constatările sale originale, documentul de remediere și diff-ul `eaa99e0..d0c078d`) și nu a explorat liber repository-ul. Review-ul nu este un review formal GitHub (aceeași identitate de cont pentru autor și reviewer).
+
+**Limită declarată de Codex:** sandbox-ul `read-only` interzice crearea de socketuri, deci 18 din cele 40 de teste (cele HTTP) au dat `PermissionError`; Codex raportează 22 PASS / 18 ERROR și **nu confirmă „40 PASS”**. Pentru R11-4, partea HTTP nu a fost executată de Codex. Cele 40 de teste au fost rulate de Claude (autor) local, fără sandbox: 40 PASS pe Python 3.12 și 3.13 (vezi remediation-r11.md); aceasta este verificare a autorului, nu a reviewerului. Codex nu a verificat restul repository-ului, CI, concurența exhaustivă sau defecte preexistente din afara diff-ului. Observație Codex: `_decision` nu face rollback pentru excepții interne neașteptate (neblocant; operațiile validează înainte de mutație).
+
+## Promptul exact trimis lui Codex
+
+```text
+Ești reviewer independent (familia OpenAI) pentru PASUL 11 (clasă H, multi-tenant/RBAC). Citește DOAR fișierul /tmp/claude-0/r11-bundle.md (constatările tale originale R11-1..R11-4, documentul de remediere al implementatorului Claude și diff-ul eaa99e0..d0c078d). Directorul curent este checkout-ul commitului d0c078d.
+Sarcină strict limitată: (1) pentru fiecare R11-1..4 decide dacă remedierea este corectă și completă; (2) caută regresii sau defecte noi introduse DE ACEST DIFF (în special tenancy.py: _decision, update, add_member; auth.py: ordinea lock-urilor, switch_organization; app.py: plasa 500); (3) rulează doar `python3 -B -I -m unittest discover -s tests`. Nu re-citi tot repo-ul, nu modifica fișiere.
+Răspuns: verdict final APPROVED sau CHANGES_REQUESTED, apoi pentru fiecare constatare: ID, severitate, locație, scenariu reproductibil, remediere. Dacă APPROVED, spune explicit ce ai verificat și ce NU ai verificat.
+```
+(Pachetul `/tmp/claude-0/r11-bundle.md` = secțiunile R11-1..4 din acest raport, `docs/tenancy/remediation-r11.md` și `git diff eaa99e0..d0c078d -- src tests`, conținutul exact reconstruibil din Git.)
+
+## Răspunsul Codex (integral)
+
+**APPROVED** — pentru remedierile R11-1..R11-4 și diff-ul furnizat. Nu am identificat un defect nou blocant demonstrabil în acest diff. Validarea HTTP locală rămâne incompletă din cauza sandboxului.
+
+| ID / severitate inițială | Locație | Scenariu verificat | Evaluarea remedierii |
+|---|---|---|---|
+| **R11-1 / P1** | `tenancy.py`, `update` | Resursă aprobată; update cu titlu valid și corp invalid. | **Corectă și completă pentru constatare.** Toate câmpurile sunt validate înaintea mutației, sub același lock. Respingerea păstrează obiectul; update-ul valid incrementează versiunea și invalidează aprobarea. Testul de regresie trece. |
+| **R11-2 / P1** | `auth.py`, `login`; `tenancy.py`, `add_member` | Login concurent cu adăugarea unui membru, în intercalarea care producea deadlock. | **Corectă și completă pentru constatare.** Apelurile între servicii implicate sunt scoase din lockurile proprii; autorizarea în `add_member` se reverifică sub lockul tenancy. Ambele teste de lockuri, inclusiv intercalarea deterministă, trec. |
+| **R11-3 / P2** | `tenancy.py`, `_decision` și operațiile migrate | Citire privată/ID absent, modificare de către alt proprietar, eliminarea ultimului administrator. | **Corectă și completă pentru constatare.** Refuzurile așteptate produc decizia finală corespunzătoare; `allow` apare după reușită. Absent și invizibil au același cod. Testul de regresie trece. |
+| **R11-4 / P2** | `tenancy.py`, validările de intrare; `app.py`, handlerul de excepții | Tipuri JSON necorespunzătoare pentru câmpurile vizate. | **Corectă și completă pentru defectul raportat, prin inspecție și testele de serviciu.** Validările evită lookupurile cu tipuri incompatibile. Plasa generică răspunde cu `500 internal_error`, fără a reclasifica defectele interne drept 400. Testul HTTP nu a putut executa cererile. |
+
+Am verificat și modificările din `switch_organization`: construirea principalului rămâne în afara lockului auth, iar lipsa membershipului constatată ulterior produce refuz explicit. `_decision` serializează operația și auditarea rezultatului; nu reprezintă însă un mecanism de rollback pentru excepții interne neașteptate.
+
+Am rulat exclusiv comanda solicitată:
+
+```text
+python3 -B -I -m unittest discover -s tests
+40 teste: 22 reușite, 18 erori; exit code 1.
+```
+
+Toate cele 18 erori provin din interdicția de creare a socketurilor: `PermissionError: [Errno 1] Operation not permitted`. Prin urmare, **nu confirm „40 PASS”**.
+
+Am citit doar bundle-ul indicat și nu am modificat fișiere. Nu am verificat independent restul repository-ului, concordanța bundle–checkout, CI, HTTP funcțional, concurența exhaustivă sau defectele preexistente din afara diff-ului.

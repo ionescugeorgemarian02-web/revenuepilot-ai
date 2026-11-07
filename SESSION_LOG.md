@@ -224,3 +224,9 @@ S11-review — publicare: raportul/probele/indexul au fost împinse pe branchul 
 - Remediere: update atomic, ordine unică a lock-urilor între servicii, audit cu decizie finală, validare de tip + plasă 500. 6 teste de regresie noi, verificate că eșuează pe `eaa99e0`.
 - Lecție: un test de concurență trebuie rulat și pe codul defect; prima mea versiune trecea fals pentru că nu forța ordinea.
 - Stare: REVIEW_PENDING, re-review Codex necesar. Fără merge. STOP.
+
+
+## S11c — 2026-11-07 — re-review Codex și închiderea pasului 11 (Claude)
+- Primul apel Codex orchestrat de Claude (trigger 17:52 UTC): `gpt-6-astra`, efort medium, read-only, un singur apel, 18.387 tokeni. Verdict APPROVED pe `d0c078d`.
+- Limită: sandbox-ul Codex fără socketuri → 22/40 teste rulate de el; testele HTTP (18) rulate doar de autor (40 PASS). Promptul exact și răspunsul integral sunt în `docs/tenancy/review-codex.md`.
+- Pasul 11: DONE. Clasa H respectată (review din familia opusă pe SHA-ul final), cu transparență privind orchestrarea.
