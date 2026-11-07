@@ -150,3 +150,9 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Commit trigger/evidență: `d402574`; push reușit. `gh workflow run step-05-documentation.yml --ref step-07/threat-model` → FAIL HTTP 422: `Actions has been disabled for this user`. Nu este o cerere de aprobare și nu poate fi rezolvată prin eliminarea review-ului. CI remote BLOCKED, joburi NOT_RUN; nu există run URL sau succes inventat.
 - Trigger push/dispatch pregătit pentru momentul reactivării Actions; reviewerul poate evalua conținutul acum. Înainte de integrare, CI real pe HEAD trebuie observat și consemnat. Nu s-au schimbat setări de cont/protecții și nu s-au creat costuri/cred.
 - Lease/claim Codex eliberat la acest checkpoint. Continuă Claude Opus 5.5 / High cu review real al HEAD-ului PR #10, apoi remediere după caz. Autorul a livrat documentarea 07; status REVIEW_PENDING cu blocaj CI explicit, nu DONE. STOP înainte de 08. Nicio modificare în fabrica-autonoma.
+
+### S07 — eliminarea condiției de review la instrucțiunea utilizatorului
+- Autor: Codex; baza `b71c74198d020a77c033fb2aa0dfcad5c82e4114`, branch `step-07/threat-model`, PR #10. Utilizatorul spune „Nu trebuie să facă Claude review”; decizia D07-2 înlocuiește condiția de review pentru acest pas. Nu se solicită alt reviewer și nu se declară un review efectuat.
+- Indexul, documentele curente și predarea sunt actualizate: BLOCKED (CI), documentare implementată. Intrările istorice REVIEW_PENDING sunt păstrate ca istoric, nu ca stare curentă.
+- Verificare efectivă: PR #10 OPEN, HEAD b71c741, mergeStateStatus CLEAN, statusCheckRollup gol. Reîncercarea `gh workflow run step-05-documentation.yml --ref step-07/threat-model` eșuează HTTP 422, `Actions has been disabled for this user`. Acest blocaj nu este eliminat de derogarea de review.
+- Scope: documentarea deciziei și sincronizarea stării; fără modificări runtime sau pasul 08. Claim eliberat după push; reluare la deblocarea CI, fără review Claude.

@@ -38,7 +38,7 @@ Nu promitem tranzacție atomică DB + provider. STOP/revocare liniarizate înain
 
 ## Aprobări și autorizare permanentă
 
-Acordul utilizatorului din această sesiune autorizează agenții să facă operațiile de dezvoltare necesare și integrarea după verificări/review. Nu mai cerem confirmarea proprietarului pentru acest pas. Nu dezactivăm protecțiile Git și nu fabricăm review-uri. Review-ul independent pentru clasa H este o verificare tehnică, nu o cerere de aprobare repetată către utilizator.
+Acordul utilizatorului din această sesiune autorizează agenții să facă operațiile de dezvoltare necesare și integrarea după verificări/review. Nu mai cerem confirmarea proprietarului pentru acest pas. Nu dezactivăm protecțiile Git și nu fabricăm review-uri. Pentru livrarea documentară 07, utilizatorul a eliminat explicit review-ul Claude prin D07-2. Nu îl mai tratăm drept condiție de închidere și nu îl raportăm ca efectuat. Excepția privește acest pas; politicile de review propuse pentru viitoarele capabilități sunt descrise separat mai jos.
 
 În produs, grantul uman poate fi anticipat: tenantul autorizează explicit un set finit de acțiuni, destinații, interval de timp și plafon; motorul determinist verifică fiecare execuție. Cererea generică de dezvoltare nu devine grant pentru conturile viitorilor clienți. În lipsa grantului, se creează propunere în așteptare, fără publicare, cheltuială sau mesaje externe.
 

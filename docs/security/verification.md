@@ -31,7 +31,7 @@ Review documentar autor: verifică toate cele 18 intrări, fiecare cu owner/appr
 
 ## Rezultate locale observate — 2026-11-07
 
-Cele patru comenzi de mai sus: PASS (4 hashuri; graf valid, control pozitiv și 10 mutații respinse; linkuri în 12 fișiere; whitespace). Inspecția documentară a autorului a parcurs T01–T18 pentru domeniile canonice și concordanța cu arhitectura. O verificare Python suplimentară a confirmat identificatorii consecutivi, toate cele șase câmpuri obligatorii ale fiecărei intrări și păstrarea byte-for-byte a prefixului jurnalelor față de `63ac761`; `git diff 63ac761 -- docs/canonical` este gol. Aceasta validează structura și conservarea istoricului, nu conținutul securității. Review independent: NOT_RUN.
+Cele patru comenzi de mai sus: PASS (4 hashuri; graf valid, control pozitiv și 10 mutații respinse; linkuri în 12 fișiere; whitespace). Inspecția documentară a autorului a parcurs T01–T18 pentru domeniile canonice și concordanța cu arhitectura. O verificare Python suplimentară a confirmat identificatorii consecutivi, toate cele șase câmpuri obligatorii ale fiecărei intrări și păstrarea byte-for-byte a prefixului jurnalelor față de `63ac761`; `git diff 63ac761 -- docs/canonical` este gol. Aceasta validează structura și conservarea istoricului, nu conținutul securității. Review independent: NOT_RUN, exceptat explicit pentru 07 prin D07-2.
 
 ## GitHub Actions
 
@@ -41,4 +41,4 @@ PR #10, livrare `3d94c3999783631936ba407575c18983c42cb9d3`, trigger explicit ad�
 
 T01–T18: NOT_RUN pe produs, fiindcă nu există runtime. Se preiau ca teste de acceptare când capabilitatea este implementată; niciuna nu se activează doar pe baza acestui document. Fixture comun: tenanturi A/B, date sintetice, transport/provider simulat, ceas controlabil, observare a apelurilor externe, audit și starea persistentă. Pentru T10/T13–T16 se testează și concurența, crash/restart și interleaving-ul precizat; documentarea unui test nu echivalează cu executarea lui.
 
-Completarea viitoare cere comanda, SHA-ul, rezultatul real și dovada oracle-ului, inclusiv controlul pozitiv. Testele live necesită mediu și credențiale autorizate; nu există în această sesiune. Fără cost nou, fără scanarea domeniilor/rețelelor externe și fără trimitere de mesaje. Aprobarea/review-ul independent pentru 07 rămâne NOT_RUN până la raportul real Claude.
+Completarea viitoare cere comanda, SHA-ul, rezultatul real și dovada oracle-ului, inclusiv controlul pozitiv. Testele live necesită mediu și credențiale autorizate; nu există în această sesiune. Fără cost nou, fără scanarea domeniilor/rețelelor externe și fără trimitere de mesaje. Review-ul independent pentru 07 este NOT_RUN și nu mai este cerut, conform instrucțiunii explicite a utilizatorului (D07-2). Dispatch-ul CI a fost reîncercat după această instrucțiune: același HTTP 422, Actions dezactivat pentru utilizator.

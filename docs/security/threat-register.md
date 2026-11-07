@@ -47,7 +47,7 @@ Toate mitigările runtime sunt **PROPUSE / NOT_IMPLEMENTED**, toate testele runt
 ## T07 — Compromiterea Git, workflow sau contului contributorului
 - **Severitate / frontieră:** Critică / B5; commit malițios alterează controlul sau extrage credențiale CI.
 - **Owner / aprobare:** maintainer Git/CI; reviewer independent pentru schimbări sensibile, review cross-family pentru clasa H.
-- **Mitigare:** PR și check-uri pe SHA actual, fără force-push/bypass, token CI contents:read, fără secrete pe cod de PR/fork, fără pull_request_target care execută head neîncrezut; review separat pentru workflows/policy. Verifică head înainte de merge. Autorizația proprietarului nu înlocuiește review-ul tehnic.
+- **Mitigare:** PR și check-uri pe SHA actual, fără force-push/bypass, token CI contents:read, fără secrete pe cod de PR/fork, fără pull_request_target care execută head neîncrezut; review separat pentru workflows/policy. Verifică head înainte de merge. Autorizația generală de lucru nu constituie un review efectuat. Pentru documentarea 07 există derogarea explicită D07-2; controlul de aici descrie politica viitoare de implementare.
 - **Negativ / oracle:** PR sintetic introduce workflow care cere secret/write → gate-ul de review respinge, niciun job privilegiat rulează; commit adăugat după review invalidează acceptarea până la reevaluare. **Pozitiv:** PR documentar pe SHA revizuit trece check-urile read-only.
 - **Rezidual / gate:** compromiterea ownerului poate modifica protecțiile; înainte de fiecare merge și configurare CI. În 07 nu modificăm protecțiile și nu simulăm atac live pe repo.
 

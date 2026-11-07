@@ -27,4 +27,4 @@ Git păstrează codul și documentele, nu găzduiește aplicația sau baza de da
 
 ## Securitate — PASUL 07
 
-[Model de amenințări și politici de acces](docs/security/README.md) · [Predare Claude](docs/security/handoff.md). REVIEW_PENDING; controalele runtime sunt propuse, nu implementate.
+[Model de amenințări și politici de acces](docs/security/README.md) · [Predare](docs/security/handoff.md). BLOCKED (CI); review-ul Claude a fost exceptat de utilizator; controalele runtime sunt propuse, nu implementate.
