@@ -117,3 +117,9 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Status înainte de push: TESTING; predare în docs/ci/step-05.md. Nu executa PASUL 06 în aceeași sesiune.
 
 - Rezultat confirmat: PR #7, workflowul activ, GitHub Actions run #42351190538 `completed/success` pe `fd646a66e9c7b9b7ed3ba097d821e330117b15bb`; pașii checkout/hashuri/graf/linkuri/whitespace PASS. Repo public, main protected. PASUL 05 DONE pe branch; integrarea în main nu este pretinsă. Avertisment de deprecere Node 20 al checkout v4, fără eșec. Următorul 06 READY, Luna / Low ori Haiku / Low. STOP.
+
+
+## S05-integration-check — 2026-11-07 — Codex
+- Cererea utilizatorului: finalizează complet PASUL 05. Confirmate două rulări GitHub Actions pe HEAD final `ce52da3`: push #42351263418 și PR #42351267008, ambele completed/success. Teste runtime NOT_RUN, conform scope.
+- PR #3, primul din lanț, are REVIEW_REQUIRED. `gh pr merge 3 --merge --match-head-commit b73fc9b...` a fost refuzat de protecția lui main. Nu s-a folosit `--admin` sau alt bypass. PR-urile #3–#7 rămân deschise.
+- Verdict: PASUL 05 DONE pe branch/PR cu CI dovedit; integrarea în main este BLOCKED până la review GitHub valid al PR #3 și merge ulterior în ordine. Nicio modificare de produs ori cheltuială nouă.
