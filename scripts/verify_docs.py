@@ -9,6 +9,7 @@ files = [
     *sorted((root / 'docs/architecture').glob('*.md')),
     *sorted((root / 'docs/security').glob('*.md')),
     *sorted((root / 'docs/stack').glob('*.md')),
+    *sorted((root / 'docs/ui').glob('*.md')),
 ]
 errors = []
 for source in files:
