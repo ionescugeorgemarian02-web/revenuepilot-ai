@@ -1,0 +1,10 @@
+PASS: PDF original byte-for-byte RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3
+PASS: text integral regenerat identic; 34 pagini: RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3
+PASS: PDF original byte-for-byte RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3
+PASS: text integral regenerat identic; 11 pagini: RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3
+RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf: OK
+RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.txt: OK
+RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf: OK
+RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.txt: OK
+PASS: niciun remote configurat; destinație locală izolată
+NOT_RUN: push, remote HEAD, CI, build, teste produs; creare remote refuzată HTTP 403

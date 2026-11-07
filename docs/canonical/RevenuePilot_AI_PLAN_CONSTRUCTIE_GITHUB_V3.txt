@@ -1,0 +1,2580 @@
+REVENUEPILOT AI                                                                                      Plan de construcție GitHub
+
+
+
+
+REVENUEPILOT AI — PLAN DE CONSTRUCȚIE
+EXECUTABIL PE GITHUB (V3)
+Pași atomici, selectare manuală Codex/Claude, două motoare, cercetare Gemini, autoînvățare
+evaluată
+
+Data verificării documentației furnizorilor: 7 noiembrie 2026
+
+
+CUM SE FOLOSEȘTE ACEST PLAN
+
+Acest document este partenerul meta-promptului „REVENUEPILOT AI — META-PROMPT MASTER V3”. Utilizatorul
+atașează AMBELE documente la prima sesiune Codex. În PASUL 00, Codex trebuie să creeze repository GitHub NOU și
+să insereze acolo conținutul ambelor, păstrând un registru canonic de progres. Din acel moment, fiecare sesiune
+Codex/Claude citește direct repository-ul nou.
+
+IMPORTANT: GitHub = repository de cod, plan, dovezi și colaborare. Nu este hostingul aplicației dinamice și nici baza
+de date de producție. În acest moment NU există host pregătit și NU există chei API comerciale Claude/OpenAI/Gemini
+pentru backend. Nu confunda abonamentele cu API-uri. Nu atinge repository-ul „fabrica-autonoma”. Nu instala servicii
+plătite, nu cere sudo. Fiecare integrare reală se activează numai după verificarea accesului și aprobarea
+proprietarului.
+
+MOD DE OPERARE PRINCIPAL: un singur pas executat per sesiune, urmat de STOP. Utilizatorul poate face switch
+manual între Codex și Claude. Nicio sesiune nu se bazează pe memoria conversației anterioare: se citește planul și
+starea din Git.
+
+
+PALETE RECOMANDATE DE MODELE (VERIFICATE PUBLIC, NU CONFIRMATE ÎN CONTUL TĂU)
+
+H = risc strategic înalt: Codex GPT-6 Astra / High (Claude Opus 5.5 / High). Folosește rar, la arhitectură, securitate,
+multi-tenancy, audit și decizii greu reversibile.
+
+M+ = implementare foarte dificilă: Codex GPT-6.1 Sol / High (Claude Opus 5.5 / Medium-High).
+
+M = implementare serioasă, raționament echilibrat: Codex GPT-6.1 Sol / Medium (Claude Sonnet 5.5 / Medium).
+
+T = UI, integrare clară, cod cu scop delimitat: Codex GPT-6.1 Terra / Medium (Claude Sonnet 5.5 / Medium).
+
+L = extrageri, documentare, corecții mecanice: Codex GPT-6 Luna / Low (Claude Haiku 5.5 / Low).
+
+Modelul disponibil în SELECTOR are prioritate; nu pretinde că promptul poate schimba modelul automat. În Claude
+Code, /model arată lista reală. La Codex, lista și nivelurile diferă în funcție de plan, rollout și workspace.
+
+
+RESPONSABILITĂȚI CLAUDE/CODEX
+
+- Orice pas poate fi EXECUTAT de oricare dintre cele două familii, dacă modelul și instrumentele sunt disponibile.
+
+- Review-urile critice sunt independente: dacă Codex a scris, Claude revizuiește; dacă Claude a scris, Codex
+revizuiește. Review-ul real nu se inventează. Când celălalt lipsește, status REVIEW_PENDING.
+
+- Gemini fără API: research manual cu prompt, surse, dată, note și verificare; nu este numărat drept agent integrat
+automat.
+
+- Code owner, reviewer, branch, PR, commit, teste, stare, eroare, decizie și lecție trebuie să fie accesibile din repo.
+
+REGULA „CONTINUĂ CU PASUL URMĂTOR” — ALGORITM OBLIGATORIU
+
+
+1. Verifică numele remote-ului și HEAD-ul; trebuie să fie repository-ul RevenuePilot AI, NU
+fabrica existentă.
+
+2. Citește INDEXUL DE PROIECT, PLANUL CANONIC, REGISTRUL DE STARE, cererile de review și ultimele decizii
+relevante. Nu scana 5000 de pagini de jurnal dacă nu trebuie.
+
+
+
+Document V3 • 07.11.2026                                                                                                 1 / 34
+REVENUEPILOT AI                                                                                     Plan de construcție GitHub
+
+
+
+3. Verifică dacă pasul anterior are DONE cu commit + teste + criterii de acceptare; dacă este REVIEW_PENDING și
+review-ul este cerut, nu îl declara DONE.
+
+4. Selectează PRIMUL pas READY al cărui set de dependențe este închis și care nu este revendicat. Dacă pasul
+consecutiv este BLOCKED de host/API, marchează-l DEFERRED și selectează următorul independent, consemnând
+rațiunea.
+
+5. Compară modelul selectat manual cu modelul indicat la pas. Dacă este nepotrivit pentru risc, propune switch; nu
+consuma quota într-o implementare inadecvată.
+
+6. Revendică taskul pe un branch separat; stabilește scop, outcome, test de acceptare, buget de lucru, limite de
+timp/tokeni unde instrumentul oferă, și modificările permise.
+
+7. Implementează DOAR pasul curent; execuție cu verificări reproducibile, fără acțiuni destructive, fără modificări
+colaterale, fără deploy.
+
+8. Înregistrează rezultatele REALE ale testelor, nu rezultate presupuse. Documentează orice mock, lipsă de host,
+cheie API sau blocaj.
+
+9. Închide pasul conform politicii: commit/push, PR dacă este posibil, reviewer independent unde trebuie, actualizare
+de stare, lecție și eventuale defecte.
+
+10. Raportează în română exact: pasul, rezultat, tests PASS/FAIL/NOT_RUN, SHA/PR, costuri, ce este blocat, modelul
+pentru pasul următor. Apoi OPREȘTE-TE.
+
+STATUS: NOT_STARTED / READY / CLAIMED / IN_PROGRESS / IMPLEMENTED / TESTING / REVIEW_PENDING /
+CHANGES_REQUESTED / VERIFIED / DONE / BLOCKED / DEFERRED / FAILED.
+
+O etapă cu multe subtaskuri rămâne neînchisă până la acceptanța părintelui. Schimbarea modelului nu schimbă
+criteriile. Fără force-push, fără modificări arbitrare ale testelor pentru a obține PASS, fără a susține că un mock e
+integrare reală.
+
+
+CRITERII TRANSVERSALE DE ACCEPTARE (PENTRU FIECARE PAS)
+
+A. Sursa Git: commit cu scop limitat; istoricul păstrat; branch sau PR identificabil; worktree fără schimbări
+nereconciliate.
+
+B. Dovezi: cerința, implementarea, metoda de test, rezultate, known limitations, costuri/dependențe și reviewer.
+
+C. Calitate: verificări deterministe relevante; fără regresii demonstrate; orice problemă de securitate blocantă este
+rezolvată sau pasul rămâne blocat.
+
+D. Învățare: la finalul oricărui pas, inclusiv FAILED, înregistrează observația și ipoteza de îmbunătățire. Lecțiile nu
+devin automat reguli globale fără evaluări.
+
+E. Cost: nu adăuga servicii plătite; nu invoca API-uri fără chei; nu rula sute de apeluri/agenți pentru un singur test.
+Maximum o sarcină mare în această sesiune.
+
+F. Handoff: status compact și verificabil pentru modelul următor. Utilizează git ca sursă de adevăr, nu contextul
+conversației.
+
+G. Security: niciun secret, token, cookie, date personale ori asset comercial confidențial în Git; datele de test sunt
+sintetice.
+
+
+CATEGORII DE EVALUARE PE PLATFORMĂ
+
+- Marketing: brand fit, audience relevance, factual grounding, creativity, originality, channel fit, accessibility, CTA,
+funnel logic, rights/provenance, link integrity, post-publication outcomes.
+
+- Software: requirement coverage, contracts, tests, tenant isolation, auth, idempotency, quality gates, security, load,
+disaster recovery, regression, UI mobile.
+
+- Learning: lesson provenance, deduplication, recency, calibration error, drift, experiment effect, holdout regression,
+promotion/rollback, privacy deletion, cost-benefit.
+
+ÎNVĂȚAREA ESTE OBLIGATORIE CA ARHITECTURĂ, NU CA PROMISIUNE DE MODELE CARE ÎȘI SCHIMBĂ
+PONDERILE. Capturează doar datele necesare, legal, cu retenție și drepturi de ștergere. Orice adaptare
+automată trebuie verificată offline înainte de canary/producție. În primele etape învățarea poate fi
+
+
+
+Document V3 • 07.11.2026                                                                                                2 / 34
+REVENUEPILOT AI                                                                                   Plan de construcție GitHub
+
+
+
+deterministă și manual asistată; fără API nu pretinde generatori runtime autonomi.
+
+
+ORDINEA DE EXECUȚIE ȘI MODELELE SUNT MAI JOS. Fiecare PAS este un pachet independent de verificat și o singură
+sesiune atunci când dimensiunea permite. Dacă devine prea lung, împarte în subpași cu aceeași identitate și nu îl
+închide prematur.
+
+
+
+
+FAZA A — GIT, GUVERNANȚĂ ȘI CONTRACTUL DE LIVRARE (fără host)
+
+
+
+
+PASUL 00 — REPOSITORY NOU GITHUB ȘI PUNCT DE PLECARE VERIFICABIL
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+DEPINDENȚE: niciuna.
+
+IMPLEMENTARE CONCRETĂ: Verifică accesul remote, permisiunea de creare și push, verifică faptul că
+fabrica-autonoma nu este destinația de scriere. Creează repository-ul NOU pentru RevenuePilot AI, preferabil privat, și
+importă promptul și planul integral fără cod din alte proiecte. Definește un punct unic de pornire pentru viitoarele
+sesiuni. Dacă crearea remote e imposibilă, oprește-te cu un singur pas manual pentru telefon.
+
+CRITERIU DE ACCEPTARE: Există URL nou verificabil, branch inițial, HEAD și documentele sursă, sau dovadă
+explicită a blocajului fără afirmații de succes.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+01 în aceeași sesiune.
+
+
+
+PASUL 01 — REGISTRU PERSISTENT DE PROIECT ȘI JURNAL DE DECIZII
+MODEL DE EXECUȚIE: (GPT-6 Luna / Low; alternativ Claude Haiku 5.5 / Low).
+
+CLASĂ: L — Mechanical/documentation. Escalate unexpected architecture/security complexity.
+
+
+DEPINDENȚE: 00.
+
+IMPLEMENTARE CONCRETĂ: Lasă modelul să aleagă structura documentară, dar cere index, pas activ, stări, note
+de schimbare, tracker de blocaje, istoric decizii, checklist testare, handoff și regula de oprire. Documentează diferența
+dintre Git, hosting și runtime.
+
+CRITERIU DE ACCEPTARE: O sesiune nouă poate identifica exact pasul curent din repo, fără chatul original;
+informația rămâne după switch model.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+02 în aceeași sesiune.
+
+
+
+PASUL 02 — POLITICĂ GIT DE LUCRU ȘI REVIZUIRE
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+
+Document V3 • 07.11.2026                                                                                              3 / 34
+REVENUEPILOT AI                                                                                      Plan de construcție GitHub
+
+
+
+DEPINDENȚE: 01.
+
+IMPLEMENTARE CONCRETĂ: Stabilește convenții pentru branchuri, commituri, PR, review, rebase, conflict
+resolution, revendicare task, lease, no force-push, protejarea main în măsura permisă de plan, rollback și păstrarea
+dovezilor. Opțional automatizează verificări pe PR.
+
+CRITERIU DE ACCEPTARE: Două sesiuni simulate pot preda un task fără să suprascrie progresul; main nu primește
+modificări neanalizate.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+03 în aceeași sesiune.
+
+
+
+PASUL 03 — AUDIT AL INSTRUMENTELOR ȘI CONSTRÂNGERILOR REALE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 02.
+
+IMPLEMENTARE CONCRETĂ: Inventariază interpretoarele și pachetele disponibile, autentificarea Codex/GitHub,
+spațiul de lucru persistent, CI pe GitHub, quota și costurile. Confirmă lipsa hostului și a cheilor API, diferența între
+subscription și runtime.
+
+CRITERIU DE ACCEPTARE: Raport cu VERIFIED/UNKNOWN/UNAVAILABLE pentru fiecare componentă; nicio integrare
+fictivă.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+04 în aceeași sesiune.
+
+
+
+PASUL 04 — ARHITECTURA ȚINTĂ ȘI ARHITECTURA MINIMĂ
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 03.
+
+IMPLEMENTARE CONCRETĂ: Compară monolit modular, backend serverless viitor, worker/evenimente, opțiuni DB
+și costuri de migrare. Definește control plane/execution plane, boundary tenant, domenii și relații, fără deployment
+prematur și fără microservicii artificiale.
+
+CRITERIU DE ACCEPTARE: Diagrama conceptuală, deciziile tradeoff, planul de adaptare la host și testele de
+arhitectură au review critic.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+05 în aceeași sesiune.
+
+
+
+PASUL 05 — STRATEGIA DE LIVRARE CI FĂRĂ HOST
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+
+
+
+Document V3 • 07.11.2026                                                                                                 4 / 34
+REVENUEPILOT AI                                                                                  Plan de construcție GitHub
+
+
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 04.
+
+IMPLEMENTARE CONCRETĂ: Proiectează execuția testelor/formatării/buildului prin instrumente efectiv disponibile,
+eventual GitHub Actions în limitele planului. Separă test mock, unit, integrare și live, cu dovada joburilor; nu expune
+secrete.
+
+CRITERIU DE ACCEPTARE: O verificare minimală rulează efectiv în mediu și este reproductibilă; dacă CI nu e
+disponibilă, blocaj explicit.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+06 în aceeași sesiune.
+
+
+
+PASUL 06 — BASELINE KPI, RISC ȘI BACKLOG TESTABIL
+MODEL DE EXECUȚIE: (GPT-6 Luna / Low; alternativ Claude Haiku 5.5 / Low).
+
+CLASĂ: L — Mechanical/documentation. Escalate unexpected architecture/security complexity.
+
+
+DEPINDENȚE: 05.
+
+IMPLEMENTARE CONCRETĂ: Definește indicatori pentru efort, timp de execuție, defecte, learning accuracy, cost,
+acces și business. Marchează toate cifrele economice nedovedite drept ipoteze. Definește criterii de succes / stop
+pentru 30/60/90 zile.
+
+CRITERIU DE ACCEPTARE: Primul backlog are acceptanțe, dependențe și risc, nu doar denumiri de funcții.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+07 în aceeași sesiune.
+
+
+
+
+FAZA B — ARHITECTURĂ, SECURITATE ȘI FUNDAȚIE MULTI-TENANT
+
+
+
+
+PASUL 07 — THREAT MODELING ȘI POLITICI DE ACCES
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 04.
+
+IMPLEMENTARE CONCRETĂ: Modelează adversari, OAuth, SSRF, prompt injection, upload neîncredere, deschiderea
+linkurilor, compromiterea Git, supply chain, privilegiile de agent și leakage cross-tenant. Definește policy-as-code
+viitor, human approval, kill switch și deny by default.
+
+CRITERIU DE ACCEPTARE: Threat register cu mitigări testabile, severitate, owner, aprobări și cazuri negative.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+08 în aceeași sesiune.
+
+
+Document V3 • 07.11.2026                                                                                             5 / 34
+REVENUEPILOT AI                                                                                 Plan de construcție GitHub
+
+
+
+
+PASUL 08 — ALEGEREA STACKULUI ȘI TESTAREA UNUI SCHELET MINIM
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 05,07.
+
+IMPLEMENTARE CONCRETĂ: Alege instrumentele cele mai simple compatibile cu hostul viitor, telefonul și
+zero-cost, explică înlocuirea acestora. Lasă modelul să creeze singur organizarea codului și proiectului. Nu adăuga un
+framework de agenți încă.
+
+CRITERIU DE ACCEPTARE: Build de bază și un test executat cu rezultat real; versiuni/dependențe fixate adecvat.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+09 în aceeași sesiune.
+
+
+
+PASUL 09 — KIT UI MOBIL ȘI DESIGN SYSTEM MINIM
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 08.
+
+IMPLEMENTARE CONCRETĂ: Definire layout, navigație, component tokens, accesibilitate, fluxuri mobile,
+loading/error/empty states, aprobare campanie, notificări și limba română pentru utilizator. Nu proiecta zeci de
+ecrane înainte de fluxul principal.
+
+CRITERIU DE ACCEPTARE: Probe la lățimi mobile, navigare utilizabilă, contrast/tastatură sau limitare documentată.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+10 în aceeași sesiune.
+
+
+
+PASUL 10 — IDENTITATE, SESIUNI ȘI AUTENTIFICARE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 08,07.
+
+IMPLEMENTARE CONCRETĂ: Construiește sau integrează autentificarea potrivită mediului, controlul sesiunilor și
+reautorizare. Nu inventa o conexiune OAuth externă dacă nu există; folosește flow de dezvoltare sigur și marcaj
+explicit.
+
+CRITERIU DE ACCEPTARE: Teste pentru acces neautorizat, sesiune invalidă, identitate greșită și date de test; fără
+parole în repo.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+11 în aceeași sesiune.
+
+
+
+
+Document V3 • 07.11.2026                                                                                            6 / 34
+REVENUEPILOT AI                                                                                        Plan de construcție GitHub
+
+
+
+PASUL 11 — MULTI-TENANT, RBAC ȘI IZOLARE
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 10.
+
+IMPLEMENTARE CONCRETĂ: Modelează organizații, roluri, memberships, ownership, permisiuni per resursă,
+exporturi segregate, filtre pe query/search/memory și teste cross-tenant. Prefixarea unei chei nu este suficientă dacă
+există căi indirecte de acces.
+
+CRITERIU DE ACCEPTARE: Teste pozitive/negative cu 3 tenant-uri și roluri; fiecare acces cu autorizație verificată.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+12 în aceeași sesiune.
+
+
+
+PASUL 12 — PERSISTENȚĂ, MIGRARE ȘI DATE DEMO
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 11.
+
+IMPLEMENTARE CONCRETĂ: Proiectează DB adaptată hostului viitor, migrații reversibile/expand, constrângeri,
+indexuri, integritate, retenție, test DB și fixture-uri sintetice din 3 industrii. Evită date personale reale.
+
+CRITERIU DE ACCEPTARE: Migrație inițială, test creare/citire/update/scope, verificare la reluare.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+13 în aceeași sesiune.
+
+
+
+PASUL 13 — EVENIMENTE, AUDIT ȘI OBSERVAȚIE MINIMĂ
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 12.
+
+IMPLEMENTARE CONCRETĂ: Definește evenimente relevante, correlation/trace IDs, loguri structurate, redacție PII,
+erori, costuri/latency și audit immutable unde este necesar. Logurile nu includ secrete și nu sunt memorie globală
+nelimitată.
+
+CRITERIU DE ACCEPTARE: Fiecare operațiune demonstrativă are un ID de urmărit; test pentru redacție și
+reconstrucția traseului.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+14 în aceeași sesiune.
+
+
+
+
+Document V3 • 07.11.2026                                                                                                   7 / 34
+REVENUEPILOT AI                                                                                  Plan de construcție GitHub
+
+
+
+PASUL 14 — BUGETE ȘI QUOTA GUARDRAILS
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 13.
+
+IMPLEMENTARE CONCRETĂ: Limite per tenant/task/furnizor, estimated vs actual, max retries, circuit breaker,
+pauză manuală, explicit approve spend; stări pentru lipsa API sau cote. Nu înlocui abonamentele consumer cu un API
+imaginar.
+
+CRITERIU DE ACCEPTARE: O cerere care depășește bugetul este blocată determinist; zero apeluri externe
+neautorizate.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+15 în aceeași sesiune.
+
+
+
+PASUL 15 — REVIEW INDEPENDENT FUNDAȚIE + BASELINE DE SECURITATE
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 10,11,12,14.
+
+IMPLEMENTARE CONCRETĂ: Model din altă familie verifică auth, RBAC, secret handling, state drift, migrații și
+compromisuri arhitecturale. Fixurile se fac ca taskuri separate cu teste; nu doar opinii.
+
+CRITERIU DE ACCEPTARE: Raportul de review real, remedieri sau BLOCKED; benchmark baseline pentru testele
+viitoare.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+16 în aceeași sesiune.
+
+
+
+
+FAZA C — SISTEMUL DUAL CODEX/CLAUDE ȘI ORCHESTRARE DURABILĂ
+
+
+
+
+PASUL 16 — REGISTRUL DE AGENȚI ȘI CAPABILITĂȚI
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 15.
+
+IMPLEMENTARE CONCRETĂ: Definește identități logice și versiuni, scop, tool permissions, riscuri, cost, ierarhie,
+input/output, evaluator, fallback și nivel de autonomie pentru fiecare rol. Nu crea instanțe de model fără provider
+autorizat.
+
+CRITERIU DE ACCEPTARE: Un agent fără permisiune nu poate invoca un tool interzis; registrul poate fi consultat și
+versionat.
+
+
+
+
+Document V3 • 07.11.2026                                                                                             8 / 34
+REVENUEPILOT AI                                                                                  Plan de construcție GitHub
+
+
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+17 în aceeași sesiune.
+
+
+
+PASUL 17 — CONTRACTE TIPIZATE PENTRU TASK/HANDOFF
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 16.
+
+IMPLEMENTARE CONCRETĂ: Stabilește task ID, actor, session, parent/correlation, schema version, scope/tenant,
+resource limit, preconditions, manifest, provenance, reviewer, statuses, error taxonomy, idempotency. Proiectează
+migrarea schemelor.
+
+CRITERIU DE ACCEPTARE: Validarea respinge mesaje invalide, duplicate incompatibile și tentative de schimbare a
+autorității.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+18 în aceeași sesiune.
+
+
+
+PASUL 18 — ORCHESTRATOR DETERMINIST CU STARE DURABILĂ
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 17,14.
+
+IMPLEMENTARE CONCRETĂ: Definește tranzitarea exclusivă de sistem, nu de verdictul LLM; claim/lease, timeout,
+retries, ack, cancellation, dead-letter, durable resume și conflicte după reconectare. Începe monolitic.
+
+CRITERIU DE ACCEPTARE: Testele de state machine, reluare și tranziții ilegale trec; nu există două execuții ale
+aceleiași acțiuni externe.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+19 în aceeași sesiune.
+
+
+
+PASUL 19 — PROTOCOL CODEX-CLAUDE REAL PRIN GIT
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 18,02.
+
+IMPLEMENTARE CONCRETĂ: Predare prin branch, PR, comentarii, manifest de schimbare, status review, rapoarte
+de teste și semnătura artefactelor. Specifică modul de trecere manuală din telefon, fără pretinse dialoguri automate.
+
+CRITERIU DE ACCEPTARE: Sesiunea simulată B poate relua exact după sesiunea A din repo fără context de chat;
+review absent rămâne pending.
+
+
+
+
+Document V3 • 07.11.2026                                                                                             9 / 34
+REVENUEPILOT AI                                                                                  Plan de construcție GitHub
+
+
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+20 în aceeași sesiune.
+
+
+
+PASUL 20 — WORKFLOW DE CERCETARE GEMINI MANUAL
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 17.
+
+IMPLEMENTARE CONCRETĂ: Definește brief cu întrebări, surse, dată, criterii de fiabilitate, fișă de import,
+deduplicare și verificare independentă. Nu presupune acces CLI/API Gemini Pro.
+
+CRITERIU DE ACCEPTARE: Rezultatul de cercetare importat este etichetat manual/proveniență, contradicțiile sunt
+vizibile, fără integrare falsă.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+21 în aceeași sesiune.
+
+
+
+PASUL 21 — CONTROL AL UNELTELOR ȘI GATEWAY CONCEPTUAL
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 18,16.
+
+IMPLEMENTARE CONCRETĂ: Pentru fiecare rol configurează allowlist, input validation, budget, rate limit,
+escalation, scope tenant, replay protection și prohibiția de a modifica politici prin prompt. Construiește numai
+interfețele ce pot fi testate fără backend extern.
+
+CRITERIU DE ACCEPTARE: Tentativele de invocare neautorizată sunt respinse și auditate; test de prompt injection
+bazat pe input extern.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+22 în aceeași sesiune.
+
+
+
+PASUL 22 — HANDOFF ROBUST DUPĂ LIMITĂ DE COTĂ SAU ÎNTRERUPERE
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 19,21.
+
+IMPLEMENTARE CONCRETĂ: Set de scenarii: sesiune oprită la jumătate, branch divergente, reviewer indisponibil,
+commit împins fără test, quota exhausted. Implementarea reia doar după checkpoint valid.
+
+CRITERIU DE ACCEPTARE: Un model diferit poate identifica progresul fără a duplica acțiuni sau a declara task
+terminat.
+
+
+
+
+Document V3 • 07.11.2026                                                                                            10 / 34
+REVENUEPILOT AI                                                                                    Plan de construcție GitHub
+
+
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+23 în aceeași sesiune.
+
+
+
+PASUL 23 — ORCHESTRARE INTER-AGENT CU DAG MINIMAL
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 18,22.
+
+IMPLEMENTARE CONCRETĂ: Dependențe între taskuri, artefacte versionate, execuție serială inițială, concurență
+limitată și blocarea taskurilor cu parent incomplet. Fără framework complex până la justificare.
+
+CRITERIU DE ACCEPTARE: Test grafic fără cicluri, blocaje corecte, retry sigur, ordine reproducibilă.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+24 în aceeași sesiune.
+
+
+
+PASUL 24 — EVALUARE MCP/A2A/LANGGRAPH ȘI DECIZIE TEHNICĂ
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 23.
+
+IMPLEMENTARE CONCRETĂ: Compară necesitatea reală a standardelor MCP/A2A, checkpointing LangGraph și un
+orchestrator simplu după criterii de cost, maturitate și risc. Experimentează numai dacă există utilizare concretă.
+
+CRITERIU DE ACCEPTARE: Document de decizie cu varianta aleasă, experimente și criterii de revizuire; nicio
+dependență introdusă decorativ.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+25 în aceeași sesiune.
+
+
+
+PASUL 25 — MODEL DE INCIDENT ȘI CONTROL DE OPRIRE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 23,21.
+
+IMPLEMENTARE CONCRETĂ: Definește pași pentru quota exhausted, API suspendat, job blocat, rezultat
+compromis, agent neîncrezut, date expuse și publicare nedorită. Design safe stop și recovery.
+
+CRITERIU DE ACCEPTARE: Simulările de întrerupere refac starea, nu resuscitează joburi anulate și nu au
+side-effects duplicate.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+
+
+
+Document V3 • 07.11.2026                                                                                              11 / 34
+REVENUEPILOT AI                                                                                    Plan de construcție GitHub
+
+
+
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+26 în aceeași sesiune.
+
+
+
+
+FAZA D — QUALITY ENGINE, EVALUARE ȘI ANTI-REGRESIE
+
+
+
+
+PASUL 26 — MODEL DE EVALUARE INDEPENDENTĂ ȘI TAXONOMY DE DEFECTE
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 17,25.
+
+IMPLEMENTARE CONCRETĂ: Construiește taxonomia
+factual/brand/creative/copyright/policy/format/funnel/UX/security/PII, severitate, dovezi, decizii și adjudecarea
+evaluatorilor. Impune distincția hard fail vs opinie subiectivă.
+
+CRITERIU DE ACCEPTARE: Fiecare defect are probă exactă; evaluarea nu respinge lucrări pe criterii străine de
+scope.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+27 în aceeași sesiune.
+
+
+
+PASUL 27 — QUALITY GATES DETERMINISTE PENTRU ARTEFACTE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 26.
+
+IMPLEMENTARE CONCRETĂ: Verifică rubrici, completitudinea brief-ului, formate, linkuri, referințe, spații minime,
+date lipsă, statusul drepturilor și schema rezultatelor. Nu pretinde evaluarea creativității prin regex.
+
+CRITERIU DE ACCEPTARE: Cazurile valide trec și cazurile invalid construite sunt respinse cu motiv reproductibil.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+28 în aceeași sesiune.
+
+
+
+PASUL 28 — MOTOR DE REVIEW CREATIV ȘI FACTUAL ÎN MOD MANUAL
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 26,20.
+
+IMPLEMENTARE CONCRETĂ: Proiectează fluxul de evaluare multi-rubrică, import/export din interfețe
+Claude/Codex/Gemini fără API, provenance și versionare a opiniilor. Notează lipsa reviewului efectiv.
+
+
+
+
+Document V3 • 07.11.2026                                                                                              12 / 34
+REVENUEPILOT AI                                                                                    Plan de construcție GitHub
+
+
+
+CRITERIU DE ACCEPTARE: Un artefact revizuit păstrează motivul schimbării și numele real al evaluatorului, nu un
+model presupus.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+29 în aceeași sesiune.
+
+
+
+PASUL 29 — ANTI-FALSE-POSITIVE ȘI ANTI-REWARD-HACKING PENTRU EVALUATORI
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 27,28.
+
+IMPLEMENTARE CONCRETĂ: Creează cazuri precum „revizor cere SQL în pagina HTML”, modificări de teste pentru
+a trece, ștergerea caracteristicii cerute, afirmații fără evidență. Introdu verificări independente, holdout și adjudecare.
+
+CRITERIU DE ACCEPTARE: 0 regresii pe setul de cazuri istorice definite; pentru defecte noi există dovadă că se
+reproduce.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+30 în aceeași sesiune.
+
+
+
+PASUL 30 — QUALITY GATE SPECIALIZAT DE BRAND ȘI AUDIENCE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 27,29.
+
+IMPLEMENTARE CONCRETĂ: Formează rubrici parametrice pentru mesaj, ton, segment, sensibilități, promisiuni,
+canal, grad de noutate, CTA. Distinge erori reale de diferențe stilistice.
+
+CRITERIU DE ACCEPTARE: Calibrare pe un set etichetat din 3 branduri sintetice, cu explicații și false positives
+raportate.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+31 în aceeași sesiune.
+
+
+
+PASUL 31 — QUALITY GATE DE FACTUALITATE, PROVENIENȚĂ ȘI DREPTURI
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 27,29.
+
+IMPLEMENTARE CONCRETĂ: Modelează afirmații verificate/neverificate, documente sursă, actualitate, drept de
+utilizare imagini/muzică, aprobare. Păstrează libertatea creației ficționale fără să permită testimoniale inventate ca
+fapte.
+
+
+
+
+Document V3 • 07.11.2026                                                                                              13 / 34
+REVENUEPILOT AI                                                                                  Plan de construcție GitHub
+
+
+
+CRITERIU DE ACCEPTARE: Teste împotriva afirmațiilor fabricate, surselor indisponibile și drepturilor lipsă; review
+clar și auditabil.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+32 în aceeași sesiune.
+
+
+
+PASUL 32 — QUALITY GATE DE CANAL, UX, FORMAT ȘI ACCESIBILITATE
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 27,09.
+
+IMPLEMENTARE CONCRETĂ: Verifică mecanic dimensiuni/caption/CTA/linkuri/copy restrictions cunoscute, ecrane
+mobile, contrast, texte alternative și cerințe de format. Fără simulare de publicare.
+
+CRITERIU DE ACCEPTARE: Artefacte incompatibile sunt semnalate; false positive pe formate valide revizuite.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+33 în aceeași sesiune.
+
+
+
+PASUL 33 — BENCHMARK-URI, GOLDEN SET ȘI EVALUATOR CALIBRATION
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 29,30,31,32.
+
+IMPLEMENTARE CONCRETĂ: Creează referințe sintetice + review uman pentru passing/failing/borderline, scoruri
+per dimensiune, precision/recall și acord evaluatori. Distinge „confidence” de probabilitate calibrată.
+
+CRITERIU DE ACCEPTARE: Baseline numeric reproductibil și limite de încredere; niciun prag automat promovat fără
+eșantion suficient.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+34 în aceeași sesiune.
+
+
+
+PASUL 34 — CALIBRARE PARAMETRIZATĂ ȘI ROLLBACK
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 33.
+
+IMPLEMENTARE CONCRETĂ: Versionează praguri, niveluri de severitate, sampling, retries, memory limits și model
+routing. Orice modificare rulează evaluări și poate reveni la versiunea anterioară.
+
+CRITERIU DE ACCEPTARE: Canary/rollback simulat trece, cu registru explicit al schimbării, baseline și efectului.
+
+
+
+
+Document V3 • 07.11.2026                                                                                            14 / 34
+REVENUEPILOT AI                                                                                  Plan de construcție GitHub
+
+
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+35 în aceeași sesiune.
+
+
+
+PASUL 35 — AUDIT CROSS-FAMILY AL MOTORULUI DE CALITATE
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 34.
+
+IMPLEMENTARE CONCRETĂ: Al doilea model atacă rubricile, acoperirea, presupunerile, biasul către
+aprobări/respingere, test leakage și self-confirmation. Reproduce exemplele problematice și propune experiment, nu
+doar opinie.
+
+CRITERIU DE ACCEPTARE: Raport cu defecte măsurate și acțiuni; calitatea este demonstrată prin teste, nu eticheta
+„perfect”.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+36 în aceeași sesiune.
+
+
+
+
+FAZA E — MEMORIE ȘI AUTOÎNVĂȚARE CALIBRATĂ
+
+
+
+
+PASUL 36 — TAXONOMIE DE MEMORIE ȘI REGULI DE PĂSTRARE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 35,12.
+
+IMPLEMENTARE CONCRETĂ: Definește memorie episodică, procedurală, semantică, evaluativă, de brand,
+experiment și defecte sistem, izolarea tenant, TTL, minimizarea PII, drept de ștergere, sursă, versiune și supersession.
+
+CRITERIU DE ACCEPTARE: Schema conceptuală/implementare și teste: o lecție dintr-un tenant nu devine accesibilă
+altuia.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+37 în aceeași sesiune.
+
+
+
+PASUL 37 — CAPTURĂ DE EXPERIENȚE PENTRU FIECARE TASK
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+
+
+Document V3 • 07.11.2026                                                                                            15 / 34
+REVENUEPILOT AI                                                                                 Plan de construcție GitHub
+
+
+
+DEPINDENȚE: 36,13.
+
+IMPLEMENTARE CONCRETĂ: Înregistrează task → acțiune → artefact → test → critică → rezultat → cost → lecție, cu
+metadate suficiente și payload redacted. Captează și cazurile eșuate, nu doar succesele.
+
+CRITERIU DE ACCEPTARE: Traseul unui task poate fi reconstruit din evenimente fără secrete și fără PII nejustificat.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+38 în aceeași sesiune.
+
+
+
+PASUL 38 — DEDUCERE ȘI DEDUPLICARE DE LECȚII
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 37.
+
+IMPLEMENTARE CONCRETĂ: Extrage observații, ipoteze, exemple pozitive/negative, clase de eroare, surse,
+relevanță și contradicții; clasificare inițial deterministă/manuală, nu auto-confirmare LLM.
+
+CRITERIU DE ACCEPTARE: Două erori echivalente nu produc reguli contradictorii; o lecție nevalidată nu devine
+politică globală.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+39 în aceeași sesiune.
+
+
+
+PASUL 39 — RETRIEVAL CONTEXTUAL CU PROVENANCE ȘI PRIORITATE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 38.
+
+IMPLEMENTARE CONCRETĂ: Selectează lecțiile utile pe task, recency, brand, risc, sursă, evaluare și context
+budget. Întâi căutare simplă; embeddings/reranking doar dacă benchmarkul o justifică.
+
+CRITERIU DE ACCEPTARE: Răspunsul citat indică exact lecțiile folosite; un task fără lecție relevantă nu este poluat
+cu istoric.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+40 în aceeași sesiune.
+
+
+
+PASUL 40 — EVALUĂRI PENTRU ÎNVĂȚARE FĂRĂ CONTAMINARE
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+
+
+Document V3 • 07.11.2026                                                                                           16 / 34
+REVENUEPILOT AI                                                                                      Plan de construcție GitHub
+
+
+
+DEPINDENȚE: 39,33.
+
+IMPLEMENTARE CONCRETĂ: Separă training/examples/dev/holdout, compilează regresii din incidente verificate,
+benchmark zero-shot/baseline și criterii de promovare. Previi reward hacking al prompturilor și confuzia dintre date de
+train/test.
+
+CRITERIU DE ACCEPTARE: O propunere care îmbunătățește scoringul intern dar scade holdout este respinsă.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+41 în aceeași sesiune.
+
+
+
+PASUL 41 — ADAPTIVE PROMPT & ROUTING PROPOSALS, NU AUTO-MUTARE OPACĂ
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 40,34.
+
+IMPLEMENTARE CONCRETĂ: Proiectează versiuni de prompts, alegerea exemplelor, rutare model, buget și retry ca
+propuneri cu autor, cauză, valori înainte/după, test, aprobator și rollback. În lipsa API, utilizatorul face execuția în
+modelul ales.
+
+CRITERIU DE ACCEPTARE: Propunerile sunt reproductibile și neaplicate automat la producție; rollback
+demonstrabil.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+42 în aceeași sesiune.
+
+
+
+PASUL 42 — EVALUEAZĂ DSPY/GEPA/MIPROV2, BANDITS ȘI ML
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 41.
+
+IMPLEMENTARE CONCRETĂ: Cercetează din documentația oficială și proiectează condițiile de activare: volum
+etichete, cost, variabile optimizabile, holdout, bias, drift. Nu instala rețele neuronale custom pentru 10 exemple.
+
+CRITERIU DE ACCEPTARE: ADR cu decizii explicite: „acum”, „mai târziu”, „refuzat”, praguri și cost; un benchmark
+mic numai dacă este fezabil.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+43 în aceeași sesiune.
+
+
+
+PASUL 43 — CALIBRATION DASHBOARD ȘI DRIFT DETECTION
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+
+
+Document V3 • 07.11.2026                                                                                                17 / 34
+REVENUEPILOT AI                                                                                     Plan de construcție GitHub
+
+
+
+DEPINDENȚE: 42,13.
+
+IMPLEMENTARE CONCRETĂ: Măsoară rate de eșec, predicție vs rezultat, precision/recall, nivel de revizuire, recall
+lecții, cost și timp, per agent/versiune/tenant. Adaugă alerte de drift fără a pretinde predicții fiabile pe date puține.
+
+CRITERIU DE ACCEPTARE: Serii sintetice cu drift cunoscut declanșează notificare; zero date cross-tenant în
+dashboard.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+44 în aceeași sesiune.
+
+
+
+PASUL 44 — EXPERIMENT RUNNER PENTRU ÎMBUNĂTĂȚIRI A/B ȘI CANARY
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 43.
+
+IMPLEMENTARE CONCRETĂ: Definește configurație control/tratament, alocare reproducibilă, metrici, minimum
+sample, limită de buget și stop, validare înainte de promovare. În lipsa traficului, testează doar mecanismul pe date
+sintetice.
+
+CRITERIU DE ACCEPTARE: Rezultat experiment etichetat SIMULAT; reversibilitate și jurnal complet.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+45 în aceeași sesiune.
+
+
+
+PASUL 45 — SISTEM DE DEZVĂȚARE/ȘTERGERE ȘI MEMORIE NEGATIVĂ
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 44,36.
+
+IMPLEMENTARE CONCRETĂ: Ștergere per client, retragere materiale, invalidarea exemplelor derivate, dependențe,
+surse și expirare. Înregistrează incidente recurente ca anti-pattern fără „copiază promptul eșuat” necritic.
+
+CRITERIU DE ACCEPTARE: Test de drept de ștergere și invalidare retrieval; nicio lecție retrasă nu este servită în
+răspunsurile viitoare.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+46 în aceeași sesiune.
+
+
+
+PASUL 46 — AUDIT SISTEM DE ÎNVĂȚARE ȘI ÎNCHIDERE FUNDAȚIE AGENTICĂ
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+
+
+Document V3 • 07.11.2026                                                                                               18 / 34
+REVENUEPILOT AI                                                                                   Plan de construcție GitHub
+
+
+
+DEPINDENȚE: 45.
+
+IMPLEMENTARE CONCRETĂ: Revizuire independentă pentru contaminare, leak, cross-tenant, drift, auto-optimizare
+nesigură, cost runaway, false improvement. Închide numai cu evidență/teste și documentează limitările.
+
+CRITERIU DE ACCEPTARE: Raport audit, probleme severe reparate și baseline conservat; fără afirmație că modelele
+își modifică automat ponderile.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+47 în aceeași sesiune.
+
+
+
+
+FAZA F — PRODUS DE MARKETING A–Z, VERSIUNEA ASISTATĂ
+
+
+
+
+PASUL 47 — PROFIL UNIVERSAL DE ORGANIZAȚIE ȘI ONBOARDING REAL
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 46,11,09.
+
+IMPLEMENTARE CONCRETĂ: Construiește progresiv introducerea website-ului (manual dacă parsing extern
+indisponibil), domeniu, oferte, obiective, limbi, preferințe, date de contact, buget, aprobări. Salvează per tenant și
+oferă reluare.
+
+CRITERIU DE ACCEPTARE: 3 organizații din domenii diferite pot completa onboarding fără date reale.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+48 în aceeași sesiune.
+
+
+
+PASUL 48 — BRAND MEMORY ȘI CATALOG DE OFERTE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 47,36.
+
+IMPLEMENTARE CONCRETĂ: Creează brand voice versionat, mesaje aprobate/interzise, avantaje competitive,
+claims, exemple, produse, prețuri, categorii și materiale referință. Separă datele clientului de general knowledge.
+
+CRITERIU DE ACCEPTARE: Un material de brand expirat sau retras nu poate deveni „fapt confirmat”; izolarea
+rezistă căutărilor.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+49 în aceeași sesiune.
+
+
+
+
+Document V3 • 07.11.2026                                                                                             19 / 34
+REVENUEPILOT AI                                                                                 Plan de construcție GitHub
+
+
+
+PASUL 49 — GESTIONARE ASSETURI CU DREPTURI ȘI PROVENANCE
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 48,31.
+
+IMPLEMENTARE CONCRETĂ: Metadata pentru imagini/video/texte, owner, autor, licență, consimțământ, versiune,
+expirare, asocierea cu campanii. Până la host, foloseste doar asset demo și storage potrivit repo-ului (nu binare
+enorme în Git).
+
+CRITERIU DE ACCEPTARE: Două assets identice detectabile; asset fără drepturi marcat pentru review, nu publicat.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+50 în aceeași sesiune.
+
+
+
+PASUL 50 — MARKET RESEARCH CA WORKFLOW ASISTAT
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 20,48.
+
+IMPLEMENTARE CONCRETĂ: Creează brief de cercetare cu surse, dată, obiective, concurență, semnale și
+contradicții. Permite import Gemini/manual; fără API nu pretinde scraping/research complet autonom.
+
+CRITERIU DE ACCEPTARE: Rezultatul indică origine, date incerte și observații verificabile; nu confundă ipoteza cu
+faptele.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+51 în aceeași sesiune.
+
+
+
+PASUL 51 — AUDIENCE/JTBD ȘI POZIȚIONARE CONFIGURABILĂ
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 50.
+
+IMPLEMENTARE CONCRETĂ: Segmentare, job-to-be-done, buyers, objections, differentiation și score de dovezi.
+Permite personalizare per industrie fără hardcoding vertical.
+
+CRITERIU DE ACCEPTARE: 3 exemple din industrii diferite produc segmente și poziționări distincte, verificabile de
+utilizator.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+52 în aceeași sesiune.
+
+
+
+
+Document V3 • 07.11.2026                                                                                            20 / 34
+REVENUEPILOT AI                                                                                   Plan de construcție GitHub
+
+
+
+PASUL 52 — MARKETING STRATEGY PLANNER CU METRICI ȘI BUGET
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 51,14.
+
+IMPLEMENTARE CONCRETĂ: Plan pe obiective, canale, mesaje, funnel, cadente, experiment, KPI, prioritizare și
+condiții de stop. Modelul de strategie respectă datele brandului și nu inventează rezultate garantate.
+
+CRITERIU DE ACCEPTARE: Strategie salvată, revizuită și aprobată; buget total nu depășește plafonul configurat.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+53 în aceeași sesiune.
+
+
+
+PASUL 53 — CAMPAIGN BRIEF ȘI WORKFLOW DE APROBĂRI
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 52,27.
+
+IMPLEMENTARE CONCRETĂ: Definește obiective, audience, mesaj, variantă, canal, format, drepturi, termen,
+review, owner. Permite comment/approve/reject cu motiv și istoric fără să piardă originalul.
+
+CRITERIU DE ACCEPTARE: O campanie nu poate fi declarată ready dacă cerințele hard lipsesc; review păstrează
+versiuni.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+54 în aceeași sesiune.
+
+
+
+PASUL 54 — CREATIVE STUDIO: CONCEPTE, COPY ȘI VARIANTE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 53,30.
+
+IMPLEMENTARE CONCRETĂ: Proiectează taskuri de generare cu import manual din Codex/Claude/Gemini până la
+API; variante semnificativ diferite de hook, unghi, CTA, ton și lungime, plus scoring. Ficțiune creativă permisă, claims
+verificabile necesare.
+
+CRITERIU DE ACCEPTARE: Un material produs asistat poartă eticheta MANUAL/ASSISTED, evaluatorii și versiunile
+sale.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+55 în aceeași sesiune.
+
+
+
+
+Document V3 • 07.11.2026                                                                                             21 / 34
+REVENUEPILOT AI                                                                                  Plan de construcție GitHub
+
+
+
+PASUL 55 — SCRIPTURI VIDEO, STORYBOARD ȘI ADAPTARE FORMAT
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 54,49.
+
+IMPLEMENTARE CONCRETĂ: Produse conceptuale: shot list, script, hook, subtitles, tempo, set de asseturi, diferite
+proporții și canal. Nu presupune generare video/render fără unelte verificate.
+
+CRITERIU DE ACCEPTARE: Brief complet în format potrivit canalului; cazuri fără footage sunt detectate înainte de
+«ready».
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+56 în aceeași sesiune.
+
+
+
+PASUL 56 — SEO/AEO/GEO ȘI STRUCTURĂ EDITORIALĂ
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 54,31.
+
+IMPLEMENTARE CONCRETĂ: Subiecte, keyword intent, content architecture, originalitate, metadata, interlinking,
+rich snippets dacă sunt corecte, conținut util și editare manuală. Evită pagini automate fără valoare.
+
+CRITERIU DE ACCEPTARE: Conținutul demo are dovezi, structură și verificări factuale; niciun claim SEO neverificat.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+57 în aceeași sesiune.
+
+
+
+PASUL 57 — CALENDAR EDITORIAL ȘI CAMPANII CROSS-CHANNEL
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 55,56.
+
+IMPLEMENTARE CONCRETĂ: Creează calendar, variante pe canal, dependențe asset, statut, approvals, frequency
+limits și editări ușor de folosit pe mobil. Păstrează channel differences.
+
+CRITERIU DE ACCEPTARE: Un conținut are istoric de versiuni și programare fără dubluri; calendarul indică dacă
+publicarea este manuală.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+58 în aceeași sesiune.
+
+
+
+PASUL 58 — PUBLISHING MANUAL-FIRST ȘI EXPORT VERIFICABIL
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+
+Document V3 • 07.11.2026                                                                                            22 / 34
+REVENUEPILOT AI                                                                                   Plan de construcție GitHub
+
+
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 57,32.
+
+IMPLEMENTARE CONCRETĂ: Realizează pachete de publicare/revizuire/export cu text, asseturi, metadate, deadline
+și checklist; nu crea endpointuri social API fictive. Confirmarea publicării este introdusă/importată transparent.
+
+CRITERIU DE ACCEPTARE: Un material exportat poate fi refolosit fără pierdere; postarea externă rămâne
+UNCONFIRMED până la dovadă.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+59 în aceeași sesiune.
+
+
+
+PASUL 59 — LANDING PAGES ȘI CTA DE CAMPANIE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 53,09.
+
+IMPLEMENTARE CONCRETĂ: Creează landing page builder minimal bazat pe componente, formular, text,
+accesibilitate, CTA, mobile, consent și test pentru date incomplete. În lipsa hostului, doar preview/build local/CI dacă
+este accesibil.
+
+CRITERIU DE ACCEPTARE: E2E de preview, formular în mod de test și validare CTA; nu declara trafic real.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+60 în aceeași sesiune.
+
+
+
+PASUL 60 — LEAD CAPTURE, DEDUPLICARE ȘI EVENT MODEL
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 59,11.
+
+IMPLEMENTARE CONCRETĂ: Construiește model de lead cu sursa, consent, timestamp, import/export, duplicate
+handling, scoring transparent și state pipeline. Nu colecta automat contacte din surse neautorizate.
+
+CRITERIU DE ACCEPTARE: Formularul de test produce lead corect în tenantul corect; duplicatele sunt gestionate.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+61 în aceeași sesiune.
+
+
+
+PASUL 61 — CRM HANDOFF ȘI FOLLOW-UP ASISTAT
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+
+
+Document V3 • 07.11.2026                                                                                             23 / 34
+REVENUEPILOT AI                                                                                         Plan de construcție GitHub
+
+
+
+DEPINDENȚE: 60,21.
+
+IMPLEMENTARE CONCRETĂ: Definire contract export/import și evenimente de lead, mapping de câmpuri, dedup,
+eșec retry, etichete privacy; emailul rămâne manual/draft până la provider/consimțământ verificat.
+
+CRITERIU DE ACCEPTARE: Un lead este exportabil și urmărit în istoric; nicio trimitere efectivă de email în test fără
+autorizare.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+62 în aceeași sesiune.
+
+
+
+PASUL 62 — MARKETING ANALYTICS ȘI ATRIBUIRE CU INCERTITUDINE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 60,13.
+
+IMPLEMENTARE CONCRETĂ: Event tracking first-party, funnel stages, campaign IDs, conversii, marcaj sintetic/live,
+limiti de attribution, costuri și date lipsă. Nu calcula ROI fără date reale ale veniturilor și costurilor.
+
+CRITERIU DE ACCEPTARE: Un eveniment test se leagă de o campanie, dar e marcat TEST; dashboard arată sursa și
+calitatea datelor.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+63 în aceeași sesiune.
+
+
+
+PASUL 63 — CLOSED-LOOP PERFORMANCE → LEARNING
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 62,44,54.
+
+IMPLEMENTARE CONCRETĂ: Conectează variațiile creative și aprobările cu rezultate, lead quality, costuri și
+feedback. Propune actualizări de lecții/parametri pe date validate, nu doar scorul unui LLM Judge.
+
+CRITERIU DE ACCEPTARE: Poate fi urmărit un ciclu complet sintetic, cu propunere de schimbare + evaluare +
+rollback; nu se pretinde creștere reală.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+64 în aceeași sesiune.
+
+
+
+PASUL 64 — EXPERIMENTE CREATIVE ȘI COMPARAREA VARIANTELOR
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+
+
+Document V3 • 07.11.2026                                                                                                   24 / 34
+REVENUEPILOT AI                                                                                 Plan de construcție GitHub
+
+
+
+DEPINDENȚE: 63.
+
+IMPLEMENTARE CONCRETĂ: Setup hypothesize/variant/control/assignment/metric/guardrails/stop. Evită
+interpretări de tip «cea mai bună reclamă» după 10 vizualizări.
+
+CRITERIU DE ACCEPTARE: Experimente sintetice au unit tests pentru randomizare, lipsă date și stop; rapoarte
+disting cauzalitate și confuzie.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+65 în aceeași sesiune.
+
+
+
+PASUL 65 — DASHBOARD MOBIL PENTRU CLIENT ȘI OPERATOR
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 64,09.
+
+IMPLEMENTARE CONCRETĂ: Vederi: overview, brand, campanii, creativ, calendar, approvals, leaduri, evaluări,
+learning, buget, integrări, erori. Mobile-first, preferințe și stări de încărcare/eroare.
+
+CRITERIU DE ACCEPTARE: Parcursul onboarding → brief → review → export → lead demo funcționează în preview
+verificat.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+66 în aceeași sesiune.
+
+
+
+PASUL 66 — ACCEPTANȚA MVP ORIZONTAL FĂRĂ HOST
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 65.
+
+IMPLEMENTARE CONCRETĂ: Testează un flux complet pe 3 organizații și 3 domenii: onb. → brand → brief →
+research manual → strategie → creativ → quality → aprobare → export → lead test → metrici test → lecție.
+Documentează blocajele de host și API.
+
+CRITERIU DE ACCEPTARE: Matrice de acceptanță cu PASS/FAIL/NOT_RUN; zero claim de autopublishing ori ROI real.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+67 în aceeași sesiune.
+
+
+
+
+FAZA G — GROWTH, COMERCIAL, CONTROL OPERAȚIONAL
+
+
+
+
+Document V3 • 07.11.2026                                                                                           25 / 34
+REVENUEPILOT AI                                                                                     Plan de construcție GitHub
+
+
+
+PASUL 67 — PRICING, USAGE METERING ȘI PACHETE COMERCIALE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 66,14.
+
+IMPLEMENTARE CONCRETĂ: Proiectează Starter/Growth/Agency/Enterprise ca oferte testabile, fără preț fixat ca
+fapt. Măsoară cost intern, consum, utilizatori, canale, video, AI credits, suport și marja anticipată. Evită
+reimplementarea plăților deja rezolvate.
+
+CRITERIU DE ACCEPTARE: Raport estimări vs real disponibil; cost limit test; planurile nu sunt „nelimitate”.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+68 în aceeași sesiune.
+
+
+
+PASUL 68 — VÂNZĂRI ȘI ONBOARDING AL PRIMILOR 3 CLIENȚI
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 67.
+
+IMPLEMENTARE CONCRETĂ: Creează demo-uri cu date sintetice clar etichetate, mesaj comercial, instrument de
+feedback, pilot agreement, scope, SLA realist, validare WTP cu clienți din industrii diferite. Fără testimoniale
+inventate.
+
+CRITERIU DE ACCEPTARE: Poate fi urmărită o oportunitate de vânzare de la contact la plată numai când există date
+reale, altfel marcată nevalidată.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+69 în aceeași sesiune.
+
+
+
+PASUL 69 — GROWTH ENGINE: CONȚINUT PENTRU PLATFORMA PROPRIE
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 68.
+
+IMPLEMENTARE CONCRETĂ: Content pillars, publishing calendar, TikTok/Shorts/Reels/Pinterest/SEO/LinkedIn, idei
+diferite, lead magnet util, demos, referral, afiliere, white-label agencies, analytics funnel. Nu confunda views cu MRR.
+
+CRITERIU DE ACCEPTARE: 90 zile de experimente cu ownership și KPI fără promisiuni de viralitate.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+70 în aceeași sesiune.
+
+
+
+
+Document V3 • 07.11.2026                                                                                               26 / 34
+REVENUEPILOT AI                                                                                  Plan de construcție GitHub
+
+
+
+PASUL 70 — CUSTOMER SUPPORT, FEEDBACK ȘI DEFECTE ÎNCHISE ÎN BUCLĂ
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 69,37.
+
+IMPLEMENTARE CONCRETĂ: Inbox/feedback minimal, clasificare incident/cerere, severitate, problema de produs vs
+preferință de brand, proces de îmbunătățire; fără date sensitive în Git.
+
+CRITERIU DE ACCEPTARE: Un feedback negativ devine item de backlog cu legătură la artefactul originar; soluția se
+poate verifica.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+71 în aceeași sesiune.
+
+
+
+PASUL 71 — RETENTION ȘI PRODUCT ANALYTICS INTERN
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 70,62.
+
+IMPLEMENTARE CONCRETĂ: Activation rate, TTV, usage, rework, adoption, anulare, churn, expansion, succes pe
+plan. Definire cohortelor și metricilor corecte.
+
+CRITERIU DE ACCEPTARE: Datele demo sunt etichetate, formulele sunt verificate, rapoartele arată incertitudinea
+eșantioanelor mici.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+72 în aceeași sesiune.
+
+
+
+PASUL 72 — FINANȚE ȘI CRITERII INVESTIȚIE/SCALĂ
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 71,67.
+
+IMPLEMENTARE CONCRETĂ: Model costuri pentru 1/3/10/30/100/1000 clienți, COGS complet, CAC, suport, rate
+video, stocare, cost AI, taxe separat, cashflow. Test sensibilitate la churn și volum media; praguri de reinvestire după
+2–3 clienți reali.
+
+CRITERIU DE ACCEPTARE: Ipotezele sunt distincte de datele reale; niciun «profit net» fără costuri complete;
+GO/NO-GO cuantificat.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+73 în aceeași sesiune.
+
+
+
+
+Document V3 • 07.11.2026                                                                                            27 / 34
+REVENUEPILOT AI                                                                                 Plan de construcție GitHub
+
+
+
+PASUL 73 — AUDIT AL EXPERIENȚEI ȘI DIFERENȚIATORULUI COMERCIAL
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 72.
+
+IMPLEMENTARE CONCRETĂ: Compară produsul efectiv cu alternative reale, întreabă de ce plătește clientul
+separat, identifică părțile commodity, retenția și modul de a se integra cu stackul existent. Nu adăuga 10 module
+pentru spectacol.
+
+CRITERIU DE ACCEPTARE: Backlog reprioritizat după valoare, date comerciale și cost; motivele de refuz sunt
+documentate.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+74 în aceeași sesiune.
+
+
+
+PASUL 74 — DOCUMENTAȚIE CLIENT/OPERATOR EXCLUSIV MOBIL
+MODEL DE EXECUȚIE: (GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: T — Defined-scope feature/UI. Check behavior rather than verbosity.
+
+
+DEPINDENȚE: 73.
+
+IMPLEMENTARE CONCRETĂ: Ghid simplu pentru client și fondator, onboarding, aprobări, handoff manual,
+troubleshooting, revocare acces, export, backup și explicarea limitelor „autopilot”.
+
+CRITERIU DE ACCEPTARE: O persoană neprogramatoare poate urma fluxul și recunoaște ce nu este automatizat.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+75 în aceeași sesiune.
+
+
+
+PASUL 75 — RELEASE REVIEW ȘI TESTUL DE VERTICALITATE INVERSĂ
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 74.
+
+IMPLEMENTARE CONCRETĂ: Review cross-family al versiunii demonstrabile, compară 3 industrii, vezi dacă
+platforma este cu adevărat orizontală și unde se rupe. Nu promova versiunea la public fără aprobări.
+
+CRITERIU DE ACCEPTARE: Raport de defecte, acceptanțe, restricții și posibilități de pilot plătit.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+76 în aceeași sesiune.
+
+
+
+
+Document V3 • 07.11.2026                                                                                           28 / 34
+REVENUEPILOT AI                                                                                    Plan de construcție GitHub
+
+
+
+
+FAZA H — INTEGRĂRI REALE, PRODUCTION READINESS ȘI SCALARE
+
+
+
+
+PASUL 76 — ALEGERE HOST DUPĂ DISPONIBILITATE, COST ȘI RISC
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 75.
+
+IMPLEMENTARE CONCRETĂ: Compară opțiuni free/paid, Cloudflare/serverless/VPS existente, media storage, job
+runner, DB, egress, deploy, backup, observability; verifică condițiile legale/comerciale actuale. Nu ghici privilegii sudo.
+
+CRITERIU DE ACCEPTARE: ADR costuri și migration path. Până la host autorizat, pas DEFERRED, nu oprește alte
+lucrări independente.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+77 în aceeași sesiune.
+
+
+
+PASUL 77 — PIPELINE DE DEPLOY, MIGRARE ȘI ROLLBACK
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 76.
+
+IMPLEMENTARE CONCRETĂ: După host disponibil: configurație izolată, secret management, migrări verificate,
+staging, healthchecks, CI gate, rollback, disaster recovery, zero downtime ca obiectiv măsurabil, nu promisiune.
+
+CRITERIU DE ACCEPTARE: Deploy STAGING real cu logs/healthchecks și rollback testat; fără host status
+BLOCKED/DEFERRED.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+78 în aceeași sesiune.
+
+
+
+PASUL 78 — SECURITY REVIEW PREPROD, GDPR ȘI INCIDENTE
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 77.
+
+IMPLEMENTARE CONCRETĂ: Testare auth, tenant, consent, data export/delete, secrets, upstream APIs, supply
+chain, webhook verification, abuse prevention, incident response, backing up/restore. Apelează specialist juridic când
+e necesar.
+
+CRITERIU DE ACCEPTARE: Audit cross-family, blockere remediate, restaurare testată; nu declara conformitate
+juridică absolută.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+
+
+Document V3 • 07.11.2026                                                                                              29 / 34
+REVENUEPILOT AI                                                                                    Plan de construcție GitHub
+
+
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+79 în aceeași sesiune.
+
+
+
+PASUL 79 — CONECTOR SOCIAL #1 REAL, DUPĂ APROBARE API
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 78,58.
+
+IMPLEMENTARE CONCRETĂ: Alege UN canal cu API, tip de cont și permisiune efectiv accesibile. Implementează
+OAuth/token handling, rate limits, success acknowledgement, idempotency, media validation, consent, retry și
+revocare.
+
+CRITERIU DE ACCEPTARE: Teste live sandbox/cont autorizat, dovada API, fără postare neautorizată. Fără acces:
+DEFERRED și export manual rămâne funcțional.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+80 în aceeași sesiune.
+
+
+
+PASUL 80 — CONECTORI ADIACENȚI ȘI INTEGRARE CRM/EMAIL
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 79.
+
+IMPLEMENTARE CONCRETĂ: Adaugă câte un provider numai când există cerere, permisiuni și plan comercial.
+Refolosește contractele, quality gates, consent, quotas și recovery. Nu promite suport universal imediat.
+
+CRITERIU DE ACCEPTARE: Contract tests + integration tests distincte și observabilitate; rate-limit și token expiry
+testate.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+81 în aceeași sesiune.
+
+
+
+PASUL 81 — EXPERIMENT ACTIV ȘI CALIBRARE DIN DATE REALE
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 80,63.
+
+IMPLEMENTARE CONCRETĂ: Cu clienți și trafic autentic, verifică campanii, control/tratament, impact, delayed
+feedback, false positives ale filtrelor și alegerea modelului; propune calibrare în limite aprobate.
+
+CRITERIU DE ACCEPTARE: Metrici de bază, date suficient de complete, concluzii etichetate; fără intervenții
+automate asupra bugetelor.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+
+
+
+Document V3 • 07.11.2026                                                                                              30 / 34
+REVENUEPILOT AI                                                                                   Plan de construcție GitHub
+
+
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+82 în aceeași sesiune.
+
+
+
+PASUL 82 — SCALARE OPERAȚIONALĂ CONTROLATĂ LA 10–30 CLIENȚI
+MODEL DE EXECUȚIE: (GPT-6.1 Sol / Medium; alternativ Claude Sonnet 5.5 / Medium).
+
+CLASĂ: M — Balanced implementation. One coherent task and tests.
+
+
+DEPINDENȚE: 81,72.
+
+IMPLEMENTARE CONCRETĂ: Load tests, rate limit, tenancy quotas, storage, media lifecycle, job queue, support
+time, incident playbooks și cost per active tenant. Dedică infrastructura doar după măsurări.
+
+CRITERIU DE ACCEPTARE: SLO și capacitate măsurate; plan concret pentru 10/30/100 clienți, costuri și puncte de
+rupere.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+83 în aceeași sesiune.
+
+
+
+PASUL 83 — DECIZIE ML / EMBEDDINGS / FINE-TUNING PE DOVEZI
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 82,42.
+
+IMPLEMENTARE CONCRETĂ: Dacă volumul și calitatea datelor o justifică, evaluează retrieval semantic, contextual
+bandits, clasificatoare, fine-tuning al unui model autorizat, distillation și metode de optimizare DSPy. Include drepturi
+de antrenare, GDPR, cost total, holdout și rollback.
+
+CRITERIU DE ACCEPTARE: ADR cu test de beneficii și cost; model propriu doar după finanțare, nu atribui
+reantrenarea Claude/Codex.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+84 în aceeași sesiune.
+
+
+
+PASUL 84 — AUDIT INDEPENDENT FINAL ȘI PLANUL DE 100–1000 CLIENȚI
+MODEL DE EXECUȚIE: (GPT-6 Astra / High; alternativ Claude Opus 5.5 / High).
+
+CLASĂ: H — Critic: architectural/security decision. Requires independent second-family review; do not rush.
+
+
+DEPINDENȚE: 83.
+
+IMPLEMENTARE CONCRETĂ: Examinare adversarială a securității, performanței, profitului, achiziției, churn,
+incidentelor, autonomiei reale, calității și memoriei. Separă dovezi de ipoteze și stabilește criterii GO/NO-GO pentru
+investiții mari.
+
+CRITERIU DE ACCEPTARE: Rezumat cu verdict, incidente deschise, KPI reali, cost/tenant, nivelul de autonomie,
+backlog financiar justificat.
+
+DOVEZI OBLIGATORII: raportează contractul/scope-ul efectiv; branch+commit/PR; teste și comenzi efectiv rulate;
+rezultate PASS/FAIL/NOT_RUN; comparație cu baseline; defecte și riscuri; cost și limite; impact asupra
+memoriei/învățării; note pentru reviewer; stare persistentă în Git.
+
+
+Document V3 • 07.11.2026                                                                                             31 / 34
+REVENUEPILOT AI                                                                                     Plan de construcție GitHub
+
+
+
+STOP: după atingerea criteriului sau documentarea blocajului, actualizează registrul și oprește-te. Nu trece la PASUL
+85 în aceeași sesiune.
+
+
+
+MATRICEA DE GATES TRANSVERSALE PENTRU REVENUEPILOT AI
+
+
+
+G0 — GIT/PROVENANCE: repository nou, branch unic, commit, schimbări auditate, fără secrete.
+
+G1 — CONTRACT: input/output validat, identitate tenant și permisiuni, acceptance test clar.
+
+G2 — BUILD/STATIC: lint, types, build, dependențe verificate, scanare de secrete dacă instrumentele permit.
+
+G3 — TEST: unit/property/integration/UI/E2E relevant, cu mock/live separat și log de rezultat.
+
+G4 — SECURITY/PRIVACY: limitare acces, cross-tenant, auth, consent, PII redaction, attack surfaces.
+
+G5 — REVIEW: evaluator independent pentru pasul critic; constatări specifice, verificabile și în scope.
+
+G6 — LEARNING: episod/lecție cu cauza, probă, baseline, test, propunere de calibrare și limitare.
+
+G7 — BUSINESS: cost, efect asupra valorii, fără costuri noi neaprobate, funcționalitate folosită real.
+
+G8 — RELEASE/AUTONOMY: niciun efect extern fără acces real, audit, approvals și rollback.
+
+Aceste porți sunt IMPLEMENTATE PROGRESIV. În PASUL 00 nu pretinde că există G0–G8 toate. Pentru fiecare, ține un
+status NOT_IMPLEMENTED / IMPLEMENTED / VERIFIED / BLOCKED.
+
+
+
+CALIBRAREA AGENȚILOR ȘI A EVALUATORILOR
+
+
+
+Pentru FIECARE agent real sau rol logic, menține:
+
+- identitate și versiune; scop; model/abonament; tool permissions; context scope; input/output contracts; cost/latency
+budgets;
+
+- parametri controlați: praguri de severitate, risc, escaladare, repetiție, confidence, temperatură doar când modelul o
+expune, context length, top-k retrieval, memory TTL, review sampling, retries, expiration, capability access;
+
+- metrics: schema validity, groundedness, acceptance, reviewer agreement, false positive rate, false negative rate,
+factual errors, originality, latency, token usage, cost, manual minutes, downstream outcome;
+
+- seturi de teste separate: cazuri standard, adversariale, boundary cases, holdout, regresii istorice, câteva rezultate
+etichetate uman;
+
+- buclă de învățare: eveniment → clasificare → lecție propusă → test de reproducere → nouă variantă → baseline vs
+candidate → holdout → aprobare → canary → rollback → documentare;
+
+- prevenire scurgeri de date și reward hacking; niciun agent nu poate promova singur propriile praguri critice;
+perspective de bias și drift;
+
+- abordare de cost: întâi reguli deterministe, după aceea modele pentru ambiguitate; model mare doar când
+compararea măsurată justifică;
+
+- prompturile și politicile versionate, pentru reproducere; datele se șterg/expiră la cererea legală și nu se propagă
+între clienți.
+
+Calitate creativă: nu este o singură notă. Sunt minimum: brief fit; facts; brand; audience; originality; craft; readability;
+accessibility; channel fit; copyright; conversion intent; measured outcome. Scorurile sunt ordinale până când există
+calibrare statistică. Promovarea automată a unui conținut este permisă numai după gates definite și autorizări;
+predicțiile despre viralitate rămân ipoteze.
+
+
+
+EXEMPLE DE HANDOFF FĂRĂ COD
+
+
+
+
+Document V3 • 07.11.2026                                                                                               32 / 34
+REVENUEPILOT AI                                                                                      Plan de construcție GitHub
+
+
+
+LA FINALUL UNEI SESIUNI CODEX:
+
+- Model real folosit / nivel, pas real, repo/branch/HEAD, bază de commit.
+
+- Ce a fost schimbat și de ce, ce NU a fost schimbat.
+
+- Teste rulare efectivă și defecte; reviewer cerut și status.
+
+- Lecții candidate + date care le susțin, nu lecții inventate.
+
+- Costuri, efort, limite API/host, aprobări.
+
+- Următorul PAS conform dependențelor + model recomandat.
+
+- STOP. Utilizatorul alege modelul din UI.
+
+
+LA STARTUL SESIUNII CLAUDE:
+
+- Citește repository-ul nou, nu fabrica. Confirmă HEAD și pasul READY.
+
+- Dacă există review pending din sesiunea Codex, rezolvă review-ul pe dovezi; dacă nu, implementează un pas
+atribuit sau disponibil, strict cu un singur scope.
+
+- Nu inventa că ai citit un diff dacă nu ai acces; nu suprascrie logurile Codex; adaugă critica și testele.
+
+- Actualizează statusul în Git și STOP.
+
+
+LA IMPORTUL UNEI CERCETĂRI GEMINI:
+
+- Cercetarea vine prin utilizator și include întrebarea, răspunsul, sursele, data, acoperirea și lipsurile.
+
+- Rolul de Research Evidence verifică informația și o înregistrează ca fapt dovedit sau ipoteză.
+
+- Nu declară o integrare automată dacă nu există API ori instrument de transfer autorizat.
+
+
+
+VERIFICĂRI PERIODICE ȘI STOP RULES
+
+
+
+După pașii 15, 35, 46, 66 și 75: audit arhitectură/segregare, benchmark calitate, retenția lecțiilor și impact cost. Nu
+avansa critic dacă securitatea sau izolarea dintre tenant-uri este nevalidată.
+
+După primii 2–3 clienți plătitori: cost real/client, ore manuale, timp la valoare, rate de refacere creativă, activare,
+retenție, diferențiere față de alternative; abia apoi decide host/API/abonamente mai scumpe și investiții.
+
+După 10, 30, 100 clienți: monitorizează marja brută, contribution margin, CAC, LTV/payback, churn, suport, rate
+media/video, cost execuție, calitatea filtrelor și failure rate. Nu crește efortul de marketing dacă onboardingul și
+suportul nu fac față.
+
+MODURI DE EȘEC CE TREBUIE TESTATE: lipsă API; rate limit; model indisponibil; răspuns invalid; task duplicat; retry
+ne-idempotent; două modele scriu același branch; lipsă auth; leakage între tenant-uri; evaluator fals pozitiv; evaluator
+fals negativ; recompensarea unui test nevalid; date despre client expirate; traducerea greșită a valorilor; pierdere
+asset; GC șterge ceva activ; job incomplet după limită; prompt injection; cheltuieli externe fără aprobare; rotația
+secretelor; PR blocat; GitHub Actions quota limit; host neconfigurat; incomplete attribution; consent revocat; memorie
+retrasă încă servită; metrici false din date sintetice.
+
+
+
+SURSE ȘI VERIFICAREA MODELELOR — 7 NOIEMBRIE 2026
+
+
+
+OpenAI — modele și alegere: https://developers.openai.com/api/docs/models ;
+https://developers.openai.com/api/docs/guides/model-selection
+
+OpenAI — Codex/Work disponibilitate: https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex
+
+
+
+
+Document V3 • 07.11.2026                                                                                                33 / 34
+REVENUEPILOT AI                                                                                    Plan de construcție GitHub
+
+
+
+Anthropic — modele în Claude Code:
+https://support.claude.com/en/articles/11940350-claude-code-model-configuration
+
+Anthropic — efort și quota: https://support.claude.com/en/articles/14552983-models-usage-and-limits-in-claude-code
+
+Anthropic — effort selector:
+https://support.claude.com/en/articles/8664678-change-the-model-effort-and-thinking-settings
+
+Google — Gemini CLI consumer login retirat, Antigravity ca alternativă:
+https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals
+
+LangGraph — checkpointing: https://github.com/langchain-ai/docs/blob/main/src/oss/langgraph/checkpointers.mdx
+
+DSPy — optimizatoare pe evals: https://dspy.ai/current/api/optimizers/MIPROv2/
+
+MCP — standard de unelte: https://modelcontextprotocol.io/
+
+A2A — interoperabilitate între agenți: https://a2a-protocol.org/
+
+OpenTelemetry — semantic conventions: https://opentelemetry.io/docs/specs/semconv/
+
+Prețurile API din documentația furnizorilor NU reprezintă consumul abonamentului Codex/Claude Code. Modelele
+listate sunt opțiuni public documentate, nu promisiune că apar în contul fiecărui utilizator. Păstrează verificarea UI ca
+sursă de adevăr și actualizează planul când furnizorii schimbă disponibilitatea.
+
+
+
+INSTRUCȚIUNE PENTRU PRIMA SESIUNE — PASUL 00
+
+
+
+„Citește meta-promptul V3 și acest plan integral, apoi EXECUTĂ EXCLUSIV PASUL 00. Creează un repository GitHub
+NOU pentru RevenuePilot AI, separat de fabrica-autonoma, verifică permisiunile și păstrează aceste documente în
+repository ca sursă de adevăr. Nu implementa produsul acum. La final dovedește URL-ul/branchul/commitul sau
+prezintă blocajul și singura acțiune necesară de pe telefon. Oprește-te complet.”
+
+
+INSTRUCȚIUNE PENTRU TOATE SESIUNILE ULTERIOARE — COPY/PASTE
+
+„Continuă cu PASUL URMĂTOR din planul canonic RevenuePilot AI aflat în repository-ul nou. Reîncarcă mai întâi Git,
+starea, dependențele, review-urile și dovezile. Execută EXACT UN pas pregătit, testează efectiv, documentează
+absolut toate deciziile, defectele și lecțiile utile, fă commit/push și oprește-te. Nu atinge fabrica-autonoma. Nu cheltui
+bani și nu folosi API inexistente. La final spune-mi ce model/efort selectez pentru pasul următor.”
+
+SFÂRȘIT PLAN V3. PAȘI 00–84, un singur pas per sesiune; dacă etapa curentă este blocată, folosește doar o etapă
+independentă pregătită și documentează motivul.
+
+
+
+
+Document V3 • 07.11.2026                                                                                              34 / 34
+
