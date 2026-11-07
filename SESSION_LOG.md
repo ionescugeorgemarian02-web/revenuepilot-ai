@@ -108,3 +108,18 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Rulat: validator (PASS, 10 mutații), mutațiile reviewerului (respinse), SHA-256 (OK), `git diff --check` (OK).
 - Corecție: linie goală în `test-plan.md` care rupea tabelul. Lecție: commitul de review `c377257` a inclus `__pycache__` prin `git add -A`; rulează Python cu `-B` și verifică `git status` înainte de commit.
 - PASUL 04: DONE pe branch; integrarea PR #3 → #6 în `main` la proprietar. Runtime NOT_RUN. Cheltuieli: zero. STOP înainte de 05.
+
+
+## S05 — 2026-11-07 — PASUL 05 (Codex)
+- Autor: Codex; model/efort runtime neverificate. Bază `b9607d23f8d16d52a1e7f8bfd27be377dd530499`, PASUL 04 DONE înregistrat după review Claude; branch `step-05/ci-no-host`.
+- Scope: verificare locală și CI documentară fără host; workflow read-only cu checkout pinned, SHA-256, graf conceptual, linkuri și diff whitespace. Cost comercial nou zero; rularea GitHub Actions/limita efectivă se raportează din job.
+- Local PASS: hashuri canonice 4/4, graf și zece mutații negative, linkuri relative. CI încă de observat. Build/integrare/UI/live/deploy ale produsului NOT_RUN; nu există module.
+- Status înainte de push: TESTING; predare în docs/ci/step-05.md. Nu executa PASUL 06 în aceeași sesiune.
+
+- Rezultat confirmat: PR #7, workflowul activ, GitHub Actions run #42351190538 `completed/success` pe `fd646a66e9c7b9b7ed3ba097d821e330117b15bb`; pașii checkout/hashuri/graf/linkuri/whitespace PASS. Repo public, main protected. PASUL 05 DONE pe branch; integrarea în main nu este pretinsă. Avertisment de deprecere Node 20 al checkout v4, fără eșec. Următorul 06 READY, Luna / Low ori Haiku / Low. STOP.
+
+
+## S05-integration-check — 2026-11-07 — Codex
+- Cererea utilizatorului: finalizează complet PASUL 05. Confirmate două rulări GitHub Actions pe HEAD final `ce52da3`: push #42351263418 și PR #42351267008, ambele completed/success. Teste runtime NOT_RUN, conform scope.
+- PR #3, primul din lanț, are REVIEW_REQUIRED. `gh pr merge 3 --merge --match-head-commit b73fc9b...` a fost refuzat de protecția lui main. Nu s-a folosit `--admin` sau alt bypass. PR-urile #3–#7 rămân deschise.
+- Verdict: PASUL 05 DONE pe branch/PR cu CI dovedit; integrarea în main este BLOCKED până la review GitHub valid al PR #3 și merge ulterior în ordine. Nicio modificare de produs ori cheltuială nouă.
