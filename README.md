@@ -16,3 +16,11 @@ Punct unic de reluare: [PROGRESS.md](PROGRESS.md). Execută un singur pas autori
 - [Checkpoint PASUL 00](docs/step-00-initial-blocker.md)
 
 Git păstrează codul și documentele, nu găzduiește aplicația sau baza de date runtime. Hostingul și cheile API comerciale nu sunt configurate. Nu modifica `fabrica-autonoma`.
+
+## Propunere de arhitectură — PASUL 04
+
+[Arhitectură și ADR-uri](docs/architecture/README.md) · [Predare pentru review](docs/architecture/handoff.md). Status REVIEW_PENDING; vezi PROGRESS pentru dependențe.
+
+## Verificări fără host — PASUL 05
+
+[Contract și rezultate](docs/ci/step-05.md); workflowul este în `.github/workflows/step-05-documentation.yml`.
