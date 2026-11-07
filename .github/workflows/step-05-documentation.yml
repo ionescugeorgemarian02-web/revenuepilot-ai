@@ -9,6 +9,7 @@ on:
       - 'PROGRESS.md'
       - 'docs/canonical/**'
       - 'docs/architecture/**'
+      - 'docs/security/**'
       - 'scripts/verify_docs.py'
       - '.github/workflows/step-05-documentation.yml'
 permissions:

@@ -19,8 +19,12 @@ Git păstrează codul și documentele, nu găzduiește aplicația sau baza de da
 
 ## Propunere de arhitectură — PASUL 04
 
-[Arhitectură și ADR-uri](docs/architecture/README.md) · [Predare pentru review](docs/architecture/handoff.md). Status REVIEW_PENDING; vezi PROGRESS pentru dependențe.
+[Arhitectură și ADR-uri](docs/architecture/README.md) · [Predare pentru review](docs/architecture/handoff.md). Status DONE după review Claude; vezi PROGRESS pentru starea curentă.
 
 ## Verificări fără host — PASUL 05
 
 [Contract și rezultate](docs/ci/step-05.md); workflowul este în `.github/workflows/step-05-documentation.yml`.
+
+## Securitate — PASUL 07
+
+[Model de amenințări și politici de acces](docs/security/README.md) · [Predare Claude](docs/security/handoff.md). REVIEW_PENDING; controalele runtime sunt propuse, nu implementate.

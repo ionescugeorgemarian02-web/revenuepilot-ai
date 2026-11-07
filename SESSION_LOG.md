@@ -130,3 +130,13 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Cifre economice: toate IPOTEZĂ/N/A; nimic inventat. K03/K04 necalculate din timpi reali.
 - Teste: verificările CI documentare rulate local (vezi commit). Produs: NOT_RUN. Cheltuieli: zero.
 - Handoff: PASUL 07 (clasa H). STOP.
+
+## S07 — 2026-11-07 — PASUL 07 (Codex)
+- Autor: Codex; model/efort runtime neverificate. Recomandare canonică autor Astra / High, reviewer Claude Opus 5.5 / High. Usage nefolosit conform instrucțiunii utilizatorului.
+- Claim: 2026-11-07T12:47:38Z, bază `63ac761c0fb972d10592bdd38a3335c23a4312e8`, branch `step-07/threat-model`; scope exclusiv 07. Dependența 04 DONE, aprobată Claude; main include deja 00–06 prin PR #8. Nu există modificări anterioare în worktree la preluare.
+- Livrare: frontiere/adversari/active, registru T01–T18 cu severitate, owner, aprobări, mitigări, negativ+oracle și pozitiv; matrice de acces, contract policy-as-code, granturi finite, STOP și incident response. Date exclusiv sintetice; fără module, host, API ori acțiuni externe de produs.
+- Corecții: indexul vechi avea main/integrarea 05–06 depășite și README indica review 04 pending; sincronizate cu dovezile Git. Jurnalele anterioare și sursele canonice păstrate. Link checker extins la docs/security; workflow include path-ul security. PR #9 rămâne separat.
+- Verificări locale efective: SHA-256 4/4 PASS; validator graf, control pozitiv și zece mutații negative PASS; linkuri 12 fișiere PASS; git diff --check PASS. CI remote încă de observat la acest checkpoint. Runtime T01–T18, build/deploy/API live și review independent 07 NOT_RUN.
+- Baseline: R02/R03/R06/R07/R08/R09 din 06 detaliate, fără reducere de risc/KPI măsurată. Cost comercial nou activat zero; Actions fără cost monetar dedus. Memorie: numai documentare Git; politicile viitoare nu sunt învățate automat din conținut extern.
+- Lecție: granturile de dezvoltare nu sunt granturi tenant; testul negativ fără control pozitiv poate accepta un sistem care refuză tot. Nu s-a invocat un reviewer fictiv.
+- Stare: IMPLEMENTED → TESTING → REVIEW_PENDING după verificările locale; predare docs/security/handoff.md. Lipsa review-ului real este limita pentru DONE. STOP înainte de 08; claim-ul se eliberează după publicare, în checkpointul următor.
