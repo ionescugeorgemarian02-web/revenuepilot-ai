@@ -140,3 +140,8 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Baseline: R02/R03/R06/R07/R08/R09 din 06 detaliate, fără reducere de risc/KPI măsurată. Cost comercial nou activat zero; Actions fără cost monetar dedus. Memorie: numai documentare Git; politicile viitoare nu sunt învățate automat din conținut extern.
 - Lecție: granturile de dezvoltare nu sunt granturi tenant; testul negativ fără control pozitiv poate accepta un sistem care refuză tot. Nu s-a invocat un reviewer fictiv.
 - Stare: IMPLEMENTED → TESTING → REVIEW_PENDING după verificările locale; predare docs/security/handoff.md. Lipsa review-ului real este limita pentru DONE. STOP înainte de 08; claim-ul se eliberează după publicare, în checkpointul următor.
+
+### S07 — checkpoint publicat și diagnostic CI
+- Commit documentar: `3d94c3999783631936ba407575c18983c42cb9d3`; push și HEAD remote confirmate. PR #10: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/10 (base main). Dreptul de scriere este demonstrat prin push/crearea PR, fără modificarea protecțiilor.
+- GitHub API după creare: workflow `410148933` active, dar actions/runs returnează total_count=0 și check-runs pentru HEAD tot 0. Citirea vechiului run #42351267008 returnează 404 în mediul curent; nu se șterge dovada istorică, dar nu se pretinde că a fost reverificată acum. CI 07 rămâne NOT_RUN până la o rulare efectivă.
+- Se adaugă trigger push pentru step-07/** și workflow_dispatch în același workflow read-only, pentru declanșare explicită fără host/secrete. CI nu este înlocuit cu un status artificial.

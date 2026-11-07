@@ -1,8 +1,10 @@
 name: Step 05 documentation checks
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'step-05/**'
+      - 'step-07/**'
   pull_request:
     paths:
       - 'README.md'
@@ -19,6 +21,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   documentation:
+  workflow_dispatch:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
