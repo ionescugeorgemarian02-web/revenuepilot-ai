@@ -177,3 +177,6 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 
 ### S08 — integrare efectivă și STOP
 - PR #11: MERGED în main, merge commit `eec60126bd61c617f1fe9c41962b301f8d43ad16`. PR #10 pentru dependența 07: MERGED, `a5d77597d25d7d5253537964ec08a869099ec7b1`. Verificări locale build/test 3.12/3.13 PASS; CI remote NOT_RUN (Actions dezactivat), fără a inventa un run. Pasul 08 DONE; următorul eligibil 09, neînceput. Autor Codex, model/efort runtime neverificate, usage nefolosit. Cost comercial nou zero. Claim eliberat.
+
+## S08 — reverificare Actions după salvarea setării de către utilizator
+- Autor Codex; 2026-11-07. Utilizatorul a salvat setarea GitHub Actions. Pe main `db8409d3d87fdb27958d0c3f977f9a5a1f05a87d`, `gh workflow run step-05-documentation.yml --ref main` returnează încă HTTP 422: `Actions has been disabled for this user`. GET actions/permissions returnează HTTP 403 `Resource not accessible by integration`, deci setarea efectivă nu poate fi citită prin această conexiune. Nu există run nou sau PASS de raportat. Pașii 07/08 rămân DONE pe baza probelor locale și a criteriilor canonice; CI remote NOT_RUN. Nu s-a început 09 și nu s-a modificat workflowul.
