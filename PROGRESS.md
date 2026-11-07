@@ -42,9 +42,10 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 ## Dovezi și limite curente
 
 - E07-1 PASS local: hashuri canonice 4/4; graf conceptual cu control pozitiv și zece mutații negative; linkuri în 12 fișiere; `git diff --check`. Comenzi în [verification](docs/security/verification.md).
-- E07-2: SHA, PR și rezultat GitHub Actions se consemnează în checkpointul S07 din [SESSION_LOG](SESSION_LOG.md). Nu se deduc din rezultatele locale.
+- E07-2: [PR #10](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/10), livrare `3d94c3999783631936ba407575c18983c42cb9d3`, trigger CI `d402574`. Push/HEAD remote PASS. CI remote BLOCKED/NOT_RUN: dispatch respins HTTP 422, `Actions has been disabled for this user`. Workflow active, dar zero runs/checks pentru 07. Detalii în checkpointul S07 din [SESSION_LOG](SESSION_LOG.md).
 - E07-3 NOT_RUN: toate scenariile runtime T01–T18, build/unit/integration/E2E/deploy/API live și review independent 07. Nu există implementare de produs în acest pas.
 - Cost comercial nou activat: zero. Nu s-au creat servicii, conturi, hosting sau credențiale. Nu pretindem cost monetar Actions fără facturare.
+- Blocaj CI: Actions dezactivat la nivelul utilizatorului GitHub; triggerul push și dispatch explicit nu au produs o rulare. Reactivarea contului/Actions trebuie rezolvată prin mecanismele GitHub; nu este o lipsă de aprobare pentru lucru. Review-ul documentar Claude poate începe, integrarea așteaptă probele CI.
 - Riscul curent: măsurile de securitate sunt contracte propuse, nu protecții deja instalate. Clasa H necesită reviewer din familia opusă înainte de DONE.
 
 ## Reluare și predare

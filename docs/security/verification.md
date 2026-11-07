@@ -33,6 +33,10 @@ Review documentar autor: verifică toate cele 18 intrări, fiecare cu owner/appr
 
 Cele patru comenzi de mai sus: PASS (4 hashuri; graf valid, control pozitiv și 10 mutații respinse; linkuri în 12 fișiere; whitespace). Inspecția documentară a autorului a parcurs T01–T18 pentru domeniile canonice și concordanța cu arhitectura. O verificare Python suplimentară a confirmat identificatorii consecutivi, toate cele șase câmpuri obligatorii ale fiecărei intrări și păstrarea byte-for-byte a prefixului jurnalelor față de `63ac761`; `git diff 63ac761 -- docs/canonical` este gol. Aceasta validează structura și conservarea istoricului, nu conținutul securității. Review independent: NOT_RUN.
 
+## GitHub Actions
+
+PR #10, livrare `3d94c3999783631936ba407575c18983c42cb9d3`, trigger explicit adăugat în `d402574`. API: workflow 410148933 active; lista runs și check-runs HEAD are total_count=0. Comanda efectivă `gh workflow run step-05-documentation.yml --ref step-07/threat-model` → HTTP 422: `Actions has been disabled for this user`. **FAIL declanșare / BLOCKED CI / NOT_RUN joburi**. Nu există run URL de raportat. Rulările istorice 05 sunt doar dovezi din jurnalul anterior; GET pentru #42351267008 a returnat 404 în această sesiune. Nu au fost șterse sau modificate rulări de către această sesiune.
+
 ## Testele viitoare
 
 T01–T18: NOT_RUN pe produs, fiindcă nu există runtime. Se preiau ca teste de acceptare când capabilitatea este implementată; niciuna nu se activează doar pe baza acestui document. Fixture comun: tenanturi A/B, date sintetice, transport/provider simulat, ceas controlabil, observare a apelurilor externe, audit și starea persistentă. Pentru T10/T13–T16 se testează și concurența, crash/restart și interleaving-ul precizat; documentarea unui test nu echivalează cu executarea lui.
