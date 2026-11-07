@@ -1,0 +1,2 @@
+# No third-party runtime or build dependencies in PASUL 08.
+# Python version is pinned in .python-version; pyproject.toml constrains compatibility.

@@ -61,3 +61,6 @@ Corecție de integrare față de D06-1: PR #8 este deja merged, main `63ac761` i
 
 ## D07-2 — Eliminarea review-ului Claude pentru PASUL 07
 Autor: Codex, la instrucțiunea explicită a utilizatorului: „Nu trebuie să facă Claude review”. Această instrucțiune ulterioară prevalează asupra cerinței de review independent pentru livrarea documentară 07 din plan și D07-1. Nu se așteaptă alt reviewer în locul lui Claude; review-ul este exceptat, nu efectuat sau APPROVED. Excepția este limitată la 07; PDF-urile canonice și istoricul rămân nemodificate. Blocajul separat GitHub Actions a fost reconfirmat prin dispatch HTTP 422 și rămâne consemnat. Starea curentă devine BLOCKED (CI), nu REVIEW_PENDING. Nu se începe 08.
+
+## D08-1 — stack minim fără dependențe comerciale
+Autor: Codex. Utilizatorul cere PASUL 08 în timp ce 07 are CI blocat. Instrucțiunea explicită permite implementarea lui 08 pe branch separat peste 07, dar nu transformă 07 în DONE și nu inventează o rulare Actions. Pentru schelet se folosește Python 3.12.14 fixat local, cod compatibil 3.12–3.13, fără biblioteci externe; zipapp prin stdlib și health endpoint pe loopback. Hostul viitor nu este cunoscut, deci alegerea serverului public rămâne ulterioară. Stare 08 TESTING până când dependența 07/CI este rezolvată; fără 09.

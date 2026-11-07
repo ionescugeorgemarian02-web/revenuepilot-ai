@@ -8,6 +8,7 @@ files = [
     root / 'PROGRESS.md',
     *sorted((root / 'docs/architecture').glob('*.md')),
     *sorted((root / 'docs/security').glob('*.md')),
+    *sorted((root / 'docs/stack').glob('*.md')),
 ]
 errors = []
 for source in files:

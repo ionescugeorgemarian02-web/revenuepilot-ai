@@ -1,6 +1,6 @@
 # RevenuePilot AI — index și stare curentă
 
-Punct unic de reluare. Ultima actualizare: 2026-11-07, Codex, PASUL 07. Citește planul canonic și [predarea curentă](docs/security/handoff.md) înainte de lucru.
+Punct unic de reluare. Ultima actualizare: 2026-11-07, Codex, PASUL 08. Citește planul canonic și [predarea curentă](docs/security/handoff.md) înainte de lucru.
 
 ## Proiect și limite
 
@@ -8,7 +8,7 @@ Repository public: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai
 Owner `ionescugeorgemarian02-web` (GitHub ID 342118131), repository ID 1449074103. Branch canonic `main`.
 Surse canonice nemodificate: [Meta-prompt V3](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf), [Plan V3](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf). PDF-urile sunt sursa de adevăr; textul extras ajută căutarea. Hashuri în `docs/canonical/SHA256SUMS`.
 
-GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API comerciale nu sunt configurate. Nu modifica `fabrica-autonoma`; nu adăuga secrete ori date clienți. Un pas per sesiune, apoi STOP. Acordul permanent al utilizatorului permite operațiile de dezvoltare necesare fără confirmări repetate (D07-1); dovezile/review-ul rămân reale.
+GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API comerciale nu sunt configurate. Nu modifica `fabrica-autonoma`; nu adăuga secrete ori date clienți. Un pas per sesiune, apoi STOP. Utilizatorul a cerut explicit 08 deși 07 rămâne blocat la CI; lucrul pentru 08 se face pe branch separat, fără a declara 07 DONE. Acordul permanent al utilizatorului permite operațiile de dezvoltare necesare fără confirmări repetate (D07-1); dovezile/review-ul rămân reale.
 
 ## Registrul execuțiilor
 
@@ -22,7 +22,8 @@ GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API
 | 05 | DONE | Codex; model/efort runtime neverificate | [Probe CI](docs/ci/step-05.md), PR #7 integrat `4d2bd75`; Actions #42351263418 și #42351267008 PASS pe `ce52da3` | Clasa M |
 | 06 | DONE | Claude Sonnet 5.5 | [Baseline KPI](docs/planning/baseline-kpi.md), [backlog](docs/planning/backlog.md), PR #8 integrat `63ac761` | Clasa L |
 | 07 | BLOCKED (CI) | Codex; model/efort runtime neverificate | [Threat model, 18 amenințări și politici](docs/security/README.md); baza `63ac761`, branch `step-07/threat-model` | Review exceptat explicit de utilizator (D07-2); neefectuat |
-| 08–84 | NOT_STARTED | — | 08 depinde de 05 și 07, conform planului canonic | — |
+| 08 | TESTING (dependența 07/CI blocată) | Codex; model/efort runtime neverificate | [Stack și schelet](docs/stack/step-08.md); build/test local Python 3.12 și 3.13 PASS | Clasa M; review independent necerut |
+| 09–84 | NOT_STARTED | — | 09 depinde de 08 | — |
 
 Corecție față de indexul vechi: `main` la `63ac761c0fb972d10592bdd38a3335c23a4312e8` conține 00–06. Mențiunile anterioare „main are doar 00–01”, „05/06 neintegrat” și lanțul obligatoriu de PR-uri suprapuse sunt depășite; istoria rămâne în Git și SESSION_LOG. PR #9 pentru autorizare/CI este separat și nu a fost integrat de această sesiune. Numărul curent al aprobărilor GitHub nu este dedus din auditul istoric; regulile efective se verifică la integrare, fără bypass.
 
@@ -41,7 +42,7 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 
 ## Dovezi și limite curente
 
-- E07-1 PASS local: hashuri canonice 4/4; graf conceptual cu control pozitiv și zece mutații negative; linkuri în 12 fișiere; `git diff --check`. Comenzi în [verification](docs/security/verification.md).
+- E07-1 PASS local: hashuri canonice 4/4; graf conceptual cu control pozitiv și zece mutații negative; linkuri în 13 fișiere; `git diff --check`. Comenzi în [verification](docs/security/verification.md).
 - E07-2: [PR #10](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/10), livrare `3d94c3999783631936ba407575c18983c42cb9d3`, trigger CI `d402574`. Push/HEAD remote PASS. CI remote BLOCKED/NOT_RUN: dispatch respins HTTP 422, `Actions has been disabled for this user`. Workflow active, dar zero runs/checks pentru 07. Detalii în checkpointul S07 din [SESSION_LOG](SESSION_LOG.md).
 - E07-3 NOT_RUN: toate scenariile runtime T01–T18, build/unit/integration/E2E/deploy/API live și review independent 07. Nu există implementare de produs în acest pas.
 - Cost comercial nou activat: zero. Nu s-au creat servicii, conturi, hosting sau credențiale. Nu pretindem cost monetar Actions fără facturare.
@@ -50,8 +51,8 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 
 ## Reluare și predare
 
-Reluarea este **verificarea CI pentru PASUL 07** din `step-07/threat-model`, după fetch și verificarea SHA-ului curent. Utilizatorul a precizat „Nu trebuie să facă Claude review”; D07-2 elimină această condiție pentru 07. Nu se așteaptă un reviewer și nu se cere o nouă confirmare. Ultima încercare de dispatch a reconfirmat HTTP 422 (`Actions has been disabled for this user`). După reactivarea Actions, rulează verificările pe HEAD, consemnează rezultatul și integrează PR #10 prin mecanismele GitHub disponibile.
+Reluarea începe cu **verificarea CI pentru PASUL 07 și finalizarea PASULUI 08** din `step-07/threat-model`, după fetch și verificarea SHA-ului curent. Utilizatorul a precizat „Nu trebuie să facă Claude review”; D07-2 elimină această condiție pentru 07. Nu se așteaptă un reviewer și nu se cere o nouă confirmare. Ultima încercare de dispatch a reconfirmat HTTP 422 (`Actions has been disabled for this user`). După reactivarea Actions, rulează verificările pe HEAD, consemnează rezultatul și integrează PR #10 prin mecanismele GitHub disponibile.
 
-După DONE 07: PASUL 08, GPT-6.1 Sol / Medium sau Claude Sonnet 5.5 / Medium; dependențe 05,07. În această sesiune STOP înainte de 08.
+PASUL 08 este implementat pe branchul `step-08/minimal-skeleton`, dar nu se marchează DONE până la închiderea dependenței 07 și verificarea dovezilor lui 08. Model recomandat pentru 08: GPT-6.1 Sol / Medium sau Claude Sonnet 5.5 / Medium. STOP înainte de 09.
 
 Istoric: [SESSION_LOG.md](SESSION_LOG.md), [DECISIONS.md](DECISIONS.md). Șablon: [SESSION_TEMPLATE.md](SESSION_TEMPLATE.md). Documentele vechi de handoff sunt instantanee istorice; acest index și predarea 07 descriu punctul curent.

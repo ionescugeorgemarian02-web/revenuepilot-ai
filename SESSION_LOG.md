@@ -156,3 +156,14 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Indexul, documentele curente și predarea sunt actualizate: BLOCKED (CI), documentare implementată. Intrările istorice REVIEW_PENDING sunt păstrate ca istoric, nu ca stare curentă.
 - Verificare efectivă: PR #10 OPEN, HEAD b71c741, mergeStateStatus CLEAN, statusCheckRollup gol. Reîncercarea `gh workflow run step-05-documentation.yml --ref step-07/threat-model` eșuează HTTP 422, `Actions has been disabled for this user`. Acest blocaj nu este eliminat de derogarea de review.
 - Scope: documentarea deciziei și sincronizarea stării; fără modificări runtime sau pasul 08. Claim eliberat după push; reluare la deblocarea CI, fără review Claude.
+
+## S08 — 2026-11-07 — schelet minim (Codex)
+- Autor: Codex; model/efort runtime neverificate. Recomandarea planului GPT-6.1 Sol / Medium. Cerere explicită utilizator: continuă cu 08. Bază `d4fcb1a4c25a551a19d69c71d3c75bec0628ea6c`, branch separat `step-08/minimal-skeleton` peste 07. Dependența 05 DONE; 07 BLOCKED (CI), deci 08 nu este marcat DONE.
+- Livrare: Python stdlib, versiune 3.12.14 în `.python-version`, suport declarat 3.12–3.13, zero dependențe terțe, zipapp build, endpoint HTTP loopback `/health`, test real 200/JSON și 404. Corectat și workflowul invalid introdus anterior: `workflow_dispatch` rătăcit sub `jobs.documentation`; acum jobul are doar `runs-on`/steps. CI extins pentru build/test, când Actions va fi disponibil.
+- Probe inițiale: Python 3.12.14 și 3.13 locale, build PASS (1384 bytes), unittest smoke PASS (1 test pe fiecare). Nu este test de auth/tenant/DB și nu dovedește un host public. API/live/deploy/memorie produs NOT_RUN. Cost comercial nou zero.
+- Baseline 06: apare un test produs executat local, fără KPI comercial ori economie măsurată. Riscuri: contul GitHub are Actions dezactivat (422); 07 rămâne deschis; stdlib HTTP este doar shell local. Lecție: verificați YAML structural după editări automate; simpla prezență a triggerului nu dovedește un job valid.
+- Status: TESTING pe branch, predare docs/stack/step-08.md. STOP înainte de 09.
+
+### S08 — verificări locale și limită curentă
+- SHA-256 canonice 4/4 PASS; validator arhitectură (control pozitiv + zece respingeri) PASS; linkuri în 13 documente PASS; `git diff --check` PASS. YAML analizat cu PyYAML 6.0.3 instalat local: trigger `workflow_dispatch` la nivelul corect, job/documentation valid și pasul smoke prezent — PASS structural. PyYAML este unealtă locală de verificare, nu dependență a produsului.
+- Build/test local Python 3.12 și 3.13 PASS. CI remote NOT_RUN deoarece Actions este dezactivat pentru cont; nu se revendică un run.
