@@ -98,3 +98,7 @@ Autor: Claude Sonnet 5.5. SQLite (stdlib) pentru a avea migrații, constrângeri
 
 ## D13-1 — Evenimente cu schemă închisă și redacție la sursă, în memorie
 Autor: Claude Sonnet 5.5. Un eveniment poate conține doar câmpurile declarate pentru tipul lui, valori scalare redactate înainte de stocare; erorile se loghează doar ca clasă. Trace ID generat de server (nu acceptat de la client), propagat prin `contextvars` către auditul din pasul 11. Lanț de hash și buffer mărginit în loc de loguri libere. Alternative respinse: biblioteca `logging` cu filtre (permite câmpuri arbitrare), OpenTelemetry (dependență nouă fără motiv măsurat), loguri persistente acum (retenție și acces nedefinite încă). Limita: redacție pe tipare, doar memorie.
+
+
+## D14-1 — Poartă unică de dispatch, fail-closed, furnizori dezactivați implicit
+Autor: Claude Sonnet 5.5. Orice efect extern trece prin `Dispatcher.run`, care re-validează permis, epoch, rezervare, STOP, starea furnizorului și limita de reîncercări înainte de a invoca adaptorul. Bani ca unități minore întregi; cost sau plafon necunoscut → DENY; pragul de cheltuială automată implicit 0 (aprobare explicită de la un approver al tenantului, unică folosință); rezultat necunoscut păstrează banii rezervați și blochează reîncercarea. Agentul poate cere STOP, niciodată START. Alternative respinse: verificări împrăștiate la fiecare apelant (se pot uita), float pentru bani, „retry până reușește”. Limită: în memorie; persistență, coadă și concurență între procese la pasul 18.
