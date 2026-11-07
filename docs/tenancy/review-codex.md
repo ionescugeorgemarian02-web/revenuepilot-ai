@@ -49,3 +49,7 @@ Pe Python 3.12.14:
 - `git diff --check origin/main...HEAD`: PASS.
 
 CI remote, DB/RLS/cache/workeri, audit persistent, browser și Python 3.13 în această sesiune: NOT_RUN. Nicio cheltuială externă nouă, nicio schimbare în codul produsului sau în fabrica-autonoma. Starea persistentă devine CHANGES_REQUESTED; Claude primește R11-1..4, remediază și solicită re-review pe noul SHA. STOP înainte de 12.
+
+## Publicare GitHub
+
+Raport/probe/index publicate pe branchul PR #18 în `5f00836`. GitHub a refuzat evenimentul formal REQUEST_CHANGES pe SHA-ul analizat cu HTTP 422: `Review Can not request changes on your own pull request` (aceeași identitate GitHub pentru autor și reviewer). Verdictul independent Codex este publicat ca un comentariu pe PR și în acest raport; nu se pretinde o aprobare sau un review formal GitHub acceptat. PR-ul rămâne deschis, fără merge.
