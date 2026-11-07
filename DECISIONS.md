@@ -61,3 +61,6 @@ Corecție de integrare față de D06-1: PR #8 este deja merged, main `63ac761` i
 
 ## D07-2 — Eliminarea review-ului Claude pentru PASUL 07
 Autor: Codex, la instrucțiunea explicită a utilizatorului: „Nu trebuie să facă Claude review”. Această instrucțiune ulterioară prevalează asupra cerinței de review independent pentru livrarea documentară 07 din plan și D07-1. Nu se așteaptă alt reviewer în locul lui Claude; review-ul este exceptat, nu efectuat sau APPROVED. Excepția este limitată la 07; PDF-urile canonice și istoricul rămân nemodificate. Blocajul separat GitHub Actions a fost reconfirmat prin dispatch HTTP 422 și rămâne consemnat. Starea curentă devine BLOCKED (CI), nu REVIEW_PENDING. Nu se începe 08.
+
+## D07-3 — corectarea blocajului CI față de criteriul canonic
+Autor: Codex. La pregătirea lui 08 s-a reverificat PASUL 07 din plan: criteriul de acceptare este registrul cu mitigări testabile, severitate, owner, aprobări și cazuri negative; nu cere o rulare GitHub Actions. Această livrare există și a trecut verificările locale. Review-ul independent a fost exceptat explicit de utilizator prin D07-2. Prin urmare 07 poate fi DONE cu CI remote NOT_RUN ca limitare, nu BLOCKED. Afirmația anterioară că integrarea așteaptă obligatoriu CI a fost prea strictă și este corectată; eroarea GitHub HTTP 422 rămâne consemnată, fără rezultat inventat.

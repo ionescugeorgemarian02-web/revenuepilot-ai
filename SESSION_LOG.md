@@ -156,3 +156,6 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Indexul, documentele curente și predarea sunt actualizate: BLOCKED (CI), documentare implementată. Intrările istorice REVIEW_PENDING sunt păstrate ca istoric, nu ca stare curentă.
 - Verificare efectivă: PR #10 OPEN, HEAD b71c741, mergeStateStatus CLEAN, statusCheckRollup gol. Reîncercarea `gh workflow run step-05-documentation.yml --ref step-07/threat-model` eșuează HTTP 422, `Actions has been disabled for this user`. Acest blocaj nu este eliminat de derogarea de review.
 - Scope: documentarea deciziei și sincronizarea stării; fără modificări runtime sau pasul 08. Claim eliberat după push; reluare la deblocarea CI, fără review Claude.
+
+### S07 — corecție după reverificarea criteriului canonic
+- PASUL 07: DONE pe branch; registrul T01–T18 și politicile sunt livrate, probele locale PASS, review-ul exceptat prin D07-2. CI remote NOT_RUN/HTTP 422 este limitare suplimentară, nu condiție de acceptare din plan. Înregistrările BLOCKED anterioare rămân istoric și sunt corectate explicit prin D07-3. Integrarea PR #10 urmează cu verificarea regulilor GitHub reale.

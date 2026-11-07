@@ -2,7 +2,7 @@
 
 Autor: Codex, 2026-11-07; modelul și efortul runtime nu sunt verificabile în această sesiune. Recomandarea canonică: GPT-6 Astra / High; reviewer recomandat inițial: Claude Opus 5.5 / High; cerință exceptată ulterior de utilizator pentru 07 (D07-2). Bază: `63ac761c0fb972d10592bdd38a3335c23a4312e8` pe `main`, cu pașii 00–06 integrați. Dependența 04 este DONE, cu review Claude APPROVED pe `5dc5e27`.
 
-**Scope:** contract de securitate pentru implementările viitoare, fără module de produs, host, DB, API comerciale sau teste de penetrare. Stare: BLOCKED (CI). Review-ul independent pentru 07 nu mai este cerut, conform D07-2; nu a fost efectuat. Controalele runtime de mai jos sunt PROPUSE, nu instalate. Acordul de dezvoltare al proprietarului este consemnat în D07-1; nu este necesară o nouă confirmare pentru publicarea acestui pas.
+**Scope:** contract de securitate pentru implementările viitoare, fără module de produs, host, DB, API comerciale sau teste de penetrare. Stare: DONE pe branch după verificări locale; CI remote NOT_RUN este limită documentată. Review-ul independent pentru 07 nu mai este cerut, conform D07-2; nu a fost efectuat. Controalele runtime de mai jos sunt PROPUSE, nu instalate. Acordul de dezvoltare al proprietarului este consemnat în D07-1; nu este necesară o nouă confirmare pentru publicarea acestui pas.
 
 - [Registrul amenințărilor](threat-register.md): severitate, responsabili, mitigări, aprobări și oracole de test.
 - [Politici de acces](access-policies.md): deny by default, matrice de privilegii, aprobări, kill switch și contract policy-as-code.
