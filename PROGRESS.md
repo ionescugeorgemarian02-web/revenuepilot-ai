@@ -14,8 +14,8 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 
 - PASUL 00: DONE — repository separat și privat, surse canonice importate, push verificat. Merge commit `1e0cf4451aac1f59e88e849f8e997a999fbfcd91`; PR #1.
 - PASUL 01: DONE prin PR-ul acestei livrări. A creat indexul, reguli de stare, istoric, decizii, tracker de blocaje/dovezi și handoff.
-- PASUL 02: BLOCKED — politica este pregătită în [GIT_POLICY.md](GIT_POLICY.md), dar main este neprotejat și accesul la protecție a returnat HTTP 403. Nu considera pasul închis.
-- PASUL 03: IMPLEMENTED, nu DONE — auditul complet este în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunea „verificare completă”, Claude). DONE așteaptă închiderea PASULUI 02. Proprietarul a ales opțiunea C (repo public, D03-4); repo-ul este încă privat până la acțiunea manuală a proprietarului, apoi se reia 02 (protecție main).
+- PASUL 02: DONE — politica în [GIT_POLICY.md](GIT_POLICY.md). Protecția clasică pe `main` verificată din API (2026-11-07): PR cu 1 aprobare, `enforce_admins=true`, force-push și ștergere interzise. Ruleset-ul `main` rămâne `disabled` (nefolosit). Integrarea în `main` se face prin PR #3 → #4 → #5, doar de proprietar.
+- PASUL 03: DONE — audit în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunile 1–6). Repo public din decizia C (D03-4); runnerele Actions NU au fost re-măsurate.
 - PASUL 04–84: NOT_STARTED; urmează dependențele și recomandările modelului din plan.
 
 ## Stări și tranziții
@@ -36,8 +36,8 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 |---|---|---|---|---|
 | 00 | DONE | Codex; modelul exact nu a fost verificat atunci | `590e4d1` → `1e0cf44`; surse și progres publicate prin PR #1 | Review independent nepretins |
 | 01 | DONE | Codex; utilizatorul a confirmat GPT-6 Luna / Low înainte de execuție | `1e0cf44` → SHA-ul PR-ului curent; jurnal și handoff în PR | Clasa L; review independent necerut/nepretins |
-| 02 | BLOCKED | Codex; model runtime/efort neverificat | Bază `df7d1347a99c19119544c56e57761b7d3fb46d99`; politică pregătită pe branch dedicat | Review independent neefectuat; protecția main neconfirmată. Cauză identificată în audit 03: limită de plan GitHub (repo privat, fără Pro), nu permisiuni |
-| 03 | IMPLEMENTED | Claude Sonnet 5.5 (selectat de utilizator); audit preliminar anterior: Codex | Bază `08e715f046840a27dc1921b70db55f4c5943cbee` → branch `claude/step-03-audit-verificat` | Clasa M; review independent necerut, nepretins. DONE blocat de dependența 02 |
+| 02 | DONE | Codex (politică); verificare protecție: Claude Sonnet 5.5 | Bază `df7d134` → branch `docs/step-02-git-policy` (PR #3) | Review independent neefectuat, necerut de plan pentru clasa T |
+| 03 | DONE | Claude Sonnet 5.5 (selectat de utilizator); audit preliminar: Codex | `08e715f` → branch `claude/blissful-galileo-9tz9fz` (PR #4, #5) | Clasa M; review independent necerut |
 
 Nu inventa model runtime, versiune, efort sau usage dacă nu sunt verificabile. Instrucțiunea utilizatorului pentru sesiunile curente este să nu se folosească usage; nu îl urmări și nu raporta procente.
 
@@ -73,4 +73,4 @@ La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branc
 
 La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
 
-Punct de reluare: PASUL 02 BLOCKED până la dovada protecției main și review; apoi PASUL 03 conform dependenței, recomandat GPT-6.1 Sol / Medium.
+Punct de reluare: PASUL 02 și 03 DONE; integrează PR #3 → #4 → #5 în `main`. Apoi PASUL 04 (clasa H, Astra/High sau Opus/High, review din familia opusă). Există deja PR #6 (`step-04/architecture`), neverificat de această sesiune.
