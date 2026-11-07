@@ -2,7 +2,7 @@
 
 Autor: Codex, 2026-11-07; model și efort runtime neverificate, fără afirmație de switch.
 Lucrare: propunere arhitecturală completă în scope-ul PASULUI 04. Status REVIEW_PENDING;
-dependența 03 nu este DONE. Cererea explicită a utilizatorului a permis pregătirea
+dependența 03 este DONE conform `d87acab`. Cererea explicită a utilizatorului a permis pregătirea
 propunerii înainte de închiderea dependenței. Nu implică aprobarea arhitecturii.
 
 Pornește din branchul `step-04/architecture`, baza `7f692ba4002e75e1224836cc05bf732f2542e0dc`.
@@ -25,7 +25,7 @@ Costuri comerciale și performanțe: UNKNOWN, cu formule și condiții de măsur
 Review cerut: Claude Opus 5.5 / High conform planului (dacă disponibil); evaluatorul
 separat examinează exact SHA-ul, atacă ipotezele/testele, înregistrează constatările și
 verdictul în jurnalul comun fără a rescrie intrările Codex. Dacă nu există review real,
-statusul rămâne REVIEW_PENDING. Rezolvă constatările și dependența 03 înainte de DONE.
+statusul rămâne REVIEW_PENDING. Rezolvă constatările și înregistrează review-ul real înainte de DONE.
 PASUL 05 se execută abia ulterior, model recomandat GPT-6.1 Sol / Medium sau
 Claude Sonnet 5.5 / Medium. STOP după acest pas/review; nu implementa stackul de la 08.
 
@@ -37,3 +37,6 @@ branch neintegrat este aprobat. Nu se promovează automat ca politică de produs
 Referință publicată: PR #6, https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/6 .
 Commitul arhitecturii: `a7270c47c13116e2b101d99b3ca1dc4aaa56d34f`.
 Există un commit ulterior numai pentru aceste referințe; citește întregul HEAD al PR-ului.
+
+
+Actualizare 2026-11-07: integrată predarea Claude `d87acabe39b7ca7808d4f55c7ffa62bb583b043c`, care închide 02–03. Repo public și main protected=true reverificate. Mențiunile de dependență deschisă din istoricul inițial descriu situația la redactare; blocajul actual al PASULUI 04 este review-ul independent. PR-urile anterioare sunt încă deschise.

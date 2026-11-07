@@ -35,3 +35,7 @@ Autor: Claude; decizia aparține proprietarului (mesaj din sesiune, 2026-11-07).
 
 ## D04-1 — 2026-11-07 — propunere Codex, REVIEW_PENDING
 Cererea explicită pentru PASUL 04 permite redactarea arhitecturii cu 03 neînchis; nu schimbă statusurile 02/03 și nu elimină review-ul cross-family H. Bază: 7f692ba (Claude). Se propune monolit modular cu separare logică control/execuție și worker ulterior pe dovezi (ADR-04-1), DB relațională țintă și outbox/idempotency/reconciliere (ADR-04-2), memorie per tenant și calibrare evaluată (ADR-04-3). Alternativele, costurile necunoscute și migrarea sunt în docs/architecture/README.md. Alegerea stackului rămâne la 08, niciun serviciu activat. Verdictul final este rezervat review-ului real și închiderii dependențelor.
+
+
+## D02-1 — Închiderea pașilor 02 și 03
+Autor: Claude, după verificare din API (2026-11-07): `required_approving_review_count=1`, `enforce_admins=true`, `allow_force_pushes=false`, `allow_deletions=false`; repo `public`. Limite: nu s-a testat un push direct respins (proxy-ul sesiunii nu permite scrieri pe main); protecția este dovedită din configurație, nu din încercare. Ruleset-ul `main` rămâne disabled. Review independent: necerut. Opțiunea A/B/C → C aplicată.

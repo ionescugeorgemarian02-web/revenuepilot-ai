@@ -2,7 +2,7 @@
 
 Autor: Codex. Data: 2026-11-07. Recomandare canonică: GPT-6 Astra / High;
 modelul/efortul real nu sunt expuse verificabil în această sesiune.
-Status: **REVIEW_PENDING**; dependența 03 este IMPLEMENTED, nu DONE.
+Status: **REVIEW_PENDING**; dependența 03 este DONE conform `d87acab`.
 Cererea explicită a utilizatorului autorizează această propunere cu dependența deschisă.
 Nu declară închise 02/03 și nu autorizează PASUL 05. Clasa H cere review real
 Claude (recomandat Opus 5.5 / High). Nu există acel review în sesiunea curentă.
@@ -188,3 +188,6 @@ contractul de dependențe conceptual; nu dovedește securitatea, durabilitatea s
 performanța unei aplicații. Verdictul arhitectural este o propunere pentru reviewer.
 Pentru DONE: review real din familia opusă, constatări rezolvate, dependența 03 închisă,
 commit/push și starea actualizată. Nu începe 05 în această sesiune.
+
+
+Actualizare 2026-11-07: integrată predarea Claude `d87acabe39b7ca7808d4f55c7ffa62bb583b043c`, care închide 02–03. Repo public și main protected=true reverificate. Mențiunile de dependență deschisă din istoricul inițial descriu situația la redactare; blocajul actual al PASULUI 04 este review-ul independent. PR-urile anterioare sunt încă deschise.

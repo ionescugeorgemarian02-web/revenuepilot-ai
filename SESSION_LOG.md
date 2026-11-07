@@ -71,3 +71,17 @@ Adaugă o intrare per sesiune Codex/Claude. Nu rescrie intrări precedente; core
 - PR draft #6: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/6 ; bază `claude/blissful-galileo-9tz9fz`, head `step-04/architecture`.
 - Commitul propunerii: `a7270c47c13116e2b101d99b3ca1dc4aaa56d34f`, push reușit și HEAD verificabil prin PR/Git. Intrarea de față adaugă numai referința de predare.
 - Review-ul trebuie să citească HEAD-ul actual al PR-ului (inclusiv această notă), nu să presupună că SHA-ul inițial este ultimul. Status REVIEW_PENDING; dependența 03 încă neînchisă. Lease Codex eliberat.
+
+
+## S03c — 2026-11-07 — PASUL 03, actualizare după publicare (Claude)
+- Verificat: repo public; protecție main absentă (404); PUT blocat de proxy-ul sesiunii (403). Audit actualizat în `AUDIT_PASUL_03.md` §6.
+- Stare: 03 IMPLEMENTED; 02 BLOCKED. Pas manual proprietar: Settings → Branches → regulă pe `main` (PR obligatoriu, 1 aprobare, fără force-push). Teste produs/CI: NOT_RUN.
+
+
+## S03d — 2026-11-07 — închidere 02 și 03 (Claude)
+- Verificat din API protecția clasică pe `main` (vezi D02-1). 02 și 03: DONE în `PROGRESS.md`. Teste produs/CI: NOT_RUN; Actions nemăsurat. Cheltuieli: zero.
+- Handoff: proprietarul integrează PR #3 → #4 → #5. PASUL 04 neînceput de această sesiune; PR #6 există, neverificat. STOP.
+
+
+## S04-sync — 2026-11-07 — Codex
+Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual: repo public, main protected=true; PR-urile #3–#5 încă deschise. Merge al predării în branchul 04 cu păstrarea integrală a intrărilor Codex și Claude. Actualizată dependența în index/handoff; 04 rămâne REVIEW_PENDING, review extern încă neefectuat. Nu s-a modificat arhitectura și nu s-a început 05.
