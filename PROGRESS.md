@@ -25,7 +25,7 @@ GitHub păstrează codul și documentația. Hostingul, DB runtime și cheile API
 | 08 | DONE (CI remote NOT_RUN) | Codex; model/efort runtime neverificate | [Stack și schelet](docs/stack/step-08.md); build/test local Python 3.12 și 3.13 PASS | Clasa M; review independent necerut |
 | 09–84 | NOT_STARTED | — | 09 depinde de 08 | — |
 
-Corecție față de indexul vechi: `main` după PR #10 (`a5d7759`) conține 00–07. Mențiunile anterioare „main are doar 00–01”, „05/06 neintegrat” și lanțul obligatoriu de PR-uri suprapuse sunt depășite; istoria rămâne în Git și SESSION_LOG. PR #9 pentru autorizare/CI este separat și nu a fost integrat de această sesiune. Numărul curent al aprobărilor GitHub nu este dedus din auditul istoric; regulile efective se verifică la integrare, fără bypass.
+Corecție față de indexul vechi: `main` după PR #11 (`eec6012`) conține 00–08. Mențiunile anterioare „main are doar 00–01”, „05/06 neintegrat” și lanțul obligatoriu de PR-uri suprapuse sunt depășite; istoria rămâne în Git și SESSION_LOG. PR #9 pentru autorizare/CI este separat și nu a fost integrat de această sesiune. Numărul curent al aprobărilor GitHub nu este dedus din auditul istoric; regulile efective se verifică la integrare, fără bypass.
 
 Nu inventa model runtime, versiune, efort sau usage. Utilizatorul a cerut să nu se folosească usage; nu îl urmări și nu raporta procente.
 
@@ -51,8 +51,8 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 
 ## Reluare și predare
 
-PASUL 07 este integrat prin PR #10 (`a5d7759`); CI remote rămâne NOT_RUN (Actions dezactivat la nivel de cont). PASUL 08 a trecut buildul și testul local, conform criteriului canonic; CI nu este criteriu de acceptare explicit la 08. După integrarea PR #11, următorul pas eligibil este 09.
+PASUL 07 este integrat prin PR #10 (`a5d7759`); CI remote rămâne NOT_RUN (Actions dezactivat la nivel de cont). PASUL 08 a trecut buildul și testul local, conform criteriului canonic; CI nu este criteriu de acceptare explicit la 08. PR #11 este integrat în main (`eec6012`). Următorul pas eligibil este 09.
 
-PASUL 08 este DONE după build/test local pe Python 3.12 și 3.13, cu dependența 07 închisă; integrarea PR #11 este în curs. Model recomandat pentru 08: GPT-6.1 Sol / Medium sau Claude Sonnet 5.5 / Medium. STOP înainte de 09.
+PASUL 08 este DONE și integrat prin PR #11 (`eec6012`), după build/test local pe Python 3.12 și 3.13. Următorul pas eligibil: 09; STOP în această sesiune. Model recomandat pentru 08: GPT-6.1 Sol / Medium sau Claude Sonnet 5.5 / Medium. STOP înainte de 09.
 
 Istoric: [SESSION_LOG.md](SESSION_LOG.md), [DECISIONS.md](DECISIONS.md). Șablon: [SESSION_TEMPLATE.md](SESSION_TEMPLATE.md). Documentele vechi de handoff sunt instantanee istorice; acest index și predarea 08 descriu punctul curent.

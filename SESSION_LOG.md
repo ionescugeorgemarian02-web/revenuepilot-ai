@@ -174,3 +174,6 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 ### S08 — închidere după PR #10
 - PR #10 pentru 07 merged în main la `a5d77597d25d7d5253537964ec08a869099ec7b1`. PR #11 pentru 08 are baza `step-07/threat-model`; branchul 08 a fost reancorat pe main și conflictele de jurnal au fost rezolvate păstrând intrările ambelor pasuri. Baza PR #11 trebuie schimbată la main după push.
 - PASUL 08 DONE conform criteriului canonic: build zipapp și smoke HTTP executate local pe Python 3.12/3.13, cu rezultate PASS. CI remote NOT_RUN/HTTP 422 rămâne limită de mediu, nu probă pozitivă. Nu se începe 09 în această sesiune.
+
+### S08 — integrare efectivă și STOP
+- PR #11: MERGED în main, merge commit `eec60126bd61c617f1fe9c41962b301f8d43ad16`. PR #10 pentru dependența 07: MERGED, `a5d77597d25d7d5253537964ec08a869099ec7b1`. Verificări locale build/test 3.12/3.13 PASS; CI remote NOT_RUN (Actions dezactivat), fără a inventa un run. Pasul 08 DONE; următorul eligibil 09, neînceput. Autor Codex, model/efort runtime neverificate, usage nefolosit. Cost comercial nou zero. Claim eliberat.
