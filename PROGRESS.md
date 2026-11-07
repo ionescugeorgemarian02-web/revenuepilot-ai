@@ -17,8 +17,9 @@ GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației
 - PASUL 02: DONE — politica în [GIT_POLICY.md](GIT_POLICY.md). Protecția clasică pe `main` verificată din API (2026-11-07): PR cu 1 aprobare, `enforce_admins=true`, force-push și ștergere interzise. Ruleset-ul `main` rămâne `disabled` (nefolosit). Integrarea în `main` se face prin PR #3 → #4 → #5, doar de proprietar.
 - PASUL 03: DONE — audit în [AUDIT_PASUL_03.md](AUDIT_PASUL_03.md) (secțiunile 1–6). Repo public din decizia C (D03-4); runnerele Actions NU au fost re-măsurate.
 - PASUL 04: DONE — [arhitectura](docs/architecture/README.md), PR #6. Re-review Claude Opus 5.5 pe `5dc5e27`: R04-1..R04-4 rezolvate, APPROVED ([review](docs/architecture/review-claude.md)). Integrarea în `main` după PR #3 → #4 → #5.
-- PASUL 05: TESTING — [verificări fără host](docs/ci/step-05.md), branch `step-05/ci-no-host`; rezultatele locale PASS, CI remote încă neconfirmat.
-- PASUL 06–84: NOT_STARTED.
+- PASUL 05: DONE pe branch — [verificări fără host](docs/ci/step-05.md), PR #7; rulare GitHub Actions 42351190538 PASS pe `fd646a66e9c7b9b7ed3ba097d821e330117b15bb`. PR-urile #3–#7 încă trebuie integrate în ordine în main.
+- PASUL 06: READY conform dependenței 05, neînceput; recomandare GPT-6 Luna / Low sau Claude Haiku 5.5 / Low.
+- PASUL 07–84: NOT_STARTED.
 
 ## Stări și tranziții
 
@@ -42,7 +43,7 @@ Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTIN
 | 03 | DONE | Claude Sonnet 5.5 (selectat de utilizator); audit preliminar: Codex | `08e715f` → branch `claude/blissful-galileo-9tz9fz` (PR #4, #5) | Clasa M; review independent necerut |
 | 04 | DONE | Codex; runtime/efort neverificate | Bază `7f692ba`; branch `step-04/architecture`, remediere `5dc5e27` | Claude Opus 5.5: CHANGES_REQUESTED pe `fd2ebbe`, APPROVED pe `5dc5e27` |
 
-| 05 | TESTING | Codex; runtime/efort neverificate | Bază `b9607d23f8d16d52a1e7f8bfd27be377dd530499`; workflow documentar pe branch | CI remote în așteptare; produsul nu există |
+| 05 | DONE | Codex; runtime/efort neverificate | Bază `b9607d23f8d16d52a1e7f8bfd27be377dd530499`; PR #7, Actions #42351190538 PASS | Clasa M; review independent necerut/nepretins |
 
 Nu inventa model runtime, versiune, efort sau usage dacă nu sunt verificabile. Instrucțiunea utilizatorului pentru sesiunile curente este să nu se folosească usage; nu îl urmări și nu raporta procente.
 
@@ -78,7 +79,7 @@ La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branc
 
 La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
 
-Punct de reluare: PASUL 05 TESTING pe branchul propriu. Verifică jobul GitHub Actions și dovezile din docs/ci/step-05.md înainte de DONE; apoi STOP. PR-urile #3–#6 rămân suprapuse, main protejat.
+Punct de reluare: PASUL 05 DONE pe branch (PR #7, Actions #42351190538 PASS). Integrarea PR-urilor #3–#7 în main rămâne deschisă, main protejat. Următorul pas eligibil este 06, model recomandat GPT-6 Luna / Low sau Claude Haiku 5.5 / Low. STOP după 05.
 
 
 ## Predare actualizată după d87acab
@@ -88,4 +89,11 @@ Punct de reluare: PASUL 05 TESTING pe branchul propriu. Verifică jobul GitHub A
 
 ## S05 — checkpoint curent
 
-PASUL 04 a fost aprobat de Claude pe `5dc5e27` și marcat DONE în `b9607d2`. PASUL 05 rulează doar verificări documentare și nu adaugă produs/hosting. Local: hashuri canonice 4/4 PASS, validator conceptual și zece mutații negative PASS, linkuri relative PASS. GitHub Actions: NOT_RUN până la job observat. Model recomandat după 05: GPT-6 Luna / Low pentru PASUL 06, dacă este disponibil.
+PASUL 04 a fost aprobat de Claude pe `5dc5e27` și marcat DONE în `b9607d2`. PASUL 05 a rulat doar verificări documentare și nu a adăugat produs/hosting. Local: hashuri canonice 4/4 PASS, validator conceptual și zece mutații negative PASS, linkuri relative PASS. GitHub Actions #42351190538: PASS efectiv pe fd646a6; workflow activ. Model recomandat după 05: GPT-6 Luna / Low pentru PASUL 06, dacă este disponibil.
+
+
+## Dovezi PASUL 05
+
+- E05-1 PASS local: `sha256sum -c SHA256SUMS` 4/4, `python3 -B -I docs/architecture/check_contract.py` 10 mutații negative, `python3 -B -I scripts/verify_docs.py` 7 fișiere, `git diff --check`.
+- E05-2 PASS GitHub Actions: [run 42351190538](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/actions/runs/42351190538), commit `fd646a66e9c7b9b7ed3ba097d821e330117b15bb`, job documentation completat. CI pe main NOT_RUN; PR-urile sunt încă suprapuse.
+- E05-3 NOT_RUN: build, unit, integrare, UI/E2E, live APIs, deployment ale produsului; produsul nu are încă module. Costuri externe noi zero. A apărut avertisment de deprecere Node 20 pentru actions/checkout v4, fără eșec de job; actualizare ulterioară cu pin verificat.

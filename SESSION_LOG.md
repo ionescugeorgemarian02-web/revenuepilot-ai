@@ -115,3 +115,5 @@ Confirmare utilizator 01–03 DONE, coroborată cu d87acab (Claude). API actual:
 - Scope: verificare locală și CI documentară fără host; workflow read-only cu checkout pinned, SHA-256, graf conceptual, linkuri și diff whitespace. Cost comercial nou zero; rularea GitHub Actions/limita efectivă se raportează din job.
 - Local PASS: hashuri canonice 4/4, graf și zece mutații negative, linkuri relative. CI încă de observat. Build/integrare/UI/live/deploy ale produsului NOT_RUN; nu există module.
 - Status înainte de push: TESTING; predare în docs/ci/step-05.md. Nu executa PASUL 06 în aceeași sesiune.
+
+- Rezultat confirmat: PR #7, workflowul activ, GitHub Actions run #42351190538 `completed/success` pe `fd646a66e9c7b9b7ed3ba097d821e330117b15bb`; pașii checkout/hashuri/graf/linkuri/whitespace PASS. Repo public, main protected. PASUL 05 DONE pe branch; integrarea în main nu este pretinsă. Avertisment de deprecere Node 20 al checkout v4, fără eșec. Următorul 06 READY, Luna / Low ori Haiku / Low. STOP.

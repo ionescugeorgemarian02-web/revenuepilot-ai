@@ -47,3 +47,5 @@ Autor: Codex. Acceptate R04-1..4: deletion ledger recuperabil independent de sna
 
 ## D05-1 — CI minimal fără host (2026-11-07)
 Autor: Codex. PASUL 04 DONE pe branch, după re-review Claude. Alegere: workflow GitHub Actions read-only pentru integritatea surselor și contractul arhitectural, plus verificare de linkuri și whitespace; niciun provider, pachet nou sau secret. Alternativele de build/test runtime nu sunt executabile înaintea scheletului din 08. Până la job real, starea 05 rămâne TESTING, nu DONE. Costul efectiv Actions se verifică din cont; repo public nu este garanție de quota nelimitată.
+
+D05-1 — actualizare după rulare: GitHub Actions run 42351190538 a trecut pe fd646a6; aceasta verifică CI documentar efectiv, fără a pretinde teste de produs. CI pe main încă nu există cât PR-urile #3–#7 sunt deschise.
