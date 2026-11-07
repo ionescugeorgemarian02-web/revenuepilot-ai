@@ -1,15 +1,17 @@
 # RevenuePilot AI
 
-Punct unic de pornire pentru sesiunile viitoare. Executat exclusiv PASUL 00 la 2026-11-07.
+Punct unic de reluare: [PROGRESS.md](PROGRESS.md). Execută un singur pas autorizat per sesiune și oprește-te la final.
 
-**PASUL 00: DONE. PASUL 01: READY, neexecutat.** Repository privat: [ionescugeorgemarian02-web/revenuepilot-ai](https://github.com/ionescugeorgemarian02-web/revenuepilot-ai). Starea verificată și dovezile se află în registrul de progres.
+## Surse canonice
+- [Meta-prompt V3 — PDF](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf) · [text extras](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.txt)
+- [Plan V3 — PDF](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf) · [text extras](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.txt)
+- Hashuri: [SHA256SUMS](docs/canonical/SHA256SUMS)
 
-- [Meta-prompt canonic V3, PDF original](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf) · [text integral extras](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.txt)
-- [Plan canonic V3, PDF original](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf) · [text integral extras](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.txt)
-- [Registru persistent minimal](PROGRESS.md): stare, blocaj, dovezi, decizii și reluare.
-- [Sume SHA-256](docs/canonical/SHA256SUMS)
+## Progres și handoff
+- [Index și status](PROGRESS.md)
+- [Jurnal append-only de sesiuni](SESSION_LOG.md)
+- [Jurnal append-only de decizii](DECISIONS.md)
+- [Șablon handoff](SESSION_TEMPLATE.md)
+- [Checkpoint PASUL 00](docs/step-00-initial-blocker.md)
 
-PDF-urile originale sunt sursele canonice; textele sunt extrageri pdftotext -layout integrale, fără reformulare.
-Git păstrează documente și progres; nu reprezintă hosting sau runtime. Hostingul și API-urile comerciale nu sunt disponibile conform specificației; nu au fost presupuse sau configurate.
-
-Nu modifica fabrica-autonoma. Nu continua automat la PASUL 01. Nu există module de produs, CI, deploy sau servicii plătite.
+Git păstrează codul și documentele, nu găzduiește aplicația sau baza de date runtime. Hostingul și cheile API comerciale nu sunt configurate. Nu modifica `fabrica-autonoma`.

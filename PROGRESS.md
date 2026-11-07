@@ -1,52 +1,74 @@
-# Registru persistent minimal — RevenuePilot AI
+# RevenuePilot AI — index și stare curentă
 
-## Stare curentă
+Punct unic de reluare: această pagină. Sesiunea următoare citește planul canonic și cel mai recent handoff înainte de lucru.
 
-Data: 2026-11-07 UTC. PASUL 00: **DONE**. Push real și integritate remote verificate.
-PASUL 01: READY, neexecutat; pașii 02–84: NOT_STARTED.
-Executat exclusiv 00. Niciun modul de produs. Nu modifica fabrica-autonoma.
+## Proiect și limite
 
 Repository privat: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai
-Owner: ionescugeorgemarian02-web, ID 342118131. Repo ID: 1449074103.
-Branch de lucru: step-00-bootstrap. Branch implicit: main.
-Bază remote: 590e4d181a7b07afdbf496ff08cd954543699a02 (Initial commit, README creat de utilizator).
-Checkpoint local anterior: 55c5d695d76f8c940b1f11268c390706ed930ef0.
-Integrare: merge al celor două istorice; conflict add/add README rezolvat prin completarea paginii de pornire. Commitul inițial remote este păstrat, fără force-push.
-Commitul registrului se identifică prin `git log -1 --format=%H -- PROGRESS.md`; HEAD prin `git rev-parse HEAD`.
+Owner `ionescugeorgemarian02-web` (GitHub ID 342118131), repository ID 1449074103. Branch canonic `main`.
+Surse canonice nemodificate: [Meta-prompt V3](docs/canonical/RevenuePilot_AI_META_PROMPT_CONSTRUCTIE_V3.pdf), [Plan V3](docs/canonical/RevenuePilot_AI_PLAN_CONSTRUCTIE_GITHUB_V3.pdf). PDF-urile sunt sursa de adevăr; textul extras ajută căutarea. Hashuri în `docs/canonical/SHA256SUMS`.
 
-## Scope și acceptare
+GitHub păstrează codul și documentația. Hostingul și runtime-ul aplicației, baza de date și cheile API comerciale nu sunt configurate. Nu modifica `fabrica-autonoma`; nu adăuga secrete ori date personale; nu activa cheltuieli fără autorizare. Un pas per sesiune, apoi STOP.
 
-Un repository separat, preferabil privat, ambele PDF-uri originale și textele integrale, progres minimal, URL/branch/HEAD și dovada accesului efectiv. Fără hosting, API-uri, module, cod din alte proiecte sau execuția 01. Nicio cheltuială nouă autorizată ori inițiată.
+## Pas curent
+
+- PASUL 00: DONE — repository separat și privat, surse canonice importate, push verificat. Merge commit `1e0cf4451aac1f59e88e849f8e997a999fbfcd91`; PR #1.
+- PASUL 01: DONE prin PR-ul acestei livrări. A creat indexul, reguli de stare, istoric, decizii, tracker de blocaje/dovezi și handoff.
+- PASUL 02: READY, următorul pas conform dependenței. Planul recomandă GPT-6.1 Terra / Medium sau Claude Sonnet 5.5 / Medium. Neînceput.
+- PASUL 03–84: NOT_STARTED; urmează dependențele și recomandările modelului din plan.
+
+## Stări și tranziții
+
+Stări: `NOT_STARTED`, `READY`, `CLAIMED`, `IN_PROGRESS`, `IMPLEMENTED`, `TESTING`, `REVIEW_PENDING`, `CHANGES_REQUESTED`, `VERIFIED`, `DONE`, `BLOCKED`, `DEFERRED`, `FAILED`.
+
+1. La start, verifică repository, branch, HEAD, worktree, acest index și ultimul handoff.
+2. `NOT_STARTED → READY` numai când dependențele sunt DONE și pasul este autorizat/modelul potrivit.
+3. `READY → CLAIMED → IN_PROGRESS → IMPLEMENTED → TESTING`; înregistrează autor, model declarat, SHA de bază și scop.
+4. `TESTING → VERIFIED → DONE` doar cu criterii și dovezi reale, commit/push și review real când este cerut. Nu deduce testele din cod sau din plan.
+5. Lipsa dependenței/accesului duce la `BLOCKED` ori `DEFERRED`, cu probă și pas de deblocare. Nu sări peste dependențe.
+6. Review-ul independent este scris de reviewer, separat de autor. Fără reviewer disponibil, păstrează `REVIEW_PENDING` când planul îl cere.
+7. Istoricul este append-only. Corecțiile noi indică intrarea anterioară; fără force-push.
+
+## Registrul execuțiilor
+
+| Pas | Status | Autor / model declarat | Bază → rezultat | Review |
+|---|---|---|---|---|
+| 00 | DONE | Codex; modelul exact nu a fost verificat atunci | `590e4d1` → `1e0cf44`; surse și progres publicate prin PR #1 | Review independent nepretins |
+| 01 | DONE | Codex; utilizatorul a confirmat GPT-6 Luna / Low înainte de execuție | `1e0cf44` → SHA-ul PR-ului curent; jurnal și handoff în PR | Clasa L; review independent necerut/nepretins |
+| 02 | READY | Model recomandat: GPT-6.1 Terra / Medium; alternativ Claude Sonnet 5.5 / Medium | Depinde de 01; încă neînceput | De stabilit conform planului |
+
+Nu inventa model runtime, versiune, efort sau usage dacă nu sunt verificabile. Instrucțiunea utilizatorului pentru sesiunile curente este să nu se folosească usage; nu îl urmări și nu raporta procente.
+
+## Decizii curente
+
+Jurnalul append-only: [DECISIONS.md](DECISIONS.md). Sesiunile și handoff-urile: [SESSION_LOG.md](SESSION_LOG.md). Șablon: [SESSION_TEMPLATE.md](SESSION_TEMPLATE.md).
+
+- D00-1: permisiunea de creare remote a lipsit inițial; proprietarul a creat repo privat, după care push-ul a fost verificat. Istoric: `docs/step-00-initial-blocker.md`.
+- D00-2: PDF-urile originale, textul extras și hashurile rămân împreună; fără import de cod din alte proiecte.
+- D01-1: `PROGRESS.md` este singurul index pentru starea curentă; jurnalul de sesiuni și decizii rămân append-only, evitând statusuri concurente.
+- D01-2: autorul consemnează modelul selectat de utilizator; modelul intern neverificabil este etichetat ca atare.
+
+## Blocaje, riscuri, limite
+
+- Rulesets GitHub pentru repo privat au fost refuzate de API în planul curent. Fără upgrade sau schimbare de vizibilitate; PASUL 02 va documenta politica aplicabilă.
+- Host și chei API comerciale: neconfigurate; nu blochează documentarea.
+- Build/test produs, CI, deploy și API live: NOT_RUN; nu există implementare de produs în scope-ul PASULUI 01.
 
 ## Dovezi
 
-- PASS: conectorul GitHub get_repo și gh repo view confirmă repository privat, main și drepturi admin/push/pull.
-- PASS: fetch real prin HTTPS; origin exact repository RevenuePilot AI; main conținea numai README.md cu titlul proiectului.
-- PASS: integritatea surselor verificată prin SHA-256, comparație byte-for-byte PDF și regenerare pdftotext identică (11 + 34 pagini). Detalii: LOCAL_CHECKS.txt.
-- PASS: cele două documente au fost citite integral în sesiunea inițială; rămân canonice, nemodificate.
-- PASS: push real al branchului step-00-bootstrap, SHA 9b7f56eddbbdc85e76269c237658939a282deeb9 confirmat prin ls-remote; toate cele 5 fișiere canonice recitite din GitHub și comparate byte-for-byte. Dovezi: REMOTE_CHECKS.txt.
-- PASS: git fsck --full și verificarea ambelor istorice ca strămoși ai HEAD. PR-ul de publicare se identifică în GitHub prin head step-00-bootstrap → base main.
-- Build, teste unitare/UI/E2E, API-uri live, CI și deploy: NOT_RUN, fără produs în scope.
-- Review independent: NOT_RUN, neobligatoriu pentru clasa M a pasului 00; nicio aprobare cross-family pretinsă.
+| ID | Pas | Probă | Rezultat |
+|---|---|---|---|
+| E00-1 | 00 | Extragere pdftotext 11 + 34 pagini, comparație byte-for-byte și `sha256sum -c` | PASS |
+| E00-2 | 00 | GitHub repo metadata, permisiuni admin/push, push și citire fișiere remote | PASS |
+| E00-3 | 00 | PR #1, `git fsck --full`; istorice inițiale păstrate | PASS |
+| E01-1 | 01 | Planul canonic și registrul reluate; dependența 00 verificată | PASS |
+| E01-2 | 01 | Linkuri locale, consistența indexului și diff whitespace | Se consemnează după verificare |
+| E01-3 | 01 | Push, PR și HEAD main comparat | Se consemnează după verificare |
 
-Baseline: commit local cu 00 BLOCKED și remote creat manual cu un README. Rezultat urmărit: ambele istorice păstrate, surse și stare accesibile pe GitHub. Raportul istoric al refuzurilor GraphQL/REST rămâne în docs/step-00-initial-blocker.md și Git.
+## Procedura de reluare și handoff
 
-PR de publicare: https://github.com/ionescugeorgemarian02-web/revenuepilot-ai/pull/1. Verificat MERGEABLE / CLEAN, fără CI sau review obligatoriu raportat; nu se pretinde review independent.
-Limită opțională verificată: GET /rulesets returnează HTTP 403, solicitând GitHub Pro sau repository public. Nu schimbăm vizibilitatea și nu cumpărăm abonament; politica Git și protecțiile se tratează la pasul 02.
+La început: fetch; confirmă `ionescugeorgemarian02-web/revenuepilot-ai`, branch, HEAD și worktree; citește indexul, pasul din plan și ultima intrare din `SESSION_LOG.md`; selectează primul pas READY cu dependențe închise.
 
-Blocaje curente pentru PASUL 00: niciunul. Refuzul de creare inițial a fost rezolvat prin crearea manuală.
+La final: adaugă intrarea sesiunii fără a rescrie trecutul; actualizează statusul și probele; notează defecte/decizii/lecții numai dacă există dovezi; commit/push/PR; raportează PASS/FAIL/NOT_RUN, SHA, blocaje și model recomandat; STOP.
 
-## Decizii, limite și lecție
-
-D00-3: README-ul creat accidental nu impune ștergerea sau recrearea repository-ului. Păstrăm commitul inițial și completăm README în merge auditat.
-D00-4: folosim PR pentru publicarea documentelor, fără a introduce politica Git completă rezervată pasului 02. Nu pretindem review independent dacă nu a avut loc.
-Costuri: fără servicii plătite sau API-uri comerciale; costul/quota sesiunii nu sunt expuse măsurabil.
-Host și chei API comerciale: indisponibile conform specificației; nu au fost configurate. GitHub este sursă de adevăr, nu hostingul produsului sau DB runtime.
-Lecție candidată: dreptul de creare și dreptul de push sunt distincte; eroarea inițială de creare nu dovedește imposibilitatea scrierii într-un repo creat manual. Probă: refuz 403 anterior, acces metadata/fetch și push real actual. Nu este regulă runtime promovată și nu există motor de învățare implementat.
-Executor: Codex; numele exact al modelului și nivelul UI nu sunt expuse verificabil. Niciun reviewer extern invocat.
-Gates: G0 VERIFIED pentru bootstrap documentar (identitate, istoric, commit și push; fără certificare de securitate a unui produs); G1–G8 NOT_IMPLEMENTED.
-
-## Reluare și STOP
-
-Citește README, sursele canonice, acest registru și dovezile. Verifică remote, branch, HEAD, worktree și progresul actualizat înainte de orice editare. Un singur pas per sesiune. Nu executa PASUL 01 în sesiunea curentă.
-După închiderea verificată a 00, următorul pas este 01 (registru persistent extins și jurnal de decizii), cu dependența 00 satisfăcută. Model recomandat: GPT-6 Luna / Low; alternativ Claude Haiku 5.5 / Low, dacă sunt în selector. Alegerea se face manual de utilizator.
+Punct de reluare după acest PR: PASUL 02 READY; model recomandat GPT-6.1 Terra / Medium (alternativ Claude Sonnet 5.5 / Medium).
