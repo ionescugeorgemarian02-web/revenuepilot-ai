@@ -39,6 +39,7 @@ class StoreCase(unittest.TestCase):
 class MigrationTest(unittest.TestCase):
     def test_up_down_up_roundtrip_and_history(self):
         conn = storage.connect()
+        self.addCleanup(conn.close)
         self.assertEqual(migrate(conn), LATEST)
         tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         self.assertTrue({"organizations", "memberships", "resources", "resource_grants", "audit_events", "tenant_counters"} <= tables)
@@ -52,6 +53,7 @@ class MigrationTest(unittest.TestCase):
 
     def test_failed_migration_rolls_back_completely(self):
         conn = storage.connect()
+        self.addCleanup(conn.close)
         migrate(conn, 1)
         bad = MIGRATIONS[:1] + (Migration(2, "broken", "CREATE TABLE half_done (x INTEGER); CREATE TABLE half_done (y INTEGER)", "DROP TABLE half_done"),)
         with self.assertRaises(sqlite3.OperationalError):
@@ -61,6 +63,7 @@ class MigrationTest(unittest.TestCase):
 
     def test_tampered_or_unknown_history_is_refused(self):
         conn = storage.connect()
+        self.addCleanup(conn.close)
         migrate(conn)
         conn.execute("UPDATE schema_migrations SET checksum = 'x' WHERE version = 1")
         with self.assertRaisesRegex(StorageError, "checksum"):

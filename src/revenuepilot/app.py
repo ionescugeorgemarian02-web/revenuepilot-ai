@@ -7,9 +7,11 @@ import os
 import re
 import secrets
 import sys
+import time
 from urllib.parse import parse_qs
 
 from .auth import AuthError, AuthService, Principal
+from .observability import Observability, current_trace_id, new_trace_id
 from .tenancy import ROLE_PERMISSIONS, AccessDenied, NotFound, TenancyService
 
 MAX_BODY = 4096
@@ -27,6 +29,56 @@ class Handler(BaseHTTPRequestHandler):
     @property
     def tenancy(self) -> TenancyService | None:
         return getattr(self.server, "tenancy", None)
+
+    @property
+    def obs(self) -> Observability | None:
+        return getattr(self.server, "obs", None)
+
+    # --- tracing (PASUL 13) --------------------------------------------
+    _status = 0
+    _trace_tenant: str | None = None
+    _trace_user: str | None = None
+
+    def send_response(self, code: int, message: str | None = None) -> None:
+        self._status = code
+        super().send_response(code, message)
+
+    def end_headers(self) -> None:
+        if self.obs is not None:
+            self.send_header("X-Trace-Id", current_trace_id.get())  # server-generated, never client-supplied
+        super().end_headers()
+
+    @staticmethod
+    def _route_template(path: str) -> str:
+        """Log the route shape, never raw IDs or query strings."""
+        path = path.partition("?")[0]
+        path = re.sub(r"^/api/tenants/[^/]+/", "/api/tenants/{id}/", path)
+        path = re.sub(r"^/api/resources/[^/]+", "/api/resources/{id}", path)
+        return path[:80]
+
+    def _traced(self, method: str, handler) -> None:
+        obs = self.obs
+        if obs is None:
+            handler()
+            return
+        token = current_trace_id.set(new_trace_id())
+        started = time.monotonic()
+        self._status, self._trace_tenant, self._trace_user = 0, None, None
+        route = self._route_template(self.path)
+        try:
+            obs.emit("request.received", method=method, route=route)
+            try:
+                handler()
+            except Exception as error:  # last resort; message and traceback are never logged
+                obs.emit("request.error", level="error", tenant_id=self._trace_tenant,
+                         user_id=self._trace_user, error_class=type(error).__name__)
+                raise
+            finally:
+                obs.emit("request.completed", tenant_id=self._trace_tenant, user_id=self._trace_user,
+                         method=method, route=route, status=self._status,
+                         duration_ms=round((time.monotonic() - started) * 1000, 3), cost_units=0)
+        finally:
+            current_trace_id.reset(token)
 
     def _send(self, status: int, body: object | None = None, headers: dict[str, str] | None = None) -> None:
         payload = b"" if body is None else json.dumps(body).encode("utf-8")
@@ -63,7 +115,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def _principal(self) -> Principal | None:
         try:
-            return self.auth.authenticate(self._token())
+            principal = self.auth.authenticate(self._token())
+            self._trace_tenant, self._trace_user = principal.tenant_id, principal.user_id
+            return principal
         except AuthError:
             self._send(401, {"error": "unauthenticated"})
             return None
@@ -96,6 +150,12 @@ class Handler(BaseHTTPRequestHandler):
 
     # --- routes --------------------------------------------------------
     def do_GET(self) -> None:
+        self._traced("GET", self._get)
+
+    def do_POST(self) -> None:
+        self._traced("POST", self._post)
+
+    def _get(self) -> None:
         if self.path == "/":
             payload = files("revenuepilot").joinpath("index.html").read_bytes()
             self.send_response(200)
@@ -137,7 +197,7 @@ class Handler(BaseHTTPRequestHandler):
             return
         self._tenant_call("GET", path, parse_qs(query), principal)
 
-    def do_POST(self) -> None:
+    def _post(self) -> None:
         if self.auth is None or not (self.path in AUTH_ROUTES or self.path.startswith("/api/")):
             self.send_error(404)
             return
@@ -153,12 +213,15 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if self.path == "/auth/login":
                 token, principal = self.auth.login(data.get("username"), data.get("password"), client, data.get("organization_id"))
+                self._trace_tenant, self._trace_user = principal.tenant_id, principal.user_id
+                self._emit("auth.login", outcome="success")
                 self._send(200, self._identity(principal), {"Set-Cookie": self._cookie(token, self.auth.absolute_ttl)})
             elif self.path == "/auth/switch":
                 token, principal = self.auth.switch_organization(self._token(), data.get("organization_id"))
                 self._send(200, self._identity(principal), {"Set-Cookie": self._cookie(token, self.auth.absolute_ttl)})
             elif self.path == "/auth/logout":
                 self.auth.logout(self._token())
+                self._emit("auth.logout")
                 self._send(204, None, {"Set-Cookie": self._cookie("", 0)})
             else:
                 token = self._token()
@@ -170,6 +233,8 @@ class Handler(BaseHTTPRequestHandler):
                     return
                 self._send(204, None, {"Set-Cookie": self._cookie(new_token, self.auth.absolute_ttl)})
         except AuthError as error:
+            if self.path == "/auth/login":
+                self._emit("auth.login", level="warning", outcome="failure", reason=error.code)
             if error.code == "rate_limited":
                 self._send(429, {"error": "rate_limited"}, {"Retry-After": str(error.retry_after)})
             elif error.code == "invalid_credentials":
@@ -178,6 +243,10 @@ class Handler(BaseHTTPRequestHandler):
                 self._send(403, {"error": "forbidden"})
             else:
                 self._send(401, {"error": "unauthenticated"})
+
+    def _emit(self, name: str, **fields: object) -> None:
+        if self.obs is not None:
+            self.obs.emit(name, tenant_id=self._trace_tenant, user_id=self._trace_user, **fields)
 
     @staticmethod
     def _identity(principal: Principal) -> dict:
@@ -229,7 +298,8 @@ class Handler(BaseHTTPRequestHandler):
             self._send(403, {"error": error.code})
         except ValueError:
             self._send(400, {"error": "invalid_request"})
-        except Exception:  # last resort: never drop the connection; not reported as a client error
+        except Exception as error:  # last resort: never drop the connection; not reported as a client error
+            self._emit("request.error", level="error", error_class=type(error).__name__)  # class only
             self._send(500, {"error": "internal_error"})
 
     def log_message(self, format: str, *args: object) -> None:
@@ -262,12 +332,22 @@ def build_auth_from_env() -> AuthService:
     return auth
 
 
+def attach_observability(tenancy: TenancyService | None, obs: Observability) -> None:
+    """Mirror each authorization decision into the event log (same trace id, redacted)."""
+    if tenancy is not None:
+        tenancy.audit_sink = lambda e: obs.emit(
+            "authz.decision", level="info" if e.decision == "allow" else "warning", tenant_id=e.tenant_id,
+            user_id=e.user_id, action=e.action, target=e.target, decision=e.decision)
+
+
 def serve() -> None:
     # Loopback only: dev authentication, no tenant isolation of data, no persistence.
     port = int(os.environ.get("REVENUEPILOT_PORT", "8765"))
     server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
     server.auth = build_auth_from_env()
     server.tenancy = server.auth.tenancy
+    server.obs = Observability(stream=sys.stderr if os.environ.get("REVENUEPILOT_LOG") == "1" else None)
+    attach_observability(server.tenancy, server.obs)
     try:
         server.serve_forever()
     finally:

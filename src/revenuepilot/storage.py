@@ -147,10 +147,14 @@ class NotFoundError(StorageError):
 def connect(path: str = ":memory:") -> sqlite3.Connection:
     conn = sqlite3.connect(path, isolation_level=None, check_same_thread=False)
     conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON")
-    if path != ":memory:":
-        conn.execute("PRAGMA journal_mode = WAL")
-        conn.execute("PRAGMA synchronous = FULL")
+    try:
+        conn.execute("PRAGMA foreign_keys = ON")
+        if path != ":memory:":
+            conn.execute("PRAGMA journal_mode = WAL")
+            conn.execute("PRAGMA synchronous = FULL")
+    except Exception:
+        conn.close()  # e.g. a file that is not a database
+        raise
     return conn
 
 
@@ -215,10 +219,14 @@ def _run(conn: sqlite3.Connection, script: str, record_sql: str, params: tuple) 
 def open_store(path: str = ":memory:", clock: Callable[[], float] = time.time) -> "Store":
     """Open (and migrate) a database; verify integrity when reopening an existing file."""
     conn = connect(path)
-    verify_history(conn)
-    migrate(conn, clock=clock)
-    store = Store(conn, clock)
-    store.check_integrity()
+    try:
+        verify_history(conn)
+        migrate(conn, clock=clock)
+        store = Store(conn, clock)
+        store.check_integrity()
+    except Exception:
+        conn.close()  # do not leak a handle on a refused database
+        raise
     return store
 
 

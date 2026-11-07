@@ -23,6 +23,8 @@ import threading
 import time
 from typing import Callable
 
+from .observability import current_trace_id
+
 ROLE_PERMISSIONS: dict[str, frozenset[str]] = {
     # Conjunctive and explicit: no role inherits another role's permissions.
     "viewer": frozenset({"resource.read"}),
@@ -92,6 +94,7 @@ class AuditEntry:
     action: str
     target: str
     decision: str  # "allow" or a deny reason code
+    trace_id: str = "-"
 
 
 def _text(value: object, name: str, limit: int = MAX_TEXT) -> str:
@@ -111,6 +114,8 @@ class TenancyService:
         self._counters: dict[str, int] = {}
         self._version = 0
         self.audit: list[AuditEntry] = []
+        # Optional observer (PASUL 13): receives every audit entry; must not call back into this service.
+        self.audit_sink: Callable[[AuditEntry], None] | None = None
 
     # --- organizations and memberships ---------------------------------
     def create_organization(self, name: str, founder_user_id: str) -> str:
@@ -180,7 +185,10 @@ class TenancyService:
             self._log(ctx.tenant_id, ctx.user_id, action, tgt, "allow")
 
     def _log(self, tenant: str, user: str, action: str, target: str, decision: str) -> None:
-        self.audit.append(AuditEntry(self._clock(), tenant, user, action, target, decision))
+        entry = AuditEntry(self._clock(), tenant, user, action, target, decision, current_trace_id.get())
+        self.audit.append(entry)
+        if self.audit_sink is not None:
+            self.audit_sink(entry)
 
     @staticmethod
     def _user_id(value: object) -> str:

@@ -236,3 +236,9 @@ S11-review — publicare: raportul/probele/indexul au fost împinse pe branchul 
 - Bază `09130e7`; branch `step-12/persistence`. Livrat: `src/revenuepilot/storage.py`, `tests/test_storage.py` (16 teste), `docs/storage/step-12.md`, D12-1.
 - Teste: 56 PASS pe 3.12 și 3.13; 7 mutații detectate. Defect propriu găsit și corectat: `visible_resources` fără verificare de membership. Un test al meu era greșit (părinte self-reference), corectat; garda statică pe sursă era fragilă, înlocuită cu garda pe SQL urmărit la execuție.
 - Codex: neutilizat (clasa M, D11-2). Cost zero. CI remote NOT_RUN.
+
+
+## S13 — 2026-11-07 — PASUL 13 (Claude Sonnet 5.5)
+- Bază `7d7330d`; branch `step-13/events`. Livrat: `observability.py`, integrare în `app.py`/`tenancy.py`, `tests/test_observability.py` (14 teste), `docs/observability/step-13.md`, D13-1.
+- Teste: 70 PASS pe 3.12 și 3.13; 12 mutații detectate. Defecte proprii găsite și corectate: telefon vs ID-uri, `request.error` lipsă pe 500, conexiuni SQLite nelăsate închise.
+- Codex neutilizat (clasa T). Cost zero. CI remote NOT_RUN.
